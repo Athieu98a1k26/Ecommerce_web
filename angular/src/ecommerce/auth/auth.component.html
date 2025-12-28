@@ -1,0 +1,355 @@
+<div class="ecommerce-auth-page">
+  <!-- Header -->
+  <header class="ecommerce-header">
+    <div class="header-container">
+      <!-- Logo -->
+      <div class="header-logo" (click)="navigateToHome()">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="logo-text">Ecommerce</span>
+      </div>
+
+      <!-- Navigation -->
+      <nav class="header-nav">
+        <a href="#" class="nav-link" (click)="navigateToHome(); $event.preventDefault()">Trang chủ</a>
+        <a href="#" class="nav-link">Sản phẩm</a>
+        <a href="#" class="nav-link flash-sale">
+          <i class="fas fa-bolt"></i>
+          Flash Sale
+        </a>
+      </nav>
+
+      <!-- User Actions -->
+      <div class="header-actions">
+        <!-- Not Logged In -->
+        <div class="auth-buttons" *ngIf="!isLoggedIn">
+          <button class="btn-login" (click)="scrollToAuth()">Đăng nhập</button>
+          <button class="btn-register" (click)="switchTab('register'); scrollToAuth()">Đăng ký</button>
+        </div>
+
+        <!-- Logged In -->
+        <div class="user-menu" *ngIf="isLoggedIn">
+          <div class="user-info" (click)="toggleUserDropdown()">
+            <img [src]="userAvatar" alt="User" class="user-avatar" onerror="this.src='assets/img/user.png'">
+            <span class="username">{{ userName }}</span>
+            <i class="fas fa-chevron-down" [class.rotated]="showUserDropdown"></i>
+          </div>
+          <div class="user-dropdown" [class.show]="showUserDropdown">
+            <a href="#" class="dropdown-item" (click)="navigateToAccount(); $event.preventDefault()">
+              <i class="fas fa-user"></i>
+              Tài khoản của tôi
+            </a>
+            <a href="#" class="dropdown-item" (click)="navigateToOrders(); $event.preventDefault()">
+              <i class="fas fa-shopping-bag"></i>
+              Đơn mua
+            </a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="dropdown-item" (click)="onLogout(); $event.preventDefault()">
+              <i class="fas fa-sign-out-alt"></i>
+              Đăng xuất
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="content-container">
+      <!-- Left Column - Promotion Banner -->
+      <aside class="promotion-column">
+        <div class="promotion-banner">
+          <div class="promotion-content">
+            <div class="promotion-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <h3 class="promotion-title">Miễn phí vận chuyển</h3>
+            <p class="promotion-desc">Cho đơn hàng từ 200.000đ</p>
+          </div>
+          <div class="promotion-content">
+            <div class="promotion-icon">
+              <i class="fas fa-gift"></i>
+            </div>
+            <h3 class="promotion-title">Hoàn xu lên đến 15%</h3>
+            <p class="promotion-desc">Tích điểm cho mọi giao dịch</p>
+          </div>
+          <button class="promotion-cta" (click)="navigateToHome()">
+            Mua ngay
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Center Column - Hero Banner -->
+      <section class="hero-column">
+        <div class="hero-carousel">
+          <div class="carousel-slide active">
+            <div class="slide-content">
+              <h2 class="slide-title">Siêu Sale 12.12</h2>
+              <p class="slide-subtitle">Giảm đến 50%</p>
+              <p class="slide-desc">Hàng ngàn sản phẩm với giá tốt nhất</p>
+              <button class="slide-button" (click)="navigateToHome()">Khám phá ngay</button>
+            </div>
+            <div class="slide-decoration">
+              <div class="decoration-circle circle-1"></div>
+              <div class="decoration-circle circle-2"></div>
+              <div class="decoration-circle circle-3"></div>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-indicators">
+          <span class="indicator active"></span>
+          <span class="indicator"></span>
+          <span class="indicator"></span>
+        </div>
+      </section>
+
+      <!-- Right Column - Auth Card -->
+      <aside class="auth-column">
+        <div class="auth-card">
+          <!-- Tab Switcher -->
+          <div class="tab-switcher">
+            <button 
+              class="tab-button" 
+              [class.active]="activeTab === 'login'"
+              (click)="switchTab('login')">
+              Đăng nhập
+            </button>
+            <button 
+              class="tab-button" 
+              [class.active]="activeTab === 'register'"
+              (click)="switchTab('register')">
+              Đăng ký
+            </button>
+          </div>
+
+          <!-- Login Tab -->
+          <div class="tab-content" [class.active]="activeTab === 'login'">
+            <h2 class="auth-title">Đăng nhập</h2>
+
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+              <!-- Username/Email/Phone Input -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    type="text"
+                    formControlName="userNameOrEmailAddress"
+                    class="form-input"
+                    placeholder="Số điện thoại / Email / Tên đăng nhập"
+                    [class.error]="loginForm.get('userNameOrEmailAddress')?.invalid && loginForm.get('userNameOrEmailAddress')?.touched">
+                  <i class="fas fa-user input-icon"></i>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('userNameOrEmailAddress', loginForm)">
+                  {{ getErrorMessage('userNameOrEmailAddress', loginForm) }}
+                </span>
+              </div>
+
+              <!-- Password Input -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    class="form-input"
+                    placeholder="Mật khẩu"
+                    [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                  <i class="fas fa-lock input-icon"></i>
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    (click)="togglePasswordVisibility()">
+                    <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('password', loginForm)">
+                  {{ getErrorMessage('password', loginForm) }}
+                </span>
+              </div>
+
+              <!-- Forgot Password Link -->
+              <div class="form-options">
+                <a href="#" class="forgot-password-link" (click)="onForgotPassword(); $event.preventDefault()">
+                  Quên mật khẩu?
+                </a>
+              </div>
+
+              <!-- Login Button -->
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="loginForm.invalid || submitting">
+                <span *ngIf="!submitting">Đăng nhập</span>
+                <span *ngIf="submitting" class="loading-spinner">
+                  <i class="fas fa-spinner fa-spin"></i> Đang xử lý...
+                </span>
+              </button>
+
+              <!-- Divider -->
+              <div class="divider">
+                <span class="divider-text">Hoặc</span>
+              </div>
+
+              <!-- Social Login Buttons -->
+              <div class="social-login">
+                <button
+                  type="button"
+                  class="social-button facebook"
+                  (click)="onSocialLogin('facebook')">
+                  <i class="fab fa-facebook-f"></i>
+                  <span>Facebook</span>
+                </button>
+                <button
+                  type="button"
+                  class="social-button google"
+                  (click)="onSocialLogin('google')">
+                  <i class="fab fa-google"></i>
+                  <span>Google</span>
+                </button>
+                <button
+                  type="button"
+                  class="social-button apple"
+                  (click)="onSocialLogin('apple')">
+                  <i class="fab fa-apple"></i>
+                  <span>Apple</span>
+                </button>
+              </div>
+
+              <!-- OTP Login Link -->
+              <div class="otp-link-wrapper">
+                <a href="#" class="otp-link" (click)="onOTPLogin(); $event.preventDefault()">
+                  Đăng nhập bằng SMS
+                </a>
+              </div>
+            </form>
+          </div>
+
+          <!-- Register Tab -->
+          <div class="tab-content" [class.active]="activeTab === 'register'">
+            <h2 class="auth-title">Đăng ký</h2>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
+              <!-- Phone Number Input -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    type="tel"
+                    formControlName="phoneNumber"
+                    class="form-input"
+                    placeholder="Số điện thoại"
+                    [class.error]="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched">
+                  <i class="fas fa-phone input-icon"></i>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('phoneNumber', registerForm)">
+                  {{ getErrorMessage('phoneNumber', registerForm) }}
+                </span>
+              </div>
+
+              <!-- Email Input (Optional) -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    type="email"
+                    formControlName="email"
+                    class="form-input"
+                    placeholder="Email (tùy chọn)"
+                    [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                  <i class="fas fa-envelope input-icon"></i>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('email', registerForm)">
+                  {{ getErrorMessage('email', registerForm) }}
+                </span>
+              </div>
+
+              <!-- Password Input -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    [type]="showPassword ? 'text' : 'password'"
+                    formControlName="password"
+                    class="form-input"
+                    placeholder="Mật khẩu"
+                    [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                  <i class="fas fa-lock input-icon"></i>
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    (click)="togglePasswordVisibility()">
+                    <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+                <!-- Password Strength Indicator -->
+                <div class="password-strength" *ngIf="registerForm.get('password')?.value">
+                  <div class="strength-bar">
+                    <div 
+                      class="strength-fill" 
+                      [class]="getPasswordStrengthClass()"
+                      [style.width.%]="(passwordStrength / 5) * 100">
+                    </div>
+                  </div>
+                  <span class="strength-text" [class]="getPasswordStrengthClass()">
+                    <span *ngIf="passwordStrength <= 2">Yếu</span>
+                    <span *ngIf="passwordStrength === 3">Trung bình</span>
+                    <span *ngIf="passwordStrength >= 4">Mạnh</span>
+                  </span>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('password', registerForm)">
+                  {{ getErrorMessage('password', registerForm) }}
+                </span>
+              </div>
+
+              <!-- Confirm Password Input -->
+              <div class="form-group">
+                <div class="input-wrapper">
+                  <input
+                    [type]="showConfirmPassword ? 'text' : 'password'"
+                    formControlName="confirmPassword"
+                    class="form-input"
+                    placeholder="Nhập lại mật khẩu"
+                    [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+                  <i class="fas fa-lock input-icon"></i>
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    (click)="toggleConfirmPasswordVisibility()">
+                    <i [class]="showConfirmPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+                <span class="error-message" *ngIf="getErrorMessage('confirmPassword', registerForm) || registerForm.errors?.['passwordMismatch']">
+                  {{ getErrorMessage('confirmPassword', registerForm) || 'Mật khẩu không khớp' }}
+                </span>
+              </div>
+
+              <!-- Terms Checkbox -->
+              <div class="form-group checkbox-group">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    formControlName="agreeToTerms"
+                    class="checkbox-input">
+                  <span class="checkbox-text">
+                    Tôi đồng ý với <a href="#" class="terms-link">Điều khoản & Chính sách</a>
+                  </span>
+                </label>
+                <span class="error-message" *ngIf="registerForm.get('agreeToTerms')?.invalid && registerForm.get('agreeToTerms')?.touched">
+                  Vui lòng đồng ý với điều khoản
+                </span>
+              </div>
+
+              <!-- Register Button -->
+              <button
+                type="submit"
+                class="primary-button"
+                [disabled]="registerForm.invalid || submitting">
+                <span *ngIf="!submitting">Đăng ký</span>
+                <span *ngIf="submitting" class="loading-spinner">
+                  <i class="fas fa-spinner fa-spin"></i> Đang xử lý...
+                </span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+

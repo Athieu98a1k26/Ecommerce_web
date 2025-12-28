@@ -1,0 +1,224 @@
+<div class="cart-page">
+  <!-- Header -->
+  <header class="cart-header">
+    <div class="header-container">
+      <div class="header-content">
+        <!-- Logo -->
+        <div class="header-logo">
+          <a routerLink="/ecommerce/home" class="logo-link">
+            <span class="logo-text">E-Shop</span>
+          </a>
+        </div>
+
+        <!-- Page Title -->
+        <h1 class="page-title">Giỏ hàng</h1>
+
+        <!-- Search Bar -->
+        <div class="header-search">
+          <form class="search-form">
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Tìm kiếm sản phẩm"
+              [(ngModel)]="searchQuery"
+              name="searchQuery">
+            <button type="submit" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- User Account -->
+        <div class="header-actions">
+          <div class="user-avatar-wrapper">
+            <a href="#" class="user-link" *ngIf="isLoggedIn">
+              <img src="assets/img/user.png" alt="User" class="user-avatar">
+            </a>
+            <a href="#" class="login-button" *ngIf="!isLoggedIn">
+              Đăng nhập
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="cart-content">
+    <div class="cart-container">
+      <!-- Empty Cart State -->
+      <div class="empty-cart" *ngIf="isEmpty">
+        <div class="empty-cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <h2 class="empty-cart-title">Giỏ hàng của bạn đang trống</h2>
+        <p class="empty-cart-text">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
+        <a routerLink="/ecommerce/home" class="continue-shopping-btn">
+          Tiếp tục mua sắm
+        </a>
+      </div>
+
+      <!-- Cart with Items -->
+      <div class="cart-with-items" *ngIf="!isEmpty">
+        <!-- Cart List Section -->
+        <div class="cart-list-section">
+          <!-- Shop Group -->
+          <div class="shop-group" *ngFor="let shop of shops">
+            <!-- Shop Header -->
+            <div class="shop-header">
+              <div class="shop-select-all">
+                <input 
+                  type="checkbox" 
+                  [checked]="isShopAllSelected(shop.shopId)"
+                  [indeterminate]="isShopPartiallySelected(shop.shopId)"
+                  (change)="toggleShopSelectAll(shop.shopId)"
+                  class="shop-checkbox"
+                  id="shop-{{shop.shopId}}">
+                <label for="shop-{{shop.shopId}}" class="checkbox-label"></label>
+              </div>
+              <div class="shop-info">
+                <i [class]="shop.shopIcon" class="shop-icon"></i>
+                <span class="shop-name">{{ shop.shopName }}</span>
+              </div>
+            </div>
+
+            <!-- Cart Items -->
+            <div class="cart-items">
+              <div class="cart-item" *ngFor="let item of shop.items" [class.selected]="item.selected" [class.out-of-stock]="!item.inStock">
+                <!-- Selection Checkbox -->
+                <div class="item-checkbox">
+                  <input 
+                    type="checkbox" 
+                    [checked]="item.selected"
+                    (change)="toggleItemSelect(item)"
+                    class="item-checkbox-input"
+                    [disabled]="!item.inStock"
+                    [id]="'item-' + item.id">
+                  <label [for]="'item-' + item.id" class="checkbox-label"></label>
+                </div>
+
+                <!-- Product Image -->
+                <div class="item-image">
+                  <img [src]="item.productImage" [alt]="item.productName" class="product-thumbnail">
+                </div>
+
+                <!-- Product Info -->
+                <div class="item-info">
+                  <h3 class="product-name" [title]="item.productName">{{ item.productName }}</h3>
+                  
+                  <!-- Variant Info -->
+                  <div class="product-variation" *ngIf="item.variation && (item.variation.color || item.variation.size)">
+                    <span *ngIf="item.variation.color">Phân loại: {{ item.variation.color }}</span>
+                    <span *ngIf="item.variation.color && item.variation.size">, </span>
+                    <span *ngIf="item.variation.size">{{ item.variation.size }}</span>
+                  </div>
+
+                  <!-- Stock Status -->
+                  <div class="stock-status">
+                    <span class="in-stock" *ngIf="item.inStock">
+                      <i class="fas fa-check-circle"></i> Còn hàng
+                    </span>
+                    <span class="out-of-stock" *ngIf="!item.inStock">
+                      <i class="fas fa-times-circle"></i> Hết hàng
+                    </span>
+                  </div>
+
+                  <!-- Price Info -->
+                  <div class="item-price">
+                    <span class="current-price">{{ formatCurrency(item.price) }}</span>
+                    <span class="original-price" *ngIf="item.originalPrice && item.originalPrice > item.price">
+                      {{ formatCurrency(item.originalPrice) }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="item-quantity">
+                  <button 
+                    class="quantity-btn" 
+                    (click)="updateQuantity(item, -1)"
+                    [disabled]="item.quantity <= 1 || !item.inStock"
+                    title="Giảm số lượng">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input 
+                    type="number" 
+                    class="quantity-input" 
+                    [(ngModel)]="item.quantity"
+                    [min]="1"
+                    [max]="99"
+                    [disabled]="!item.inStock"
+                    (change)="onQuantityChange(item)"
+                    name="quantity-{{item.id}}">
+                  <button 
+                    class="quantity-btn" 
+                    (click)="updateQuantity(item, 1)"
+                    [disabled]="item.quantity >= 99 || !item.inStock"
+                    title="Tăng số lượng">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+
+                <!-- Total Price -->
+                <div class="item-total">
+                  <div class="total-price">{{ formatCurrency(item.price * item.quantity) }}</div>
+                </div>
+
+                <!-- Delete Button -->
+                <div class="item-delete">
+                  <button class="delete-btn" (click)="deleteItem(item.id)" title="Xóa sản phẩm">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Summary (Sticky) -->
+        <div class="cart-summary">
+          <div class="summary-content">
+            <!-- Select All -->
+            <div class="summary-select-all">
+              <input 
+                type="checkbox" 
+                [checked]="isAllSelected()"
+                (change)="toggleSelectAll()"
+                class="select-all-checkbox"
+                id="select-all">
+              <label for="select-all" class="checkbox-label">Chọn tất cả</label>
+            </div>
+
+            <!-- Summary Info -->
+            <div class="summary-info">
+              <div class="summary-text">
+                <span class="selected-count">Đã chọn: {{ totalItemsCount }} sản phẩm</span>
+              </div>
+              <div class="summary-total">
+                <span class="total-label">Tổng tiền:</span>
+                <span class="total-amount">{{ formatCurrency(total) }}</span>
+              </div>
+            </div>
+
+            <!-- Voucher Input -->
+            <div class="summary-voucher">
+              <input 
+                type="text" 
+                class="voucher-input" 
+                placeholder="Nhập mã giảm giá"
+                [(ngModel)]="voucherCode"
+                name="voucherCode">
+              <button class="voucher-btn" (click)="applyVoucher()">Áp dụng</button>
+            </div>
+
+            <!-- Checkout Button -->
+            <button class="checkout-btn" (click)="checkout()">
+              Mua hàng
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
