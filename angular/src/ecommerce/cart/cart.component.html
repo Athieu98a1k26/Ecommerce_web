@@ -84,7 +84,7 @@
 
             <!-- Cart Items -->
             <div class="cart-items">
-              <div class="cart-item" *ngFor="let item of shop.items" [class.selected]="item.selected" [class.out-of-stock]="!item.inStock">
+              <div class="cart-item" *ngFor="let item of shop.items" [class.selected]="item.selected" [class.out-of-stock]="item.inStock === false">
                 <!-- Selection Checkbox -->
                 <div class="item-checkbox">
                   <input 
@@ -92,7 +92,7 @@
                     [checked]="item.selected"
                     (change)="toggleItemSelect(item)"
                     class="item-checkbox-input"
-                    [disabled]="!item.inStock"
+                    [disabled]="item.inStock === false"
                     [id]="'item-' + item.id">
                   <label [for]="'item-' + item.id" class="checkbox-label"></label>
                 </div>
@@ -115,10 +115,10 @@
 
                   <!-- Stock Status -->
                   <div class="stock-status">
-                    <span class="in-stock" *ngIf="item.inStock">
+                    <span class="in-stock" *ngIf="item.inStock !== false">
                       <i class="fas fa-check-circle"></i> Còn hàng
                     </span>
-                    <span class="out-of-stock" *ngIf="!item.inStock">
+                    <span class="out-of-stock" *ngIf="item.inStock === false">
                       <i class="fas fa-times-circle"></i> Hết hàng
                     </span>
                   </div>
@@ -135,25 +135,27 @@
                 <!-- Quantity Selector -->
                 <div class="item-quantity">
                   <button 
+                    type="button"
                     class="quantity-btn" 
                     (click)="updateQuantity(item, -1)"
-                    [disabled]="item.quantity <= 1 || !item.inStock"
+                    [disabled]="item.quantity <= 1 || item.inStock === false"
                     title="Giảm số lượng">
                     <i class="fas fa-minus"></i>
                   </button>
                   <input 
                     type="number" 
                     class="quantity-input" 
-                    [(ngModel)]="item.quantity"
+                    [value]="item.quantity"
                     [min]="1"
                     [max]="99"
-                    [disabled]="!item.inStock"
-                    (change)="onQuantityChange(item)"
-                    name="quantity-{{item.id}}">
+                    [disabled]="item.inStock === false"
+                    (change)="onQuantityInputChange($event, item)"
+                    [name]="'quantity-' + item.id">
                   <button 
+                    type="button"
                     class="quantity-btn" 
                     (click)="updateQuantity(item, 1)"
-                    [disabled]="item.quantity >= 99 || !item.inStock"
+                    [disabled]="item.quantity >= 99 || item.inStock === false"
                     title="Tăng số lượng">
                     <i class="fas fa-plus"></i>
                   </button>
@@ -166,7 +168,7 @@
 
                 <!-- Delete Button -->
                 <div class="item-delete">
-                  <button class="delete-btn" (click)="deleteItem(item.id)" title="Xóa sản phẩm">
+                  <button type="button" class="delete-btn" (click)="deleteItem(item.id)" title="Xóa sản phẩm">
                     <i class="fas fa-trash-alt"></i>
                   </button>
                 </div>

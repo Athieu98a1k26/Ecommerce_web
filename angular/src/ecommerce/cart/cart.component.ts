@@ -158,12 +158,17 @@ export class CartComponent extends AppComponentBase {
 
   // Toggle select single item
   toggleItemSelect(item: CartItem): void {
+    if (item.inStock === false) return;
+    // Default inStock to true if undefined
+    if (item.inStock === undefined) {
+      item.inStock = true;
+    }
     item.selected = !item.selected;
   }
 
   // Update quantity
   updateQuantity(item: CartItem, change: number): void {
-    if (!item.inStock) return;
+    if (item.inStock === false) return;
     const newQuantity = item.quantity + change;
     if (newQuantity >= 1 && newQuantity <= 99) {
       item.quantity = newQuantity;
@@ -171,13 +176,25 @@ export class CartComponent extends AppComponentBase {
   }
 
   // Handle quantity input change
-  onQuantityChange(item: CartItem): void {
-    if (!item.inStock) {
+  onQuantityInputChange(event: Event, item: CartItem): void {
+    const input = event.target as HTMLInputElement;
+    const newQuantity = parseInt(input.value, 10);
+    
+    if (item.inStock === false) {
       item.quantity = 1;
+      input.value = '1';
       return;
     }
-    if (item.quantity < 1) item.quantity = 1;
-    if (item.quantity > 99) item.quantity = 99;
+    
+    if (isNaN(newQuantity) || newQuantity < 1) {
+      item.quantity = 1;
+      input.value = '1';
+    } else if (newQuantity > 99) {
+      item.quantity = 99;
+      input.value = '99';
+    } else {
+      item.quantity = newQuantity;
+    }
   }
 
   // Delete item
