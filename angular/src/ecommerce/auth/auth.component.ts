@@ -8,7 +8,7 @@ import { AppSessionService } from '@shared/session/app-session.service';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.css','../css/base.css',]
 })
 export class AuthComponent extends AppComponentBase implements OnInit {
   activeTab: 'login' | 'register' = 'login';

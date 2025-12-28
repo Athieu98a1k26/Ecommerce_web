@@ -15,7 +15,24 @@ import { appModuleAnimation } from '../../../shared/animations/routerTransition'
     searchQuery: string = '';
     isLoggedIn: boolean = false;
     cartItemCount: number = 1;
-    notificationCount: number = 1;
+    showNotifications = false;
+
+notificationCount = 3;
+
+notifications = [
+  { title: 'Bạn có đơn hàng mới', time: '2 phút trước' },
+  { title: 'Sản phẩm đã được giao', time: '1 giờ trước' },
+  { title: 'Khuyến mãi mới hôm nay', time: 'Hôm qua' }
+];
+
+toggleNotifications(event: Event) {
+  event.stopPropagation();
+  this.showNotifications = !this.showNotifications;
+}
+
+closeDropdown() {
+  this.showNotifications = false;
+}
     constructor(
       injector: Injector
     ) {

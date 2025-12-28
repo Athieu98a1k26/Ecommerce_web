@@ -4,6 +4,8 @@
         <!-- Logo -->
         <div class="header-logo">
           <a href="#" class="logo-link">
+            <i class="fas fa-shopping-bag"></i>
+            &nbsp;
             <span class="logo-text">E-Shop</span>
           </a>
         </div>
@@ -50,17 +52,39 @@
 
         <!-- Right Actions -->
         <div class="header-actions">
-          <div class="notification-icon-wrapper">
-            <a href="#" class="notification-link">
-              <i class="fas fa-bell"></i>
-              <span 
-                class="cart-badge" 
-                *ngIf="notificationCount > 0"
-              >
-                {{ notificationCount }}
-              </span>
-            </a>
-          </div>
+
+          <div class="notification-icon-wrapper" (clickOutside)="closeDropdown()">
+  <a
+    href="javascript:void(0)"
+    class="notification-link"
+    (click)="toggleNotifications($event)"
+  >
+    <i class="fas fa-bell"></i>
+
+    <span class="cart-badge" *ngIf="notificationCount > 0">
+      {{ notificationCount }}
+    </span>
+  </a>
+
+  <!-- Dropdown thông báo -->
+  <div class="notification-dropdown" *ngIf="showNotifications">
+    <div class="dropdown-header">
+      Thông báo
+    </div>
+
+    <div
+      class="notification-item"
+      *ngFor="let item of notifications"
+    >
+      <div class="title">{{ item.title }}</div>
+      <div class="time">{{ item.time }}</div>
+    </div>
+
+    <div class="empty" *ngIf="notifications.length === 0">
+      Không có thông báo
+    </div>
+  </div>
+</div>
           <!-- Cart -->
           <div class="cart-icon-wrapper">
             <a routerLink="/ecommerce/cart" class="cart-link">

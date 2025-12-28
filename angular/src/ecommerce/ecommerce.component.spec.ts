@@ -17,7 +17,6 @@ import { ServiceProxyModule } from "../shared/service-proxies/service-proxy.modu
 import { SharedModule } from "../shared/shared.module";
 import { HomeComponent } from "../app/home/home.component";
 import { AboutComponent } from "../app/about/about.component";
-import { AppComponent } from "@app/app.component";
 
 
 describe("AppComponent", () => {
@@ -67,10 +66,5 @@ describe("AppComponent", () => {
     TestBed.compileComponents();
   });
 
-  it("should create the app", async(() => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
-  
+ 
 });

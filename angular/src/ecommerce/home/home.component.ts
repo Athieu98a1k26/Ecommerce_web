@@ -21,7 +21,7 @@ interface Product {
 
 @Component({
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css','../css/base.css'],
+  styleUrls: ['./home.component.css'],
   animations: [appModuleAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
