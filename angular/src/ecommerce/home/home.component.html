@@ -1,33 +1,26 @@
 ﻿<!-- Banner Section -->
 <div class="container-custom-xxl">
-  <section class="banner-section">
-    <div class="banner-container">
-      <div class="banner-carousel">
-        <div class="banner-slide active">
-          <div class="banner-content">
-            <h2 class="banner-title">Siêu sale 12.12</h2>
-            <p class="banner-subtitle">Giảm đến 50%</p>
-            <button class="banner-button">Mua ngay</button>
-          </div>
-          <div class="banner-image" style="background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);"></div>
-        </div>
-      </div>
-    </div>
-  </section>
   
-  <!-- Category Section -->
-  <section class="category-section">
-    <div class="category-container">
-      <div class="category-grid">
-        <div class="category-item" *ngFor="let category of categories">
-          <div class="category-icon-wrapper">
-            <i [class]="category.icon"></i>
-          </div>
-          <span class="category-label">{{ category.name }}</span>
-        </div>
+  <owl-carousel-o [options]="customOptions">
+    <ng-template carouselSlide><img src="assets/img/banners/banner.png" /></ng-template>  
+    <ng-template carouselSlide><img src="assets/img/banners/banner.png" /></ng-template>  
+    <ng-template carouselSlide><img src="assets/img/banners/banner.png" /></ng-template>  
+  </owl-carousel-o>
+
+  <!-- Brand Section -->
+  <div class="brand-box">
+    <h3 class="brand-title">Lựa chọn hãng</h3>
+  
+    <div class="brand-wrap">
+      <div
+        class="brand-item"
+        *ngFor="let brand of brands"
+        (click)="goToBrand(brand)"
+      >
+        <img [src]="brand.logo" [alt]="brand.name" />
       </div>
     </div>
-  </section>
+  </div>
   
   <!-- Product List Section -->
   <section class="product-section">

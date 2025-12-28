@@ -18,7 +18,9 @@ import { SharedModule } from '../shared/shared.module';
 import { EcommerceComponent } from './ecommerce.component';
 import { HeaderComponent } from '@ecommerce/layout/header/header.component';
 import { FooterComponent } from '@ecommerce/layout/footer/footer.component';
-import {ProductItemComponent} from '@ecommerce/component/product-Item/product-item.component'
+import {ProductItemComponent} from '@ecommerce/component/product-item/product-item.component';
+import { CarouselModule } from 'ngx-owl-carousel-o';
+
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -44,6 +46,7 @@ import {ProductItemComponent} from '@ecommerce/component/product-Item/product-it
         ServiceProxyModule,
         SharedModule,
         NgxPaginationModule,
+        CarouselModule 
     ],
     providers: []
 })

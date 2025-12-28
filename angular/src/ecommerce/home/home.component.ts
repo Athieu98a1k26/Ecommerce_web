@@ -1,6 +1,7 @@
 import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { appModuleAnimation } from '../../shared/animations/routerTransition';
 import { AppComponentBase } from '../../shared/app-component-base';
+import { OwlOptions } from 'ngx-owl-carousel-o';
 
 interface Category {
   name: string;
@@ -30,14 +31,57 @@ export class HomeComponent extends AppComponentBase {
   cartItemCount: number = 3;
   isLoggedIn: boolean = false;
 
-  categories: Category[] = [
-    { name: 'Thời trang', icon: 'fas fa-tshirt' },
-    { name: 'Điện thoại', icon: 'fas fa-mobile-alt' },
-    { name: 'Gia dụng', icon: 'fas fa-home' },
-    { name: 'Mỹ phẩm', icon: 'fas fa-palette' },
-    { name: 'Laptop', icon: 'fas fa-laptop' }
+  customOptions: OwlOptions = {
+    loop: true,
+    items: 3,
+    autoplay: true,
+    mouseDrag: true,
+    touchDrag: false,
+    pullDrag: true,
+    dots: true,
+    navSpeed: 700,
+    navText: ['', ''],
+    responsive: {
+      0: {
+        items: 1
+      },
+      400: {
+        items: 1
+      },
+      740: {
+        items: 1
+      },
+      940: {
+        items: 1
+      }
+    },
+    nav: false
+  }
+
+  banners = [
+    { title: 'Sale 12.12', img: 'assets/img/banner1.jpg' },
+    { title: 'Giảm 50%', img: 'assets/img/banner2.jpg' },
+    { title: 'Flash Sale', img: 'assets/img/banner3.jpg' }
   ];
 
+
+  brands = [
+    { name: 'Apple', slug: 'apple', logo: 'assets/img/brands/apple.png' },
+    { name: 'Samsung', slug: 'samsung', logo: 'assets/img/brands/samsung.png' },
+    { name: 'Xiaomi', slug: 'xiaomi', logo: 'assets/img/brands/xiaomi.png' },
+    { name: 'Honor', slug: 'honor', logo: 'assets/img/brands/honor.png' },
+    { name: 'Oppo', slug: 'oppo', logo: 'assets/img/brands/oppo.png' },
+    { name: 'Tecno', slug: 'tecno', logo: 'assets/img/brands/tecno.png' },
+    { name: 'Vivo', slug: 'vivo', logo: 'assets/img/brands/vivo.png' },
+    { name: 'Nokia', slug: 'nokia', logo: 'assets/img/brands/nokia.png' },
+    { name: 'Realme', slug: 'realme', logo: 'assets/img/brands/realme.png' },
+    { name: 'Infinix', slug: 'infinix', logo: 'assets/img/brands/infinix.png' }
+  ];
+
+  goToBrand(brand: any) {
+    //this.router.navigate(['/category', brand.slug]);
+  }
+  
   products: Product[] = [
     {
       id: 1,
