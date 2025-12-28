@@ -3,8 +3,9 @@ import { RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthComponent } from './auth/auth.component';
+import { ProductComponent } from './product/product.component';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
-import { EcommerceComponent } from './app.component';
+import { EcommerceComponent } from './ecommerce.component';
 
 @NgModule({
     imports: [
@@ -17,6 +18,7 @@ import { EcommerceComponent } from './app.component';
                     { path: 'home', component: HomeComponent },
                     { path: 'cart', component: CartComponent },
                     { path: 'auth', component: AuthComponent },
+                    { path: 'product/:id', component: ProductComponent },
                 ]
             }
         ])

@@ -8,13 +8,14 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { EcommerceRoutingModule } from './app-routing.module';
+import { EcommerceRoutingModule } from './ecommerce-routing.module';
 import { HomeComponent } from './home/home.component';
 import { CartComponent } from './cart/cart.component';
 import { AuthComponent } from './auth/auth.component';
+import { ProductComponent } from './product/product.component';
 import { ServiceProxyModule } from '../shared/service-proxies/service-proxy.module';
 import { SharedModule } from '../shared/shared.module';
-import { EcommerceComponent } from './app.component';
+import { EcommerceComponent } from './ecommerce.component';
 
 @NgModule({
     declarations: [
@@ -22,6 +23,7 @@ import { EcommerceComponent } from './app.component';
         HomeComponent,
         CartComponent,
         AuthComponent,
+        ProductComponent,
     ],
     imports: [
         CommonModule,
