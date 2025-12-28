@@ -1,0 +1,84 @@
+<header class="ecommerce-header">
+    <div class="header-container">
+      <div class="header-content">
+        <!-- Logo -->
+        <div class="header-logo">
+          <a href="#" class="logo-link">
+            <span class="logo-text">E-Shop</span>
+          </a>
+        </div>
+        <!-- Language Selector -->
+        <div class="lang-dropdown">
+          <button class="lang-selected">
+            <img src="https://flagcdn.com/w20/vn.png" alt="VN">
+            <span>Tiếng việt</span>
+            <svg viewBox="0 0 24 24">
+              <path d="M7 10l5 5 5-5z"></path>
+            </svg>
+          </button>
+        
+          <ul class="lang-menu">
+            <li>
+              <img src="https://flagcdn.com/w20/vn.png" alt="VN">
+              <span>Tiếng Việt</span>
+            </li>
+            <li>
+              <img src="https://flagcdn.com/w20/us.png" alt="EN">
+              <span>English</span>
+            </li>
+            <li>
+              <img src="https://flagcdn.com/w20/jp.png" alt="JP">
+              <span>日本語</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="header-search">
+          <form class="search-form">
+            <input 
+              type="text" 
+              class="search-input" 
+              placeholder="Tìm kiếm sản phẩm"
+              [(ngModel)]="searchQuery"
+              name="searchQuery">
+            <button type="submit" class="search-button">
+              <i class="fas fa-search"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="header-actions">
+          <div class="notification-icon-wrapper">
+            <a href="#" class="notification-link">
+              <i class="fas fa-bell"></i>
+              <span 
+                class="cart-badge" 
+                *ngIf="notificationCount > 0"
+              >
+                {{ notificationCount }}
+              </span>
+            </a>
+          </div>
+          <!-- Cart -->
+          <div class="cart-icon-wrapper">
+            <a routerLink="/ecommerce/cart" class="cart-link">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+            </a>
+          </div>
+
+          <!-- User Avatar / Login -->
+          <div class="user-avatar-wrapper">
+            <a href="#" class="user-link" *ngIf="isLoggedIn">
+              <img src="assets/img/user.png" alt="User" class="user-avatar">
+            </a>
+            <a href="/ecommerce/auth" class="login-button" *ngIf="!isLoggedIn">
+              Đăng nhập / Đăng ký
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>

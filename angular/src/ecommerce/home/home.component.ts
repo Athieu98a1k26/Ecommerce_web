@@ -26,7 +26,7 @@ interface Product {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent extends AppComponentBase {
-  searchQuery: string = '';
+  
   cartItemCount: number = 3;
   isLoggedIn: boolean = false;
 

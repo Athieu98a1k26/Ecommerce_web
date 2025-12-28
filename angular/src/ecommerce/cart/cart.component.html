@@ -1,47 +1,4 @@
 <div class="cart-page">
-  <!-- Header -->
-  <header class="cart-header">
-    <div class="header-container">
-      <div class="header-content">
-        <!-- Logo -->
-        <div class="header-logo">
-          <a routerLink="/ecommerce/home" class="logo-link">
-            <span class="logo-text">E-Shop</span>
-          </a>
-        </div>
-
-        <!-- Page Title -->
-        <h1 class="page-title">Giỏ hàng</h1>
-
-        <!-- Search Bar -->
-        <div class="header-search">
-          <form class="search-form">
-            <input 
-              type="text" 
-              class="search-input" 
-              placeholder="Tìm kiếm sản phẩm"
-              [(ngModel)]="searchQuery"
-              name="searchQuery">
-            <button type="submit" class="search-button">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
-        </div>
-
-        <!-- User Account -->
-        <div class="header-actions">
-          <div class="user-avatar-wrapper">
-            <a href="#" class="user-link" *ngIf="isLoggedIn">
-              <img src="assets/img/user.png" alt="User" class="user-avatar">
-            </a>
-            <a href="#" class="login-button" *ngIf="!isLoggedIn">
-              Đăng nhập
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
 
   <!-- Main Content -->
   <div class="cart-content">

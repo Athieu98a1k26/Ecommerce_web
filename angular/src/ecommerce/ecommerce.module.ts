@@ -16,7 +16,8 @@ import { ProductComponent } from './product/product.component';
 import { ServiceProxyModule } from '../shared/service-proxies/service-proxy.module';
 import { SharedModule } from '../shared/shared.module';
 import { EcommerceComponent } from './ecommerce.component';
-
+import { HeaderComponent } from '@ecommerce/layout/header/header.component';
+import { FooterComponent } from '@ecommerce/layout/footer/footer.component';
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -24,6 +25,8 @@ import { EcommerceComponent } from './ecommerce.component';
         CartComponent,
         AuthComponent,
         ProductComponent,
+        HeaderComponent,
+        FooterComponent
     ],
     imports: [
         CommonModule,

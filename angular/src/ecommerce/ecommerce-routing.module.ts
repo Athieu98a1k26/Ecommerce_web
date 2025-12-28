@@ -11,13 +11,16 @@ import { EcommerceComponent } from './ecommerce.component';
     imports: [
         RouterModule.forChild([
             {
+                path: 'auth',
+                component: AuthComponent
+              },
+            {
                 path: '',
                 component: EcommerceComponent,
                 children: [
                     { path: '', redirectTo: 'auth', pathMatch: 'full' },
                     { path: 'home', component: HomeComponent },
                     { path: 'cart', component: CartComponent },
-                    { path: 'auth', component: AuthComponent },
                     { path: 'product/:id', component: ProductComponent },
                 ]
             }

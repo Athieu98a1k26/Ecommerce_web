@@ -9,15 +9,12 @@ export class EcommerceComponent extends AppComponentBase implements OnInit {
 
   constructor(
     injector: Injector,
-    private renderer: Renderer2,
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this.renderer.addClass(document.body, 'sidebar-mini');
 
-    
   }
 
 }
