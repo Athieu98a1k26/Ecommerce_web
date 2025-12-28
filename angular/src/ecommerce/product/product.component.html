@@ -1,4 +1,4 @@
-<div class="product-detail-page container">
+<div class="product-detail-page container-custom-xxl">
   <div class="product-main-row row">
     <!-- Left Column: Image Carousel & Modal -->
     <div class="product-left col-md-6">
@@ -152,19 +152,6 @@
                 <span class="countdown-value">{{ timeRemaining.seconds | number:'2.0' }}</span>
                 <span class="countdown-label-small">Giây</span>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Product Highlights -->
-      <section class="highlights-section">
-        <div class="highlights-card">
-          <h3 class="highlights-title">Điểm nổi bật</h3>
-          <div class="highlights-list">
-            <div class="highlight-item" *ngFor="let highlight of product.highlights">
-              <i class="fas" [class]="highlight.icon"></i>
-              <span>{{ highlight.text }}</span>
             </div>
           </div>
         </div>

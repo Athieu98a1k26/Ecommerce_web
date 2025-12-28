@@ -107,13 +107,6 @@ export class ProductComponent implements OnInit {
       isOfficial: true,
       badge: 'Official Store'
     },
-    highlights: [
-      { icon: 'fa-bolt', text: 'Đun nước nhanh trong 3-5 phút' },
-      { icon: 'fa-shield-alt', text: 'Tự động tắt khi sôi, an toàn tuyệt đối' },
-      { icon: 'fa-truck', text: 'Miễn phí vận chuyển toàn quốc' },
-      { icon: 'fa-award', text: 'Bảo hành chính hãng 12 tháng' },
-      { icon: 'fa-leaf', text: 'Tiết kiệm điện năng' }
-    ],
     qa: [
       {
         question: 'Ấm có tự động tắt khi sôi không?',

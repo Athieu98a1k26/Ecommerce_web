@@ -1,10 +1,10 @@
-.container,
-.container-fluid,
-.container-xxl,
-.container-xl,
-.container-lg,
-.container-md,
-.container-sm {
+.container-custom,
+.container-custom-fluid,
+.container-custom-xxl,
+.container-custom-xl,
+.container-custom-lg,
+.container-custom-md,
+.container-custom-sm {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
   width: 100%;
@@ -15,27 +15,27 @@
 }
 
 @media (min-width: 576px) {
-  .container-sm, .container {
+  .container-custom-sm, .container-custom {
     max-width: 540px;
   }
 }
 @media (min-width: 768px) {
-  .container-md, .container-sm, .container {
+  .container-custom-md, .container-custom-sm, .container-custom {
     max-width: 720px;
   }
 }
 @media (min-width: 992px) {
-  .container-lg, .container-md, .container-sm, .container {
+  .container-custom-lg, .container-custom-md, .container-custom-sm, .container-custom {
     max-width: 960px;
   }
 }
 @media (min-width: 1200px) {
-  .container-xl, .container-lg, .container-md, .container-sm, .container {
+  .container-custom-xl, .container-custom-lg, .container-custom-md, .container-custom-sm, .container-custom {
     max-width: 1140px;
   }
 }
 @media (min-width: 1400px) {
-  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+  .container-custom-xxl, .container-custom-xl, .container-custom-lg, .container-custom-md, .container-custom-sm, .container-custom {
     max-width: 1320px;
   }
 }

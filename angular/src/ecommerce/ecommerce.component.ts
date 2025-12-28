@@ -3,7 +3,6 @@ import { AppComponentBase } from '../shared/app-component-base';
 
 @Component({
   templateUrl: './ecommerce.component.html',
-  styleUrls: ['./css/base.css'],
 })
 export class EcommerceComponent extends AppComponentBase implements OnInit {
   sidebarExpanded: boolean;
