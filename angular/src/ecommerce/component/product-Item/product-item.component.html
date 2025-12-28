@@ -1,0 +1,23 @@
+<div class="product-card" [routerLink]="['/ecommerce/product', product.id]">
+    <div class="product-image-wrapper">
+      <img [src]="product.image" [alt]="product.name" class="product-image">
+      <span class="discount-badge" *ngIf="product.discount > 0">-{{ product.discount }}%</span>
+      <span class="freeship-badge" *ngIf="product.freeShipping">Miễn phí vận chuyển</span>
+    </div>
+    <div class="product-info">
+      <h3 class="product-name" [title]="product.name">{{ product.name }}</h3>
+      <div class="product-rating">
+        <div class="stars">
+          <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]" 
+             [class.active]="i <= product.rating"></i>
+        </div>
+        <span class="sold-count">Đã bán {{ product.sold }}</span>
+      </div>
+      <div class="product-price">
+        <span class="current-price">{{ product.price | number }}₫</span>
+        <span class="original-price" *ngIf="product.originalPrice">
+          {{ product.originalPrice | number }}₫
+        </span>
+      </div>
+    </div>
+  </div>

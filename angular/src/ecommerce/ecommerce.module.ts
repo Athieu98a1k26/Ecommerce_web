@@ -18,6 +18,7 @@ import { SharedModule } from '../shared/shared.module';
 import { EcommerceComponent } from './ecommerce.component';
 import { HeaderComponent } from '@ecommerce/layout/header/header.component';
 import { FooterComponent } from '@ecommerce/layout/footer/footer.component';
+import {ProductItemComponent} from '@ecommerce/component/product-Item/product-item.component'
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -26,7 +27,8 @@ import { FooterComponent } from '@ecommerce/layout/footer/footer.component';
         AuthComponent,
         ProductComponent,
         HeaderComponent,
-        FooterComponent
+        FooterComponent,
+        ProductItemComponent,
     ],
     imports: [
         CommonModule,

@@ -1,322 +1,299 @@
-<div class="product-detail-page">
-  <!-- Top Navigation Bar -->
-  <header class="product-header">
-    <div class="header-content">
-      <button class="back-button" (click)="goBack()">
-        <i class="fas fa-arrow-left"></i>
-      </button>
-      <div class="header-search-wrapper">
-        <form class="search-form" (ngSubmit)="onSearch()">
-          <input 
-            type="text" 
-            class="search-input" 
-            placeholder="Tìm kiếm sản phẩm"
-            [(ngModel)]="searchQuery"
-            name="searchQuery">
-          <button type="submit" class="search-button">
-            <i class="fas fa-search"></i>
+<div class="product-detail-page container">
+  <div class="product-main-row">
+    <!-- Left Column: Image Carousel & Modal -->
+    <div class="product-left">
+      <!-- Product Image Carousel -->
+      <section class="image-carousel-section">
+        <div class="carousel-container">
+          <div class="carousel-wrapper" [style.transform]="'translateX(-' + (currentImageIndex * 100) + '%)'">
+            <div class="carousel-slide" *ngFor="let image of product.images; let i = index" (click)="openImageModal(i)">
+              <img [src]="image" [alt]="product.name + ' ' + (i + 1)" class="product-image">
+            </div>
+          </div>
+          
+          <!-- Navigation Arrows -->
+          <button class="carousel-nav carousel-prev" (click)="prevImage()" *ngIf="product.images.length > 1">
+            <i class="fas fa-chevron-left"></i>
           </button>
-        </form>
-      </div>
-      <div class="header-actions">
-        <button class="icon-button" (click)="shareProduct()">
-          <i class="fas fa-share-alt"></i>
-        </button>
-        <button class="icon-button cart-icon-btn" (click)="goToCart()">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="cart-badge">3</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Product Image Carousel -->
-  <section class="image-carousel-section">
-    <div class="carousel-container">
-      <div class="carousel-wrapper" [style.transform]="'translateX(-' + (currentImageIndex * 100) + '%)'">
-        <div class="carousel-slide" *ngFor="let image of product.images; let i = index" (click)="openImageModal(i)">
-          <img [src]="image" [alt]="product.name + ' ' + (i + 1)" class="product-image">
-        </div>
-      </div>
-      
-      <!-- Navigation Arrows -->
-      <button class="carousel-nav carousel-prev" (click)="prevImage()" *ngIf="product.images.length > 1">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-      <button class="carousel-nav carousel-next" (click)="nextImage()" *ngIf="product.images.length > 1">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-      
-      <!-- Pagination Dots -->
-      <div class="carousel-dots" *ngIf="product.images.length > 1">
-        <span 
-          class="dot" 
-          *ngFor="let image of product.images; let i = index"
-          [class.active]="i === currentImageIndex"
-          (click)="goToImage(i)">
-        </span>
-      </div>
-    </div>
-
-    <!-- Thumbnail Gallery -->
-    <div class="thumbnail-gallery" *ngIf="product.images.length > 1">
-      <div class="thumbnail-scroll">
-        <div 
-          class="thumbnail-item" 
-          *ngFor="let image of product.images; let i = index"
-          [class.active]="i === currentImageIndex"
-          (click)="goToImage(i)">
-          <img [src]="image" [alt]="'Thumbnail ' + (i + 1)" class="thumbnail-image">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Image Modal/Fullscreen Viewer -->
-  <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <button class="modal-close" (click)="closeImageModal()">
-        <i class="fas fa-times"></i>
-      </button>
-      <div class="modal-carousel">
-        <div class="modal-wrapper" [style.transform]="'translateX(-' + (modalImageIndex * 100) + '%)'">
-          <div class="modal-slide" *ngFor="let image of product.images">
-            <img [src]="image" [alt]="product.name" class="modal-image">
+          <button class="carousel-nav carousel-next" (click)="nextImage()" *ngIf="product.images.length > 1">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          
+          <!-- Pagination Dots -->
+          <div class="carousel-dots" *ngIf="product.images.length > 1">
+            <span 
+              class="dot" 
+              *ngFor="let image of product.images; let i = index"
+              [class.active]="i === currentImageIndex"
+              (click)="goToImage(i)">
+            </span>
           </div>
         </div>
-        <button class="modal-nav modal-prev" (click)="prevModalImage()">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="modal-nav modal-next" (click)="nextModalImage()">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-        <div class="modal-counter">
-          {{ modalImageIndex + 1 }} / {{ product.images.length }}
+
+        <!-- Thumbnail Gallery -->
+        <div class="thumbnail-gallery" *ngIf="product.images.length > 1">
+          <div class="thumbnail-scroll">
+            <div 
+              class="thumbnail-item" 
+              *ngFor="let image of product.images; let i = index"
+              [class.active]="i === currentImageIndex"
+              (click)="goToImage(i)">
+              <img [src]="image" [alt]="'Thumbnail ' + (i + 1)" class="thumbnail-image">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image Modal/Fullscreen Viewer -->
+      <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <button class="modal-close" (click)="closeImageModal()">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="modal-carousel">
+            <div class="modal-wrapper" [style.transform]="'translateX(-' + (modalImageIndex * 100) + '%)'">
+              <div class="modal-slide" *ngFor="let image of product.images">
+                <img [src]="image" [alt]="product.name" class="modal-image">
+              </div>
+            </div>
+            <button class="modal-nav modal-prev" (click)="prevModalImage()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="modal-nav modal-next" (click)="nextModalImage()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+            <div class="modal-counter">
+              {{ modalImageIndex + 1 }} / {{ product.images.length }}
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Right Column: Product Information, Options, etc. -->
+    <div class="product-right">
+      <!-- Product Info Card -->
+      <section class="product-info-section">
+        <div class="product-info-card">
+          <!-- Product Title -->
+          <h2 class="product-title">{{ product.name }}</h2>
+          
+          <!-- Rating and Sold Info -->
+          <div class="rating-sold-row">
+            <div class="rating-group">
+              <div class="stars">
+                <i class="fas fa-star" *ngFor="let star of getStarArray(product.rating)"
+                   [class.full]="star === 1"
+                   [class.half]="star === 0.5"></i>
+              </div>
+              <span class="rating-value">{{ product.rating }}</span>
+            </div>
+            <div class="divider">|</div>
+            <span class="review-count">{{ product.reviewCount }} đánh giá</span>
+            <div class="divider">|</div>
+            <span class="sold-count">Đã bán {{ product.sold | number }}</span>
+          </div>
+
+          <!-- Seller Badge -->
+          <div class="seller-badge" *ngIf="product.seller.isOfficial">
+            <i class="fas fa-certificate"></i>
+            <span>{{ product.seller.badge }}</span>
+          </div>
+
+          <!-- Price Section -->
+          <div class="price-section">
+            <div class="current-price-wrapper">
+              <span class="current-price">{{ product.currentPrice | number }}₫</span>
+              <span class="discount-badge">-{{ product.discount }}%</span>
+            </div>
+            <div class="original-price-wrapper">
+              <span class="original-price">{{ product.originalPrice | number }}₫</span>
+            </div>
+          </div>
+
+          <!-- Shipping Info -->
+          <div class="shipping-info">
+            <div class="shipping-item" *ngIf="product.freeShipping">
+              <i class="fas fa-truck shipping-icon"></i>
+              <span class="shipping-text">Miễn phí vận chuyển</span>
+            </div>
+            <div class="shipping-item">
+              <i class="fas fa-clock shipping-icon"></i>
+              <span class="shipping-text">Giao hàng dự kiến: {{ product.estimatedDelivery }}</span>
+            </div>
+          </div>
+
+          <!-- Vouchers and Promotions -->
+          <div class="vouchers-section" *ngIf="product.vouchers.length > 0">
+            <div class="voucher-tag" *ngFor="let voucher of product.vouchers" [class.discount]="voucher.type === 'discount'">
+              <i class="fas fa-tag"></i>
+              <span>{{ voucher.text }}</span>
+            </div>
+          </div>
+
+          <!-- Flash Deal Countdown -->
+          <div class="countdown-section">
+            <div class="countdown-label">
+              <i class="fas fa-bolt"></i>
+              <span>Flash Deal kết thúc sau:</span>
+            </div>
+            <div class="countdown-timer">
+              <div class="countdown-item">
+                <span class="countdown-value">{{ timeRemaining.hours | number:'2.0' }}</span>
+                <span class="countdown-label-small">Giờ</span>
+              </div>
+              <span class="countdown-separator">:</span>
+              <div class="countdown-item">
+                <span class="countdown-value">{{ timeRemaining.minutes | number:'2.0' }}</span>
+                <span class="countdown-label-small">Phút</span>
+              </div>
+              <span class="countdown-separator">:</span>
+              <div class="countdown-item">
+                <span class="countdown-value">{{ timeRemaining.seconds | number:'2.0' }}</span>
+                <span class="countdown-label-small">Giây</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Product Highlights -->
+      <section class="highlights-section">
+        <div class="highlights-card">
+          <h3 class="highlights-title">Điểm nổi bật</h3>
+          <div class="highlights-list">
+            <div class="highlight-item" *ngFor="let highlight of product.highlights">
+              <i class="fas" [class]="highlight.icon"></i>
+              <span>{{ highlight.text }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Variant Selection -->
+      <section class="variant-section">
+        <div class="variant-card">
+          <div class="variant-header">
+            <h3 class="variant-section-title">Chọn phân loại hàng</h3>
+            <button class="view-toggle-btn" (click)="toggleVariantViewMode()">
+              <i class="fas" [class.fa-list]="variantViewMode === 'buttons'" [class.fa-th]="variantViewMode === 'dropdown'"></i>
+            </button>
+          </div>
+
+          <!-- Color Selection -->
+          <div class="variant-group">
+            <div class="variant-label">
+              <span>Màu sắc:</span>
+              <span class="selected-variant">{{ getColorName(selectedColor) }}</span>
+            </div>
+            <div class="variant-options" *ngIf="variantViewMode === 'buttons'">
+              <button 
+                class="variant-option color-option"
+                *ngFor="let color of product.colors"
+                [class.selected]="selectedColor === color.value"
+                [class.unavailable]="!color.available"
+                [style.background-color]="getColorHex(color.value)"
+                (click)="selectColor(color.value)"
+                [disabled]="!color.available">
+                <i class="fas fa-check" *ngIf="selectedColor === color.value && color.available"></i>
+                <span class="color-name">{{ color.name }}</span>
+              </button>
+            </div>
+            <select 
+              class="variant-dropdown" 
+              *ngIf="variantViewMode === 'dropdown'"
+              [(ngModel)]="selectedColor"
+              (change)="selectColor(selectedColor)">
+              <option *ngFor="let color of product.colors" [value]="color.value" [disabled]="!color.available">
+                {{ color.name }} {{ !color.available ? '(Hết hàng)' : '' }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Model Selection -->
+          <div class="variant-group">
+            <div class="variant-label">
+              <span>Phiên bản:</span>
+              <span class="selected-variant">{{ getModelName(selectedModel) }}</span>
+            </div>
+            <div class="variant-options" *ngIf="variantViewMode === 'buttons'">
+              <button 
+                class="variant-option model-option"
+                *ngFor="let model of product.models"
+                [class.selected]="selectedModel === model.value"
+                (click)="selectModel(model.value)">
+                {{ model.name }}
+              </button>
+            </div>
+            <select 
+              class="variant-dropdown" 
+              *ngIf="variantViewMode === 'dropdown'"
+              [(ngModel)]="selectedModel"
+              (change)="selectModel(selectedModel)">
+              <option *ngFor="let model of product.models" [value]="model.value">
+                {{ model.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Variant Price Update -->
+          <div class="variant-price-update" *ngIf="selectedModel !== 'standard'">
+            <span class="price-update-label">Giá đã cập nhật theo phiên bản</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quantity Selector -->
+      <section class="quantity-section">
+        <div class="quantity-card">
+          <span class="quantity-label">Số lượng:</span>
+          <div class="quantity-controls">
+            <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input type="number" class="quantity-input" [(ngModel)]="quantity" min="1" readonly>
+            <button class="quantity-btn" (click)="increaseQuantity()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <span class="stock-info">Còn {{ 50 - quantity }} sản phẩm</span>
+        </div>
+      </section>
+
+      <!-- Seller Information -->
+      <section class="seller-section">
+        <div class="seller-card">
+          <div class="seller-header">
+            <img [src]="product.seller.avatar" [alt]="product.seller.name" class="seller-avatar">
+            <div class="seller-info">
+              <h3 class="seller-name">{{ product.seller.name }}</h3>
+              <div class="seller-stats">
+                <div class="seller-stat">
+                  <i class="fas fa-star"></i>
+                  <span>{{ product.seller.rating }}</span>
+                </div>
+                <div class="seller-stat">
+                  <i class="fas fa-users"></i>
+                  <span>{{ product.seller.followers | number }} theo dõi</span>
+                </div>
+              </div>
+              <div class="seller-response">
+                <span>Tỷ lệ phản hồi: {{ product.seller.responseRate }}</span>
+                <span>Thời gian phản hồi: {{ product.seller.responseTime }}</span>
+              </div>
+            </div>
+            <button 
+              class="follow-button"
+              [class.following]="isFollowing"
+              (click)="toggleFollow()">
+              <i class="fas" [class.fa-heart]="isFollowing" [class.fa-heart-o]="!isFollowing"></i>
+              {{ isFollowing ? 'Đã theo dõi' : 'Theo dõi' }}
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
-
-  <!-- Product Info Card -->
-  <section class="product-info-section">
-    <div class="product-info-card">
-      <!-- Product Title -->
-      <h2 class="product-title">{{ product.name }}</h2>
-      
-      <!-- Rating and Sold Info -->
-      <div class="rating-sold-row">
-        <div class="rating-group">
-          <div class="stars">
-            <i class="fas fa-star" *ngFor="let star of getStarArray(product.rating)"
-               [class.full]="star === 1"
-               [class.half]="star === 0.5"></i>
-          </div>
-          <span class="rating-value">{{ product.rating }}</span>
-        </div>
-        <div class="divider">|</div>
-        <span class="review-count">{{ product.reviewCount }} đánh giá</span>
-        <div class="divider">|</div>
-        <span class="sold-count">Đã bán {{ product.sold | number }}</span>
-      </div>
-
-      <!-- Seller Badge -->
-      <div class="seller-badge" *ngIf="product.seller.isOfficial">
-        <i class="fas fa-certificate"></i>
-        <span>{{ product.seller.badge }}</span>
-      </div>
-
-      <!-- Price Section -->
-      <div class="price-section">
-        <div class="current-price-wrapper">
-          <span class="current-price">{{ product.currentPrice | number }}₫</span>
-          <span class="discount-badge">-{{ product.discount }}%</span>
-        </div>
-        <div class="original-price-wrapper">
-          <span class="original-price">{{ product.originalPrice | number }}₫</span>
-        </div>
-      </div>
-
-      <!-- Shipping Info -->
-      <div class="shipping-info">
-        <div class="shipping-item" *ngIf="product.freeShipping">
-          <i class="fas fa-truck shipping-icon"></i>
-          <span class="shipping-text">Miễn phí vận chuyển</span>
-        </div>
-        <div class="shipping-item">
-          <i class="fas fa-clock shipping-icon"></i>
-          <span class="shipping-text">Giao hàng dự kiến: {{ product.estimatedDelivery }}</span>
-        </div>
-      </div>
-
-      <!-- Vouchers and Promotions -->
-      <div class="vouchers-section" *ngIf="product.vouchers.length > 0">
-        <div class="voucher-tag" *ngFor="let voucher of product.vouchers" [class.discount]="voucher.type === 'discount'">
-          <i class="fas fa-tag"></i>
-          <span>{{ voucher.text }}</span>
-        </div>
-      </div>
-
-      <!-- Flash Deal Countdown -->
-      <div class="countdown-section">
-        <div class="countdown-label">
-          <i class="fas fa-bolt"></i>
-          <span>Flash Deal kết thúc sau:</span>
-        </div>
-        <div class="countdown-timer">
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.hours | number:'2.0' }}</span>
-            <span class="countdown-label-small">Giờ</span>
-          </div>
-          <span class="countdown-separator">:</span>
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.minutes | number:'2.0' }}</span>
-            <span class="countdown-label-small">Phút</span>
-          </div>
-          <span class="countdown-separator">:</span>
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.seconds | number:'2.0' }}</span>
-            <span class="countdown-label-small">Giây</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Product Highlights -->
-  <section class="highlights-section">
-    <div class="highlights-card">
-      <h3 class="highlights-title">Điểm nổi bật</h3>
-      <div class="highlights-list">
-        <div class="highlight-item" *ngFor="let highlight of product.highlights">
-          <i class="fas" [class]="highlight.icon"></i>
-          <span>{{ highlight.text }}</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Variant Selection -->
-  <section class="variant-section">
-    <div class="variant-card">
-      <div class="variant-header">
-        <h3 class="variant-section-title">Chọn phân loại hàng</h3>
-        <button class="view-toggle-btn" (click)="toggleVariantViewMode()">
-          <i class="fas" [class.fa-list]="variantViewMode === 'buttons'" [class.fa-th]="variantViewMode === 'dropdown'"></i>
-        </button>
-      </div>
-
-      <!-- Color Selection -->
-      <div class="variant-group">
-        <div class="variant-label">
-          <span>Màu sắc:</span>
-          <span class="selected-variant">{{ getColorName(selectedColor) }}</span>
-        </div>
-        <div class="variant-options" *ngIf="variantViewMode === 'buttons'">
-          <button 
-            class="variant-option color-option"
-            *ngFor="let color of product.colors"
-            [class.selected]="selectedColor === color.value"
-            [class.unavailable]="!color.available"
-            [style.background-color]="getColorHex(color.value)"
-            (click)="selectColor(color.value)"
-            [disabled]="!color.available">
-            <i class="fas fa-check" *ngIf="selectedColor === color.value && color.available"></i>
-            <span class="color-name">{{ color.name }}</span>
-          </button>
-        </div>
-        <select 
-          class="variant-dropdown" 
-          *ngIf="variantViewMode === 'dropdown'"
-          [(ngModel)]="selectedColor"
-          (change)="selectColor(selectedColor)">
-          <option *ngFor="let color of product.colors" [value]="color.value" [disabled]="!color.available">
-            {{ color.name }} {{ !color.available ? '(Hết hàng)' : '' }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Model Selection -->
-      <div class="variant-group">
-        <div class="variant-label">
-          <span>Phiên bản:</span>
-          <span class="selected-variant">{{ getModelName(selectedModel) }}</span>
-        </div>
-        <div class="variant-options" *ngIf="variantViewMode === 'buttons'">
-          <button 
-            class="variant-option model-option"
-            *ngFor="let model of product.models"
-            [class.selected]="selectedModel === model.value"
-            (click)="selectModel(model.value)">
-            {{ model.name }}
-          </button>
-        </div>
-        <select 
-          class="variant-dropdown" 
-          *ngIf="variantViewMode === 'dropdown'"
-          [(ngModel)]="selectedModel"
-          (change)="selectModel(selectedModel)">
-          <option *ngFor="let model of product.models" [value]="model.value">
-            {{ model.name }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Variant Price Update -->
-      <div class="variant-price-update" *ngIf="selectedModel !== 'standard'">
-        <span class="price-update-label">Giá đã cập nhật theo phiên bản</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quantity Selector -->
-  <section class="quantity-section">
-    <div class="quantity-card">
-      <span class="quantity-label">Số lượng:</span>
-      <div class="quantity-controls">
-        <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
-          <i class="fas fa-minus"></i>
-        </button>
-        <input type="number" class="quantity-input" [(ngModel)]="quantity" min="1" readonly>
-        <button class="quantity-btn" (click)="increaseQuantity()">
-          <i class="fas fa-plus"></i>
-        </button>
-      </div>
-      <span class="stock-info">Còn {{ 50 - quantity }} sản phẩm</span>
-    </div>
-  </section>
-
-  <!-- Seller Information -->
-  <section class="seller-section">
-    <div class="seller-card">
-      <div class="seller-header">
-        <img [src]="product.seller.avatar" [alt]="product.seller.name" class="seller-avatar">
-        <div class="seller-info">
-          <h3 class="seller-name">{{ product.seller.name }}</h3>
-          <div class="seller-stats">
-            <div class="seller-stat">
-              <i class="fas fa-star"></i>
-              <span>{{ product.seller.rating }}</span>
-            </div>
-            <div class="seller-stat">
-              <i class="fas fa-users"></i>
-              <span>{{ product.seller.followers | number }} theo dõi</span>
-            </div>
-          </div>
-          <div class="seller-response">
-            <span>Tỷ lệ phản hồi: {{ product.seller.responseRate }}</span>
-            <span>Thời gian phản hồi: {{ product.seller.responseTime }}</span>
-          </div>
-        </div>
-        <button 
-          class="follow-button"
-          [class.following]="isFollowing"
-          (click)="toggleFollow()">
-          <i class="fas" [class.fa-heart]="isFollowing" [class.fa-heart-o]="!isFollowing"></i>
-          {{ isFollowing ? 'Đã theo dõi' : 'Theo dõi' }}
-        </button>
-      </div>
-    </div>
-  </section>
 
   <!-- Product Description & Details Tabs -->
   <section class="details-tabs-section">
@@ -535,4 +512,3 @@
     </button>
   </div>
 </div>
-

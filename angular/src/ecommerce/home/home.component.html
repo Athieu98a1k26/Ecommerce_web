@@ -1,61 +1,41 @@
 ﻿<!-- Banner Section -->
-<section class="banner-section">
-  <div class="banner-container">
-    <div class="banner-carousel">
-      <div class="banner-slide active">
-        <div class="banner-content">
-          <h2 class="banner-title">Siêu sale 12.12</h2>
-          <p class="banner-subtitle">Giảm đến 50%</p>
-          <button class="banner-button">Mua ngay</button>
-        </div>
-        <div class="banner-image" style="background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Category Section -->
-<section class="category-section">
-  <div class="category-container">
-    <div class="category-grid">
-      <div class="category-item" *ngFor="let category of categories">
-        <div class="category-icon-wrapper">
-          <i [class]="category.icon"></i>
-        </div>
-        <span class="category-label">{{ category.name }}</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Product List Section -->
-<section class="product-section">
-  <div class="product-container">
-    <h2 class="section-title">Sản phẩm nổi bật</h2>
-    <div class="product-grid">
-      <div class="product-card" *ngFor="let product of products" [routerLink]="['/ecommerce/product', product.id]">
-        <div class="product-image-wrapper">
-          <img [src]="product.image" [alt]="product.name" class="product-image">
-          <span class="discount-badge" *ngIf="product.discount > 0">-{{ product.discount }}%</span>
-          <span class="freeship-badge" *ngIf="product.freeShipping">Miễn phí vận chuyển</span>
-        </div>
-        <div class="product-info">
-          <h3 class="product-name" [title]="product.name">{{ product.name }}</h3>
-          <div class="product-rating">
-            <div class="stars">
-              <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]" 
-                 [class.active]="i <= product.rating"></i>
-            </div>
-            <span class="sold-count">Đã bán {{ product.sold }}</span>
+<div class="container">
+  <section class="banner-section">
+    <div class="banner-container">
+      <div class="banner-carousel">
+        <div class="banner-slide active">
+          <div class="banner-content">
+            <h2 class="banner-title">Siêu sale 12.12</h2>
+            <p class="banner-subtitle">Giảm đến 50%</p>
+            <button class="banner-button">Mua ngay</button>
           </div>
-          <div class="product-price">
-            <span class="current-price">{{ product.price | number }}₫</span>
-            <span class="original-price" *ngIf="product.originalPrice">
-              {{ product.originalPrice | number }}₫
-            </span>
-          </div>
+          <div class="banner-image" style="background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);"></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+  
+  <!-- Category Section -->
+  <section class="category-section">
+    <div class="category-container">
+      <div class="category-grid">
+        <div class="category-item" *ngFor="let category of categories">
+          <div class="category-icon-wrapper">
+            <i [class]="category.icon"></i>
+          </div>
+          <span class="category-label">{{ category.name }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Product List Section -->
+  <section class="product-section">
+    <div class="product-container">
+      <h2 class="section-title">Sản phẩm nổi bật</h2>
+      <div class="product-grid">
+        <product-item *ngFor="let product of products" [product]="product"></product-item>
+      </div>
+    </div>
+  </section>
+</div>
