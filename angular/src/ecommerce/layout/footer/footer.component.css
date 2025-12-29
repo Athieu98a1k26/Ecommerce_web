@@ -48,7 +48,7 @@
   }
   
   .footer-links a:hover {
-    color: #ff6b35;
+    color: var(--brand-primary);
   }
   
   .payment-methods {

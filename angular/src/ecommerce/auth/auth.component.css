@@ -49,13 +49,13 @@
 
 .header-logo i {
   font-size: 32px;
-  color: #ee4d2d;
+  color: var(--brand-primary);
 }
 
 .logo-text {
   font-size: 24px;
   font-weight: 700;
-  color: #ee4d2d;
+  color: var(--brand-primary);
   letter-spacing: -0.5px;
 }
 
@@ -79,11 +79,11 @@
 }
 
 .nav-link:hover {
-  color: #ee4d2d;
+  color: var(--brand-primary);
 }
 
 .nav-link.flash-sale {
-  color: #ee4d2d;
+  color: var(--brand-primary);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -113,8 +113,8 @@
 .btn-login,
 .btn-register {
   padding: 8px 20px;
-  border: 1px solid #ee4d2d;
-  border-radius: 4px;
+  border: 1px solid var(--brand-primary);
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -123,22 +123,22 @@
 
 .btn-login {
   background: transparent;
-  color: #ee4d2d;
+  color: var(--brand-primary);
 }
 
 .btn-login:hover {
-  background: #ee4d2d;
+  background: var(--brand-primary);
   color: #fff;
 }
 
 .btn-register {
-  background: #ee4d2d;
+  background: var(--brand-primary);
   color: #fff;
 }
 
 .btn-register:hover {
-  background: #d73211;
-  border-color: #d73211;
+  background: var(--brand-hover);
+  border-color: var(--brand-hover);
 }
 
 /* User Menu */
@@ -165,7 +165,7 @@
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ee4d2d;
+  border: 2px solid var(--brand-primary);
 }
 
 .username {
@@ -226,8 +226,8 @@
 }
 
 .dropdown-item:hover {
-  background: #f5f5f5;
-  color: #ee4d2d;
+  background: var(--brand-light-bg);
+  color: var(--brand-primary);
 }
 
 .dropdown-item i {
@@ -236,7 +236,7 @@
 }
 
 .dropdown-item:hover i {
-  color: #ee4d2d;
+  color: var(--brand-primary);
 }
 
 .dropdown-divider {
@@ -270,10 +270,10 @@
 }
 
 .promotion-banner {
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+  border-radius: var(--radius-lg);
   padding: 32px 24px;
-  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.2);
+  box-shadow: var(--shadow-lg);
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -320,9 +320,9 @@
   margin-top: 8px;
   padding: 12px 24px;
   background: #fff;
-  color: #ee4d2d;
+  color: var(--brand-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -331,7 +331,7 @@
   justify-content: center;
   gap: 8px;
   transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .promotion-cta:hover {
@@ -356,10 +356,10 @@
 
 .hero-carousel {
   position: relative;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, #ee4d2d 0%, #ff6b35 100%);
+  box-shadow: var(--shadow-lg);
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   min-height: 500px;
   display: flex;
   align-items: center;
@@ -407,14 +407,14 @@
 .slide-button {
   padding: 14px 32px;
   background: #fff;
-  color: #ee4d2d;
+  color: var(--brand-primary);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-md);
 }
 
 .slide-button:hover {
@@ -476,9 +476,9 @@
 }
 
 .indicator.active {
-  background: #ee4d2d;
+  background: var(--brand-primary);
   width: 24px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 /* ============================================
@@ -529,12 +529,12 @@
 }
 
 .tab-button:hover {
-  color: #ee4d2d;
-  background-color: rgba(238, 77, 45, 0.05);
+  color: var(--brand-primary);
+  background-color: var(--brand-light-bg);
 }
 
 .tab-button.active {
-  color: #ee4d2d;
+  color: var(--brand-primary);
   font-weight: 600;
 }
 
@@ -545,7 +545,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background-color: #ee4d2d;
+  background-color: var(--brand-primary);
   border-radius: 3px 3px 0 0;
 }
 
@@ -613,8 +613,8 @@
 }
 
 .form-input:focus {
-  border-color: #ee4d2d;
-  box-shadow: 0 0 0 3px rgba(238, 77, 45, 0.1);
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
 }
 
 .form-input.error {
@@ -648,7 +648,7 @@
 }
 
 .password-toggle:hover {
-  color: #ee4d2d;
+  color: var(--brand-primary);
 }
 
 .error-message {
@@ -667,13 +667,13 @@
 
 .forgot-password-link {
   font-size: 14px;
-  color: #ee4d2d;
+  color: var(--brand-primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .forgot-password-link:hover {
-  color: #d73211;
+  color: var(--brand-hover);
   text-decoration: underline;
 }
 
@@ -681,22 +681,27 @@
 .primary-button {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, #ee4d2d 0%, #ff6b35 100%);
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(238, 77, 45, 0.3);
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.3);
   margin-top: 8px;
 }
 
 .primary-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #d73211 0%, #ee4d2d 100%);
-  box-shadow: 0 4px 12px rgba(238, 77, 45, 0.4);
+  background: linear-gradient(135deg, var(--brand-hover) 0%, var(--brand-primary) 100%);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.4);
   transform: translateY(-1px);
+}
+
+.primary-button:focus {
+  outline: 2px solid var(--brand-secondary);
+  outline-offset: 2px;
 }
 
 .primary-button:active:not(:disabled) {
@@ -764,9 +769,9 @@
 }
 
 .social-button:hover {
-  border-color: #ee4d2d;
-  color: #ee4d2d;
-  background-color: rgba(238, 77, 45, 0.05);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+  background-color: var(--brand-light-bg);
 }
 
 .social-button i {
@@ -799,13 +804,13 @@
 
 .otp-link {
   font-size: 14px;
-  color: #ee4d2d;
+  color: var(--brand-primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .otp-link:hover {
-  color: #d73211;
+  color: var(--brand-hover);
   text-decoration: underline;
 }
 
@@ -881,7 +886,7 @@
   width: 18px;
   height: 18px;
   cursor: pointer;
-  accent-color: #ee4d2d;
+  accent-color: var(--brand-primary);
   flex-shrink: 0;
 }
 
@@ -890,13 +895,13 @@
 }
 
 .terms-link {
-  color: #ee4d2d;
+  color: var(--brand-primary);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .terms-link:hover {
-  color: #d73211;
+  color: var(--brand-hover);
   text-decoration: underline;
 }
 
@@ -1069,7 +1074,7 @@
 .tab-button:focus-visible,
 .btn-login:focus-visible,
 .btn-register:focus-visible {
-  outline: 2px solid #ee4d2d;
+  outline: 2px solid var(--brand-primary);
   outline-offset: 2px;
 }
 

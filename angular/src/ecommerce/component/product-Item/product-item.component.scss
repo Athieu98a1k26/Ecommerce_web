@@ -1,15 +1,17 @@
 .product-card {
-    background-color: white;
-    border-radius: 8px;
+    background-color: var(--bg-white);
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s;
     cursor: pointer;
   }
   
   .product-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--brand-secondary);
   }
   
   .product-image-wrapper {
@@ -33,10 +35,10 @@
     position: absolute;
     top: 8px;
     right: 8px;
-    background-color: #ff4757;
+    background-color: var(--brand-secondary);
     color: white;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 12px;
     font-weight: bold;
   }
@@ -45,10 +47,10 @@
     position: absolute;
     bottom: 8px;
     left: 8px;
-    background-color: #2ed573;
+    background-color: var(--brand-success);
     color: white;
     padding: 4px 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 11px;
     font-weight: 500;
   }
@@ -59,7 +61,7 @@
   
   .product-name {
     font-size: 14px;
-    color: #333;
+    color: var(--text-dark);
     margin: 0 0 8px 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -94,7 +96,7 @@
   
   .sold-count {
     font-size: 12px;
-    color: #666;
+    color: var(--text-medium);
   }
   
   .product-price {
@@ -106,12 +108,12 @@
   .current-price {
     font-size: 18px;
     font-weight: bold;
-    color: #ff6b35;
+    color: var(--brand-primary);
   }
   
   .original-price {
     font-size: 14px;
-    color: #999;
+    color: var(--text-light);
     text-decoration: line-through;
   }
   
