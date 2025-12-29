@@ -1,0 +1,158 @@
+<div class="product-search-page container-custom-xxl">
+  <div class="product-search-layout row">
+    <!-- Sidebar: Filters -->
+    <aside class="filter-sidebar col-12 col-md-3">
+      <div class="filter-card">
+        <div class="filter-card-header">
+          <button class="filter-menu-btn">
+            <i class="fas fa-bars"></i>
+            <span>Danh sách sản phẩm</span>
+          </button>
+        </div>
+
+        <!-- Brand filter -->
+        <div class="filter-section">
+          <h3 class="filter-title">Lựa chọn hãng</h3>
+          <div class="brand-filter-list">
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/apple.png" alt="Apple" />
+            </button>
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/samsung.png" alt="Samsung" />
+            </button>
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/xiaomi.png" alt="Xiaomi" />
+            </button>
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/oppo.png" alt="OPPO" />
+            </button>
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/vivo.png" alt="Vivo" />
+            </button>
+            <button class="brand-filter-item">
+              <img src="assets/img/brands/realme.png" alt="Realme" />
+            </button>
+            <button class="brand-filter-item">
+              <span class="brand-text">Khác</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Price filter -->
+        <div class="filter-section">
+          <h3 class="filter-title">Mức giá</h3>
+          <div class="price-slider-row">
+            <div class="price-slider-track">
+              <div class="price-slider-range"></div>
+              <div class="price-slider-thumb left"></div>
+              <div class="price-slider-thumb right"></div>
+            </div>
+            <div class="price-inputs">
+              <div class="price-input">
+                <span class="price-label">Từ</span>
+                <input type="text" value="1 triệu" />
+              </div>
+              <span class="price-separator">-</span>
+              <div class="price-input">
+                <span class="price-label">Đến</span>
+                <input type="text" value="3 triệu" />
+              </div>
+            </div>
+            <button class="btn-apply">Áp dụng</button>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main: Result & products -->
+    <main class="product-search-main col-12 col-md-9">
+      <!-- Sort tabs -->
+      <div class="sort-tabs-card">
+        <button class="sort-tab active">Liên quan</button>
+        <button class="sort-tab">Mới nhất</button>
+        <button class="sort-tab">Bán chạy</button>
+        <button class="sort-tab">Giá rẻ</button>
+        <button class="sort-tab">Giá cao</button>
+      </div>
+
+      <!-- Category header -->
+      <section class="category-header">
+        <h1 class="category-title">Điện thoại</h1>
+        <p class="category-description">
+          Xu hướng điện thoại di động AI đang bùng nổ với những công nghệ vượt bậc như camera AI
+          thông minh, nhận diện khuôn mặt siêu tốc, trợ lý ảo cá nhân hóa... Trong đó, các hãng lớn
+          như Apple, Samsung và nhiều hãng khác đang cạnh tranh để biến smartphone thành “trợ lý”
+          đắc lực trong cuộc sống hằng ngày.
+        </p>
+      </section>
+
+      <!-- Product grid -->
+      <section class="product-list-section">
+        <div class="product-grid-header">
+          <div class="product-count">
+            <span class="product-count-main">1.268</span>
+            <span class="product-count-label">sản phẩm</span>
+          </div>
+          <div class="active-filters">
+            <span class="filter-chip">
+              <span>Hãng: Realme</span>
+              <i class="fas fa-times"></i>
+            </span>
+            <span class="filter-chip">
+              <span>Giá: 1 - 3 triệu</span>
+              <i class="fas fa-times"></i>
+            </span>
+          </div>
+        </div>
+
+        <div class="product-search-grid">
+          <div
+            class="search-product-card"
+            *ngFor="let _ of [1,2,3,4,5,6,7,8]"
+          >
+            <div class="card-image-wrapper">
+              <img
+                src="assets/img/product/iphone_17pro.png"
+                alt="Điện thoại"
+                class="card-image"
+              />
+              <span class="card-installment-badge">Góp 0%, 0 phí</span>
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">
+                realme C55 - 8GB/128GB
+              </h3>
+              <div class="card-specs">
+                <span>Helio G88</span>
+                <span class="dot"></span>
+                <span>5000mAh</span>
+                <span class="dot"></span>
+                <span>6GB</span>
+              </div>
+              <div class="card-price-row">
+                <div class="card-price-main">
+                  <span class="current-price">3,690,000₫</span>
+                  <span class="discount-percent">-26%</span>
+                </div>
+                <div class="original-price">4,990,000₫</div>
+              </div>
+              <div class="card-member-badge">
+                <span>Member Giảm Thêm Tới</span>
+                <strong>44,000₫</strong>
+              </div>
+              <div class="card-promo">
+                <span class="promo-label">KM</span>
+                <span class="promo-text">Giảm 10% phụ kiện khi mua kèm Phone/Tab/Laptop</span>
+              </div>
+              <div class="card-extra-offers">
+                <span>+ 15 ưu đãi khác</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+

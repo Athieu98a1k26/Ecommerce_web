@@ -432,55 +432,6 @@
   z-index: 1;
 }
 
-.decoration-circle {
-  position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.circle-1 {
-  width: 200px;
-  height: 200px;
-  top: -50px;
-  right: -50px;
-}
-
-.circle-2 {
-  width: 150px;
-  height: 150px;
-  bottom: 50px;
-  right: 100px;
-}
-
-.circle-3 {
-  width: 100px;
-  height: 100px;
-  top: 50%;
-  right: 200px;
-}
-
-.carousel-indicators {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ccc;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.indicator.active {
-  background: var(--brand-primary);
-  width: 24px;
-  border-radius: var(--radius-sm);
-}
-
 /* ============================================
    RIGHT COLUMN - AUTH CARD
    ============================================ */

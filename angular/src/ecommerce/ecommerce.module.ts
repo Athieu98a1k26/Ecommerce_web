@@ -20,7 +20,7 @@ import { HeaderComponent } from '@ecommerce/layout/header/header.component';
 import { FooterComponent } from '@ecommerce/layout/footer/footer.component';
 import {ProductItemComponent} from '@ecommerce/component/product-item/product-item.component';
 import { CarouselModule } from 'ngx-owl-carousel-o';
-
+import {ProductSearchComponent} from '@ecommerce/product-search/product-search.component';
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -31,6 +31,7 @@ import { CarouselModule } from 'ngx-owl-carousel-o';
         HeaderComponent,
         FooterComponent,
         ProductItemComponent,
+        ProductSearchComponent,
     ],
     imports: [
         CommonModule,

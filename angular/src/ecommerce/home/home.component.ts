@@ -86,7 +86,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 1,
       name: 'Áo thun nam cổ tròn chất liệu cotton cao cấp, thoáng mát, nhiều màu sắc',
-      image: 'https://via.placeholder.com/300x300/ff6b35/ffffff?text=Product+1',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 199000,
       originalPrice: 299000,
       discount: 30,
@@ -97,7 +97,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 2,
       name: 'Điện thoại smartphone màn hình 6.5 inch, RAM 8GB, bộ nhớ 128GB',
-      image: 'https://via.placeholder.com/300x300/ff8c42/ffffff?text=Product+2',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 5990000,
       originalPrice: 7990000,
       discount: 25,
@@ -108,7 +108,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 3,
       name: 'Máy xay sinh tố đa năng, công suất cao, an toàn cho sức khỏe',
-      image: 'https://via.placeholder.com/300x300/ffa07a/ffffff?text=Product+3',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 890000,
       originalPrice: 1200000,
       discount: 26,
@@ -119,7 +119,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 4,
       name: 'Kem dưỡng da mặt chống lão hóa, làm trắng da, dưỡng ẩm sâu',
-      image: 'https://via.placeholder.com/300x300/ffb347/ffffff?text=Product+4',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 450000,
       originalPrice: 650000,
       discount: 31,
@@ -130,7 +130,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 5,
       name: 'Laptop gaming hiệu năng cao, card đồ họa rời, màn hình 15.6 inch',
-      image: 'https://via.placeholder.com/300x300/ffcc99/ffffff?text=Product+5',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 18990000,
       originalPrice: 24990000,
       discount: 24,
@@ -141,7 +141,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 6,
       name: 'Quần jean nam form slim fit, chất liệu denim cao cấp, bền đẹp',
-      image: 'https://via.placeholder.com/300x300/ff6b35/ffffff?text=Product+6',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 450000,
       originalPrice: 650000,
       discount: 31,
@@ -152,7 +152,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 7,
       name: 'Tai nghe không dây chống ồn chủ động, pin lâu, chất lượng âm thanh cao',
-      image: 'https://via.placeholder.com/300x300/ff8c42/ffffff?text=Product+7',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 1290000,
       originalPrice: 1990000,
       discount: 35,
@@ -163,7 +163,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 8,
       name: 'Bàn chải đánh răng điện tự động, nhiều chế độ, sạc pin USB',
-      image: 'https://via.placeholder.com/300x300/ffa07a/ffffff?text=Product+8',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 350000,
       originalPrice: 500000,
       discount: 30,
@@ -174,7 +174,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 9,
       name: 'Son môi lì không trôi màu, nhiều màu sắc, bền màu cả ngày',
-      image: 'https://via.placeholder.com/300x300/ffb347/ffffff?text=Product+9',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 120000,
       originalPrice: 180000,
       discount: 33,
@@ -185,7 +185,7 @@ export class HomeComponent extends AppComponentBase {
     {
       id: 10,
       name: 'Máy tính bảng màn hình 10 inch, bút cảm ứng, pin lâu',
-      image: 'https://via.placeholder.com/300x300/ffcc99/ffffff?text=Product+10',
+      image: 'assets/img/product/iphone_17pro.png',
       price: 4990000,
       originalPrice: 6990000,
       discount: 29,

@@ -6,7 +6,7 @@ import { AuthComponent } from './auth/auth.component';
 import { ProductComponent } from './product/product.component';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { EcommerceComponent } from './ecommerce.component';
-
+import { ProductSearchComponent } from './product-search/product-search.component';
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -22,6 +22,7 @@ import { EcommerceComponent } from './ecommerce.component';
                     { path: 'home', component: HomeComponent },
                     { path: 'cart', component: CartComponent },
                     { path: 'product/:id', component: ProductComponent },
+                    { path: 'product-search', component: ProductSearchComponent },
                 ]
             }
         ])
