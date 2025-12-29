@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Auditing;
 using Ecommerce.Sessions.Dto;
@@ -33,6 +34,10 @@ namespace Ecommerce.Sessions
             }
 
             var source = LocalizationManager.GetSource(EcommerceConsts.LocalizationSourceName);
+
+            var a = LocalizationManager.GetAllSources().Select(s => s.Name).ToList();
+
+            var b = CultureInfo.CurrentCulture.Name;
 
             var vi = source.GetString("Users", new CultureInfo("vi"));
             var en = source.GetString("Users", new CultureInfo("en"));

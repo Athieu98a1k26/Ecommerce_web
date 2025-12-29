@@ -28,6 +28,8 @@ namespace Ecommerce
 
             EcommerceLocalizationConfigurer.Configure(Configuration.Localization);
 
+            Configuration.Localization.Languages.Add(new LanguageInfo("vi", "Tiếng việt",null,true));
+
             // Enable this line to create a multi-tenant application.
             Configuration.MultiTenancy.IsEnabled = EcommerceConsts.MultiTenancyEnabled;
 
