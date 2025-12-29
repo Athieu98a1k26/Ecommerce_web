@@ -46,10 +46,10 @@ export class ProductComponent implements OnInit {
     id: '1',
     name: 'Ấm Điện Đun Nước 2.5L 1500W Tự Động Tắt',
     images: [
-      'https://via.placeholder.com/400x400/ff6b35/ffffff?text=Electric+Kettle+1',
-      'https://via.placeholder.com/400x400/ff8c42/ffffff?text=Electric+Kettle+2',
-      'https://via.placeholder.com/400x400/ffa07a/ffffff?text=Electric+Kettle+3',
-      'https://via.placeholder.com/400x400/ffb347/ffffff?text=Electric+Kettle+4'
+      'assets/img/product/iphone_17pro.png',
+      'assets/img/product/iphone_17pro.png',
+      'assets/img/product/iphone_17pro.png',
+      'assets/img/product/iphone_17pro.png'
     ],
     rating: 4.5,
     reviewCount: 1250,
@@ -72,21 +72,21 @@ export class ProductComponent implements OnInit {
         name: 'Xanh Navy', 
         value: 'xanh-navy', 
         available: true,
-        image: 'https://via.placeholder.com/60x60/1e3a8a/ffffff?text=Navy',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 37990000
       },
       { 
         name: 'Đen Tuyền', 
         value: 'den-tuyen', 
         available: true,
-        image: 'https://via.placeholder.com/60x60/000000/ffffff?text=Black',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 37990000
       },
       { 
         name: 'Xám Bạc', 
         value: 'xam-bac', 
         available: true,
-        image: 'https://via.placeholder.com/60x60/9ca3af/ffffff?text=Silver',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 37990000
       }
     ],
@@ -165,7 +165,7 @@ export class ProductComponent implements OnInit {
       {
         id: '2',
         name: 'Ấm Điện 1.7L 1200W',
-        image: 'https://via.placeholder.com/200x200/ff6b35/ffffff?text=Kettle+1',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 199000,
         originalPrice: 299000,
         rating: 4.3,
@@ -174,7 +174,7 @@ export class ProductComponent implements OnInit {
       {
         id: '3',
         name: 'Ấm Điện 3L 1800W',
-        image: 'https://via.placeholder.com/200x200/ff8c42/ffffff?text=Kettle+2',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 399000,
         originalPrice: 550000,
         rating: 4.7,
@@ -183,7 +183,7 @@ export class ProductComponent implements OnInit {
       {
         id: '4',
         name: 'Ấm Điện Inox 2L',
-        image: 'https://via.placeholder.com/200x200/ffa07a/ffffff?text=Kettle+3',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 349000,
         originalPrice: 480000,
         rating: 4.5,
@@ -192,7 +192,7 @@ export class ProductComponent implements OnInit {
       {
         id: '5',
         name: 'Ấm Điện Thủy Tinh 1.5L',
-        image: 'https://via.placeholder.com/200x200/ffb347/ffffff?text=Kettle+4',
+        image: 'assets/img/product/iphone_17pro.png',
         price: 249000,
         originalPrice: 350000,
         rating: 4.2,

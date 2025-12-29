@@ -460,31 +460,8 @@
       <h3 class="section-title">Có thể bạn cũng thích</h3>
       <div class="related-products-carousel">
         <div class="related-products-scroll">
-          <div class="related-product-card"
-               *ngFor="let relatedProduct of product.relatedProducts"
-               (click)="viewRelatedProduct(relatedProduct.id)">
-            <div class="related-product-image-wrapper">
-              <img [src]="relatedProduct.image" [alt]="relatedProduct.name" class="related-product-image">
-              <span class="related-discount-badge" *ngIf="relatedProduct.originalPrice">
-                -{{ Math.round((1 - relatedProduct.price / relatedProduct.originalPrice) * 100) }}%
-              </span>
-            </div>
-            <div class="related-product-info">
-              <h4 class="related-product-name">{{ relatedProduct.name }}</h4>
-              <div class="related-product-rating">
-                <div class="stars">
-                  <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]" [class.active]="i <= relatedProduct.rating"></i>
-                </div>
-                <span class="related-sold">Đã bán {{ relatedProduct.sold | number }}</span>
-              </div>
-              <div class="related-product-price">
-                <span class="related-current-price">{{ relatedProduct.price | number }}₫</span>
-                <span class="related-original-price" *ngIf="relatedProduct.originalPrice">
-                  {{ relatedProduct.originalPrice | number }}₫
-                </span>
-              </div>
-            </div>
-          </div>
+          <product-item *ngFor="let relatedProduct of product.relatedProducts" [product]="relatedProduct"></product-item>
+          
         </div>
       </div>
     </div>
