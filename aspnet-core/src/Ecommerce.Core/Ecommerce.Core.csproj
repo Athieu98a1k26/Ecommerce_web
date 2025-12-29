@@ -19,4 +19,9 @@
     <PackageReference Include="Abp.ZeroCore.EntityFrameworkCore" Version="8.4.0" />
     <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="4.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Localization\SourceFiles\Ecommerce.vi.xml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

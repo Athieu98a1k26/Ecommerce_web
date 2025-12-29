@@ -20,6 +20,8 @@ import { ChangePasswordComponent } from './users/change-password/change-password
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
+                    { path: 'products', component: TenantsComponent, data: { permission: 'Pages.Products' }, canActivate: [AppRouteGuard] },
+                    { path: 'shops', component: TenantsComponent, data: { permission: 'Pages.Shops' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent, canActivate: [AppRouteGuard] },
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] }
                 ]

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Abp.Auditing;
 using Ecommerce.Sessions.Dto;
@@ -29,6 +31,14 @@ namespace Ecommerce.Sessions
             {
                 output.User = ObjectMapper.Map<UserLoginInfoDto>(await GetCurrentUserAsync());
             }
+
+            var source = LocalizationManager.GetSource(EcommerceConsts.LocalizationSourceName);
+
+            var vi = source.GetString("Users", new CultureInfo("vi"));
+            var en = source.GetString("Users", new CultureInfo("en"));
+
+            Console.WriteLine($"VI: {vi}");
+            Console.WriteLine($"EN: {en}");
 
             return output;
         }

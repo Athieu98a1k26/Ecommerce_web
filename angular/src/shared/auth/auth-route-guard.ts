@@ -8,6 +8,7 @@ import {
     RouterStateSnapshot,
     CanActivateChild
 } from '@angular/router';
+import { debug } from 'console';
 
 @Injectable()
 export class AppRouteGuard implements CanActivate, CanActivateChild {
@@ -19,6 +20,7 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        console.log(route);
         if (!this._sessionService.user) {
             this._router.navigate(['/account/login']);
             return false;

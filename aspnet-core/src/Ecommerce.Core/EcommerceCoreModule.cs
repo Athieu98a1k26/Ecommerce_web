@@ -36,8 +36,6 @@ namespace Ecommerce
 
             Configuration.Settings.Providers.Add<AppSettingProvider>();
             
-            Configuration.Localization.Languages.Add(new LanguageInfo("fa", "فارسی", "famfamfam-flags ir"));
-            
             Configuration.Settings.SettingEncryptionConfiguration.DefaultPassPhrase = EcommerceConsts.DefaultPassPhrase;
             SimpleStringCipher.DefaultPassPhrase = EcommerceConsts.DefaultPassPhrase;
         }
