@@ -1,4 +1,7 @@
-﻿using Abp.Localization;
+﻿using System.Reflection;
+using Abp.Localization;
+using Abp.Localization.Dictionaries.Xml;
+using Abp.Localization.Dictionaries;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Security;
@@ -27,8 +30,6 @@ namespace Ecommerce
             Configuration.Modules.Zero().EntityTypes.User = typeof(User);
 
             EcommerceLocalizationConfigurer.Configure(Configuration.Localization);
-
-            Configuration.Localization.Languages.Add(new LanguageInfo("vi", "Tiếng việt",null,true));
 
             // Enable this line to create a multi-tenant application.
             Configuration.MultiTenancy.IsEnabled = EcommerceConsts.MultiTenancyEnabled;

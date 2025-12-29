@@ -33,18 +33,6 @@ namespace Ecommerce.Sessions
                 output.User = ObjectMapper.Map<UserLoginInfoDto>(await GetCurrentUserAsync());
             }
 
-            var source = LocalizationManager.GetSource(EcommerceConsts.LocalizationSourceName);
-
-            var a = LocalizationManager.GetAllSources().Select(s => s.Name).ToList();
-
-            var b = CultureInfo.CurrentCulture.Name;
-
-            var vi = source.GetString("Users", new CultureInfo("vi"));
-            var en = source.GetString("Users", new CultureInfo("en"));
-
-            Console.WriteLine($"VI: {vi}");
-            Console.WriteLine($"EN: {en}");
-
             return output;
         }
     }

@@ -44,7 +44,7 @@
     <text name="Logout" value="Logout" />
     <text name="RegisterFormUserNameInvalidMessage">Please don't enter an email address for username.</text>
     <text name="DatabaseConnectionString" value="Database connection string" />
-    <text name="Users" value="Users" />
+	  <text name="Users">Users</text>
     <text name="IsActive" value="Is active" />
     <text name="FullName" value="Full name" />
     <text name="CreateNewUser" value="Create new user" />
