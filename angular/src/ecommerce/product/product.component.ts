@@ -10,9 +10,25 @@ import { Location } from '@angular/common';
 export class ProductComponent implements OnInit {
   productId: string | null = null;
   currentImageIndex = 0;
-  selectedColor = 'white';
+  selectedColor = 'xanh-navy';
   selectedModel = 'standard';
+  selectedVersion = '12GB/256GB';
   quantity = 1;
+  deviceCondition = 'new';
+  rentalDuration = '4';
+  customerInfo = {
+    fullName: '',
+    phone: '',
+    email: ''
+  };
+  deliveryMethod: 'home' | 'store' = 'home';
+  deliveryAddress = {
+    province: '',
+    store: ''
+  };
+  notes = '';
+  requireInvoice = false;
+  voucherCode = '';
   descriptionExpanded = true;
   showSpecs = false;
   showReviews = false;
@@ -47,11 +63,32 @@ export class ProductComponent implements OnInit {
       { text: 'Giảm 50K', type: 'discount' },
       { text: 'Freeship', type: 'shipping' }
     ],
+    versions: [
+      { name: '12GB/256GB', value: '12GB/256GB', price: 37990000 },
+      { name: '12GB/512GB', value: '12GB/512GB', price: 41990000 }
+    ],
     colors: [
-      { name: 'Trắng', value: 'white', available: true },
-      { name: 'Đen', value: 'black', available: true },
-      { name: 'Xanh', value: 'blue', available: true },
-      { name: 'Hồng', value: 'pink', available: false }
+      { 
+        name: 'Xanh Navy', 
+        value: 'xanh-navy', 
+        available: true,
+        image: 'https://via.placeholder.com/60x60/1e3a8a/ffffff?text=Navy',
+        price: 37990000
+      },
+      { 
+        name: 'Đen Tuyền', 
+        value: 'den-tuyen', 
+        available: true,
+        image: 'https://via.placeholder.com/60x60/000000/ffffff?text=Black',
+        price: 37990000
+      },
+      { 
+        name: 'Xám Bạc', 
+        value: 'xam-bac', 
+        available: true,
+        image: 'https://via.placeholder.com/60x60/9ca3af/ffffff?text=Silver',
+        price: 37990000
+      }
     ],
     models: [
       { name: 'Tiêu chuẩn', value: 'standard' },
@@ -225,6 +262,11 @@ export class ProductComponent implements OnInit {
     this.currentImageIndex = index;
   }
 
+  selectVersion(version: string): void {
+    this.selectedVersion = version;
+    this.updateVariantPrice();
+  }
+
   selectColor(color: string): void {
     this.selectedColor = color;
     this.updateVariantPrice();
@@ -337,6 +379,20 @@ export class ProductComponent implements OnInit {
   chatWithSeller(): void {
     // Chat functionality
     console.log('Chat with seller');
+  }
+
+  selectDeliveryMethod(method: 'home' | 'store'): void {
+    this.deliveryMethod = method;
+    if (method === 'home') {
+      this.deliveryAddress.store = '';
+    } else {
+      this.deliveryAddress.province = '';
+    }
+  }
+
+  applyVoucher(): void {
+    // Apply voucher logic
+    console.log('Applying voucher:', this.voucherCode);
   }
 
   getStarArray(rating: number): number[] {
