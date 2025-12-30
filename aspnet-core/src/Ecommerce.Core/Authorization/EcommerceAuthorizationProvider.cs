@@ -13,7 +13,7 @@ namespace Ecommerce.Authorization
             context.CreatePermission(PermissionNames.Pages_Roles, L("Roles"));
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
             context.CreatePermission(PermissionNames.Pages_Products, L("Products"));
-            context.CreatePermission(PermissionNames.Pages_Shops, L("Shops"));
+            context.CreatePermission(PermissionNames.Pages_Stores, L("Stores"));
         }
 
         private static ILocalizableString L(string name)

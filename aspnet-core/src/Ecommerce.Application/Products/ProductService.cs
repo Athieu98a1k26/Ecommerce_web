@@ -15,14 +15,17 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
+using Ecommerce.Entitys;
 
 namespace Ecommerce.Services
 {
     public interface IProductService
     {
-        Task<PagedResultDto<ProductResponseModel>> GetPaging(BaseRequest baseRequest);
+        Task<PagedResultDto<ProductModel>> GetPaging(BaseRequest baseRequest);
 
-        Task<ProductResponseModel> Get(long id);
+        Task<ProductModel> Get(long id);
+        Task CreateOrEdit(ProductRequestModel request);
+        Task Delete(long id);
     }
 
 
@@ -30,13 +33,15 @@ namespace Ecommerce.Services
     public class ProductService: EcommerceAppServiceBase,IProductService
     {
         private readonly IRepository<Product,long> _productRepository;
-        public ProductService(IRepository<Product, long> productRepository)
+        private readonly IRepository<ProductStore, long> _productStoreRepository;
+        public ProductService(IRepository<Product, long> productRepository, IRepository<ProductStore, long> productStoreRepository)
         {
             _productRepository = productRepository;
+            _productStoreRepository = productStoreRepository;
         }
 
         [HttpPost]
-        public async Task<PagedResultDto<ProductResponseModel>> GetPaging(BaseRequest baseRequest)
+        public async Task<PagedResultDto<ProductModel>> GetPaging(BaseRequest baseRequest)
         {
             var query = _productRepository.GetAll().WhereIf(!string.IsNullOrWhiteSpace(baseRequest.Search),s => s.Code.Contains(baseRequest.Search) || s.Name.Contains(baseRequest.Search));
 
@@ -48,30 +53,30 @@ namespace Ecommerce.Services
 
             var listData = await pagedAndFiltered.ToListAsync();
 
-            var listDataModel = ObjectMapper.Map<List<ProductResponseModel>>(listData);
+            var listDataModel = ObjectMapper.Map<List<ProductModel>>(listData);
 
-            return new PagedResultDto<ProductResponseModel>(
+            return new PagedResultDto<ProductModel>(
                totalCount,
                listDataModel
            );
         }
 
-        public async Task<ProductResponseModel> Get(long id)
+        public async Task<ProductModel> Get(long id)
         {
-            var data = _productRepository.Get(id);
-            var dataModel = ObjectMapper.Map<ProductResponseModel>(data);
+            var data =await _productRepository.GetAsync(id);
+            var dataModel = ObjectMapper.Map<ProductModel>(data);
 
             return dataModel;
         }
 
         public async Task CreateOrEdit(ProductRequestModel request)
         {
-            Validate(request);
+            await Validate(request);
 
             if (request.Id == null)
             {
                 var data= ObjectMapper.Map<Product>(request);
-                _productRepository.Insert(data);
+                await _productRepository.InsertAsync(data);
             }
             else
             {
@@ -84,11 +89,11 @@ namespace Ecommerce.Services
 
                 data.Code = request.Code;
                 data.Name = request.Name;
-                _productRepository.Update(data);
+                await _productRepository.UpdateAsync(data);
             }
         }
 
-        private void Validate(ProductRequestModel request)
+        private async Task Validate(ProductRequestModel request)
         {
             if(string.IsNullOrEmpty(request.Code))
             {
@@ -110,10 +115,26 @@ namespace Ecommerce.Services
                 throw new UserFriendlyException(L("NameProductMaxLength"));
             }
 
-            if(_productRepository.GetAll().Any(s=>(s.Code == request.Code || s.Name == request.Name) && s.Id != request.Id))
+            if(await _productRepository.GetAll().AnyAsync(s=>(s.Code == request.Code || s.Name == request.Name) && s.Id != request.Id))
             {
                 throw new UserFriendlyException(L("ProductDuplicate"));
             }
+        }
+
+        public async Task Delete(long id)
+        {
+            await ValidateDelete(id);
+            await _productStoreRepository.DeleteAsync(id);
+        }
+
+        public async Task ValidateDelete(long id)
+        {
+            var product = _productRepository.Get(id);
+
+            if (await _productStoreRepository.GetAll().AnyAsync(s=>s.ProductCode == product.Code))
+            {
+                throw new UserFriendlyException(L("ProductUse"));
+            }    
         }
     }
 }

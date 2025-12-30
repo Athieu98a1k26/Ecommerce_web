@@ -9,6 +9,6 @@
 
         public const string Pages_Roles = "Pages.Roles";
         public const string Pages_Products = "Pages.Products";
-        public const string Pages_Shops = "Pages.Shops";
+        public const string Pages_Stores = "Pages_Stores";
     }
 }

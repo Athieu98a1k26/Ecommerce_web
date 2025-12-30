@@ -9,8 +9,8 @@ using Abp.Domain.Entities.Auditing;
 
 namespace Ecommerce.Entity
 {
-    [Table("Products")]
-    public class Product : FullAuditedEntity<long>
+    [Table("Stores")]
+    public class Store : FullAuditedEntity<long>
     {
         [Required]
         [MaxLength(100)]
@@ -18,7 +18,11 @@ namespace Ecommerce.Entity
 
         [Required]
         [MaxLength(250)]
-        public string Name {  get; set; }
+        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(500)]
+        public string Address {  get; set; }
 
     }
 }

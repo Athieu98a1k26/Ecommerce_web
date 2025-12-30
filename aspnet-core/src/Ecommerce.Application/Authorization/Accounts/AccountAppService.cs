@@ -1,8 +1,10 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Abp.Configuration;
+using Abp.Domain.Repositories;
 using Abp.Zero.Configuration;
 using Ecommerce.Authorization.Accounts.Dto;
 using Ecommerce.Authorization.Users;
+using Ecommerce.Entitys;
 
 namespace Ecommerce.Authorization.Accounts
 {
@@ -12,11 +14,13 @@ namespace Ecommerce.Authorization.Accounts
         public const string PasswordRegex = "(?=^.{8,}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s)[0-9a-zA-Z!@#$%^&*()]*$";
 
         private readonly UserRegistrationManager _userRegistrationManager;
+        private readonly IRepository<Person,long> _personRepository;
 
         public AccountAppService(
-            UserRegistrationManager userRegistrationManager)
+            UserRegistrationManager userRegistrationManager, IRepository<Person, long> personRepository)
         {
             _userRegistrationManager = userRegistrationManager;
+            _personRepository = personRepository;
         }
 
         public async Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input)
@@ -47,6 +51,16 @@ namespace Ecommerce.Authorization.Accounts
             );
 
             var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
+
+            // insert vào bảng personal
+            Person person = new Person()
+            {
+                FullName = input.Name,
+                PhoneNumber = input.Name,
+                Email = input.EmailAddress,
+            };
+
+            await _personRepository.InsertAsync(person);
 
             return new RegisterOutput
             {

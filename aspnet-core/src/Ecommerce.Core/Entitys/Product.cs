@@ -7,16 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Entities.Auditing;
 
-namespace Ecommerce.Entity
+namespace Ecommerce.Entitys
 {
-    [Table("Shops")]
-    public class Shop : FullAuditedEntity<long>
+    [Table("Products")]
+    public class Product : FullAuditedEntity<long>
     {
         [Required]
+        [MaxLength(100)]
         public string Code {  get; set; }
 
         [Required]
-        public string Name { get; set; }
+        [MaxLength(250)]
+        public string Name {  get; set; }
 
     }
 }

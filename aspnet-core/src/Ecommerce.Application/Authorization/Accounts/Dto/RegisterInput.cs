@@ -34,6 +34,9 @@ namespace Ecommerce.Authorization.Accounts.Dto
         [DisableAuditing]
         public string CaptchaResponse { get; set; }
 
+        [MaxLength(100)]
+        public string PhoneNumber {  get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (!UserName.IsNullOrEmpty())

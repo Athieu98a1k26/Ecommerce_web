@@ -7,19 +7,19 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Entities.Auditing;
 
-namespace Ecommerce.Entity
+namespace Ecommerce.Entitys
 {
-    [Table("Orders")]
-    public class Order : FullAuditedEntity<long>
+    [Table("Persons")]
+    public class Person : FullAuditedEntity<long>
     {
-        [Required]
-        public string ShopCode {  get; set; }
+        [MaxLength(255)]
+        public string FullName {  get; set; }
 
-        [Required]
-        public string ProductStore {  get; set; }
+        [MaxLength(100)]
+        public string PhoneNumber {  get; set; }
 
-        [Required]
-        public int Count {  get; set; }
+        [MaxLength(100)]
+        public string Email {  get; set; }
 
         [Required]
         public long UserId {  get; set; }

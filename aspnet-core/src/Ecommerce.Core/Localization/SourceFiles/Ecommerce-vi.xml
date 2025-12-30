@@ -118,7 +118,7 @@
 		<text name="ResetPasswordStepTwoInfo">2. Sao chép mật khẩu ngẫu nhiên này để gửi cho người dùng</text>
 		<text name="UsersActivation">Kích hoạt người dùng</text>
 		<text name="Products">Sản phẩm</text>
-		<text name="Shops">Cửa hàng</text>
+		<text name="Stores">Cửa hàng</text>
 		<text name="ProductNotFound">Sản phẩm không tồn tại</text>
 		<text name="CodeProductRequired">Mã sản phẩm không được để trống</text>
 		<text name="NameProductRequired">Tên sản phẩm không được để trống</text>
@@ -126,5 +126,18 @@
 
 		<text name="NameProductMaxLength">Tên sản phẩm không được lớn hơn 255 ký tự</text>
 		<text name="ProductDuplicate">Sản phẩm đã tồn tại</text>
+
+		<text name="ProductUse">Sản phẩm đã được sử dụng</text>
+
+
+		<text name="StoreNotFound">Cửa hàng không tồn tại</text>
+		<text name="CodeStoreRequired">Mã cửa hàng không được để trống</text>
+		<text name="NameStoreRequired">Tên cửa hàng không được để trống</text>
+		<text name="CodeStoreMaxLength">Mã cửa hàng không được lớn hơn 100 ký tự</text>
+
+		<text name="NameStoreMaxLength">Tên cửa hàng không được lớn hơn 255 ký tự</text>
+		<text name="StoreDuplicate">ng đã được sử dụnCửa hàng đã tồn tại</text>
+
+		<text name="StoreUse">Cửa hàng đã được sử dụng</text>
 	</texts>
 </localizationDictionary>
