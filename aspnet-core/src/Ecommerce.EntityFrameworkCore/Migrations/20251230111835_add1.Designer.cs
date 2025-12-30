@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20251230090443_add1")]
+    [Migration("20251230111835_add1")]
     partial class add1
     {
         /// <inheritdoc />
@@ -1943,6 +1943,9 @@ namespace Ecommerce.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");
 
@@ -1964,10 +1967,24 @@ namespace Ecommerce.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("PathImage")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("Sold")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Stars")
+                        .HasColumnType("real");
 
                     b.Property<string>("StoreCode")
                         .IsRequired()
@@ -1994,6 +2011,9 @@ namespace Ecommerce.Migrations
                     b.Property<string>("ColorCode")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("datetime2");

@@ -1,23 +1,18 @@
-import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Injector, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { appModuleAnimation } from '../../shared/animations/routerTransition';
 import { AppComponentBase } from '../../shared/app-component-base';
 import { OwlOptions } from 'ngx-owl-carousel-o';
+import {
+  ProductStorePublicServiceProxy,
+  ProductStoreDto,
+  ProductStoreDtoPagedResultDto,
+  BaseRequest
+} from '@shared/service-proxies/service-proxies';
+import { environment } from '../../environments/environment';
 
 interface Category {
   name: string;
   icon: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  originalPrice?: number;
-  discount: number;
-  rating: number;
-  sold: string;
-  freeShipping: boolean;
 }
 
 @Component({
@@ -26,7 +21,7 @@ interface Product {
   animations: [appModuleAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeComponent extends AppComponentBase {
+export class HomeComponent extends AppComponentBase implements OnInit {
   
   cartItemCount: number = 3;
   isLoggedIn: boolean = false;
@@ -64,7 +59,6 @@ export class HomeComponent extends AppComponentBase {
     { title: 'Flash Sale', img: 'assets/img/banner3.jpg' }
   ];
 
-
   brands = [
     { name: 'Apple', slug: 'apple', logo: 'assets/img/brands/apple.png' },
     { name: 'Samsung', slug: 'samsung', logo: 'assets/img/brands/samsung.png' },
@@ -78,124 +72,45 @@ export class HomeComponent extends AppComponentBase {
     { name: 'Infinix', slug: 'infinix', logo: 'assets/img/brands/infinix.png' }
   ];
 
+  products: ProductStoreDto[] = [];
+  isProductsLoading: boolean = false;
+
+  constructor(
+    injector: Injector,
+    private productStorePublicService: ProductStorePublicServiceProxy
+  ) {
+    super(injector);
+  }
+
+  ngOnInit(): void {
+    this.getFeaturedProducts();
+  }
+
+  getFeaturedProducts(): void {
+    this.isProductsLoading = true;
+    const input = new BaseRequest();
+    // Set paging as you need (for example, maxResultCount, skipCount)
+    input.storeCode =environment.storeCode;
+    input.maxResultCount = 12;
+    input.skipCount = 0;
+
+    this.productStorePublicService.getPagingFeaturedProduct(input)
+      .subscribe({
+        next: (result: ProductStoreDtoPagedResultDto) => {
+          this.products = result.items || [];
+          this.isProductsLoading = false;
+          console.log(this.products)
+        },
+        error: () => {
+          this.products = [];
+          this.isProductsLoading = false;
+        }
+      });
+  }
+  trackByFn(index: number, item: any) {
+    return item.id; // hoặc index nếu không có id
+  }
   goToBrand(brand: any) {
     //this.router.navigate(['/category', brand.slug]);
-  }
-  
-  products: Product[] = [
-    {
-      id: 1,
-      name: 'Áo thun nam cổ tròn chất liệu cotton cao cấp, thoáng mát, nhiều màu sắc',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 199000,
-      originalPrice: 299000,
-      discount: 30,
-      rating: 4,
-      sold: '2.3k',
-      freeShipping: true
-    },
-    {
-      id: 2,
-      name: 'Điện thoại smartphone màn hình 6.5 inch, RAM 8GB, bộ nhớ 128GB',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 5990000,
-      originalPrice: 7990000,
-      discount: 25,
-      rating: 5,
-      sold: '5.1k',
-      freeShipping: true
-    },
-    {
-      id: 3,
-      name: 'Máy xay sinh tố đa năng, công suất cao, an toàn cho sức khỏe',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 890000,
-      originalPrice: 1200000,
-      discount: 26,
-      rating: 4,
-      sold: '1.8k',
-      freeShipping: false
-    },
-    {
-      id: 4,
-      name: 'Kem dưỡng da mặt chống lão hóa, làm trắng da, dưỡng ẩm sâu',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 450000,
-      originalPrice: 650000,
-      discount: 31,
-      rating: 4,
-      sold: '3.2k',
-      freeShipping: true
-    },
-    {
-      id: 5,
-      name: 'Laptop gaming hiệu năng cao, card đồ họa rời, màn hình 15.6 inch',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 18990000,
-      originalPrice: 24990000,
-      discount: 24,
-      rating: 5,
-      sold: '892',
-      freeShipping: true
-    },
-    {
-      id: 6,
-      name: 'Quần jean nam form slim fit, chất liệu denim cao cấp, bền đẹp',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 450000,
-      originalPrice: 650000,
-      discount: 31,
-      rating: 4,
-      sold: '1.5k',
-      freeShipping: true
-    },
-    {
-      id: 7,
-      name: 'Tai nghe không dây chống ồn chủ động, pin lâu, chất lượng âm thanh cao',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 1290000,
-      originalPrice: 1990000,
-      discount: 35,
-      rating: 4,
-      sold: '4.7k',
-      freeShipping: true
-    },
-    {
-      id: 8,
-      name: 'Bàn chải đánh răng điện tự động, nhiều chế độ, sạc pin USB',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 350000,
-      originalPrice: 500000,
-      discount: 30,
-      rating: 4,
-      sold: '2.1k',
-      freeShipping: true
-    },
-    {
-      id: 9,
-      name: 'Son môi lì không trôi màu, nhiều màu sắc, bền màu cả ngày',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 120000,
-      originalPrice: 180000,
-      discount: 33,
-      rating: 5,
-      sold: '6.8k',
-      freeShipping: true
-    },
-    {
-      id: 10,
-      name: 'Máy tính bảng màn hình 10 inch, bút cảm ứng, pin lâu',
-      image: 'assets/img/product/iphone_17pro.png',
-      price: 4990000,
-      originalPrice: 6990000,
-      discount: 29,
-      rating: 4,
-      sold: '1.2k',
-      freeShipping: true
-    }
-  ];
-
-  constructor(injector: Injector) {
-    super(injector);
   }
 }

@@ -2916,6 +2916,7 @@ export class BaseRequest implements IBaseRequest {
     skipCount: number;
     sorting: string | undefined;
     search: string | undefined;
+    storeCode: string | undefined;
 
     constructor(data?: IBaseRequest) {
         if (data) {
@@ -2932,6 +2933,7 @@ export class BaseRequest implements IBaseRequest {
             this.skipCount = _data["skipCount"];
             this.sorting = _data["sorting"];
             this.search = _data["search"];
+            this.storeCode = _data["storeCode"];
         }
     }
 
@@ -2948,6 +2950,7 @@ export class BaseRequest implements IBaseRequest {
         data["skipCount"] = this.skipCount;
         data["sorting"] = this.sorting;
         data["search"] = this.search;
+        data["storeCode"] = this.storeCode;
         return data;
     }
 
@@ -2964,6 +2967,7 @@ export interface IBaseRequest {
     skipCount: number;
     sorting: string | undefined;
     search: string | undefined;
+    storeCode: string | undefined;
 }
 
 export class ChangePasswordDto implements IChangePasswordDto {
@@ -3280,6 +3284,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
     id: number | undefined;
     storeCode: string | undefined;
     productCode: string | undefined;
+    pathImage: string | undefined;
     price: number;
     stars: number | undefined;
     sold: number | undefined;
@@ -3299,6 +3304,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
             this.id = _data["id"];
             this.storeCode = _data["storeCode"];
             this.productCode = _data["productCode"];
+            this.pathImage = _data["pathImage"];
             this.price = _data["price"];
             this.stars = _data["stars"];
             this.sold = _data["sold"];
@@ -3322,6 +3328,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
         data["id"] = this.id;
         data["storeCode"] = this.storeCode;
         data["productCode"] = this.productCode;
+        data["pathImage"] = this.pathImage;
         data["price"] = this.price;
         data["stars"] = this.stars;
         data["sold"] = this.sold;
@@ -3345,6 +3352,7 @@ export interface ICreateUpdateProductStoreDto {
     id: number | undefined;
     storeCode: string | undefined;
     productCode: string | undefined;
+    pathImage: string | undefined;
     price: number;
     stars: number | undefined;
     sold: number | undefined;
@@ -4076,6 +4084,7 @@ export class ProductStoreDto implements IProductStoreDto {
     storeName: string | undefined;
     productCode: string | undefined;
     productName: string | undefined;
+    pathImage: string | undefined;
     price: number | undefined;
     stars: number | undefined;
     sold: number | undefined;
@@ -4097,6 +4106,7 @@ export class ProductStoreDto implements IProductStoreDto {
             this.storeName = _data["storeName"];
             this.productCode = _data["productCode"];
             this.productName = _data["productName"];
+            this.pathImage = _data["pathImage"];
             this.price = _data["price"];
             this.stars = _data["stars"];
             this.sold = _data["sold"];
@@ -4122,6 +4132,7 @@ export class ProductStoreDto implements IProductStoreDto {
         data["storeName"] = this.storeName;
         data["productCode"] = this.productCode;
         data["productName"] = this.productName;
+        data["pathImage"] = this.pathImage;
         data["price"] = this.price;
         data["stars"] = this.stars;
         data["sold"] = this.sold;
@@ -4147,6 +4158,7 @@ export interface IProductStoreDto {
     storeName: string | undefined;
     productCode: string | undefined;
     productName: string | undefined;
+    pathImage: string | undefined;
     price: number | undefined;
     stars: number | undefined;
     sold: number | undefined;

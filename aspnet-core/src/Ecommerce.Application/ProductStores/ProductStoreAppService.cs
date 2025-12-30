@@ -121,7 +121,7 @@ namespace Ecommerce.ProductStores
             {
                 var store = new CreateUpdateProductStoreDto
                 {
-                    StoreCode = $"CH1",
+                    StoreCode = $"CH2",
                     ProductCode = $"Iphone{i}",
                     ListProductStoreDetailDto = new List<ProductStoreDetailDto>()
                 };
@@ -132,28 +132,33 @@ namespace Ecommerce.ProductStores
                     store.ListProductStoreDetailDto.Add(new ProductStoreDetailDto
                     {
                         ProductStoreId = i,
-                        PathImage = $"images/product_{i}_{j + 1}.jpg",
-                        CapacityCode = capacities[j-1],     // lấy thứ tự để không trùng
-                        ColorCode = colors[j-1],
+                        PathImage = $"assets/img/product/iphone_17pro.png",
+                        CapacityCode = capacities[j - 1],     // lấy thứ tự để không trùng
+                        ColorCode = colors[j - 1],
                         MachineConditionCode = conditions[j - 1],
                         PackageCode = "RentThenBuy",
                         LeaseTermCode = j + 2,
                         Prepay = 4 + (j * 10),
-                        Price = 25000000 + j * 1000000
+                        Price = 25000000 + j * 1000000,
+                        Count = j
                     });
                 }
 
-                store.Price = store.ListProductStoreDetailDto.Min(x => x.Price);
+                ProductStoreDetailDto productStoreDetailDto = store.ListProductStoreDetailDto
+                          .OrderBy(x => x.Price)
+                          .FirstOrDefault();
+
+                store.Price = productStoreDetailDto.Price;
+                store.PathImage = productStoreDetailDto.PathImage;
+                store.Count = store.ListProductStoreDetailDto.Sum(x => x.Count);
+
                 store.Stars = 4;
                 store.Sold = 1000;
 
                 await CreateOrEdit(store);
             }
 
-            
         }
-
-
 
         [UnitOfWork]
         public async Task CreateOrEdit(CreateUpdateProductStoreDto request)

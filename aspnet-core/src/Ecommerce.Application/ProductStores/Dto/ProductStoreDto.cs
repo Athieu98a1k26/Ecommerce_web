@@ -14,6 +14,7 @@ namespace Ecommerce.ProductStores.Dto
         public string ProductCode { get; set; }
         public string ProductName {  get; set; }
 
+        public string PathImage { get; set; }
         public decimal? Price {  get; set; } // giá sản phẩm
         public float? Stars { get; set; } // số sao đánh giá
         public int? Sold {  get; set; } // số sản phẩm đã bán

@@ -53,17 +53,19 @@ namespace Ecommerce.ProductStores
                         from s in shopGroup.DefaultIfEmpty()  // LEFT JOIN Shop
                         select new ProductStoreDto
                         {
+                            Id=ps.Id,
                             StoreCode = ps.StoreCode,
                             ProductCode = ps.ProductCode,
                             ProductName = p != null ? p.Name : null,
                             StoreName = s != null ? s.Name : null,
+                            PathImage = ps.PathImage,
                             Price = ps.Price,
                             Stars = ps.Stars,
                             Sold = ps.Sold,
                         };
+            query = query.Where(s => s.StoreCode == baseRequest.StoreCode);
 
             var pagedAndFiltered = query
-                .OrderBy(baseRequest.Sorting ?? "Id desc")
                 .PageBy(baseRequest);
 
             var totalCount = await query.CountAsync();
@@ -74,6 +76,35 @@ namespace Ecommerce.ProductStores
                    totalCount,
                    listData
                 );
+        }
+
+        private async Task<List<ProductStoreDetailDto>> GetListProductDetailStore(List<long> productStoreId)
+        {
+            List<ProductStoreDetail> listData = _productStoreDetailRepository.GetAll().Where(s => productStoreId.Contains(s.ProductStoreId)).ToList();
+
+            List<ProductStoreDetailDto> result = ObjectMapper.Map<List<ProductStoreDetailDto>>(listData);
+
+            return result;
+        }
+
+        public async Task<ProductStoreDto> GetDetail(long id)
+        {
+            var data = await _productStoreRepository.GetAsync(id);
+            var dataModel = ObjectMapper.Map<ProductStoreDto>(data);
+
+            List<ProductStoreDetailDto> listDetail = await GetListProductDetailStore(new List<long>()
+            {
+                dataModel.Id,
+            });
+
+            if (listDetail == null || listDetail.Count == 0)
+            {
+                return dataModel;
+            }
+
+            dataModel.ListProductStoreDetailDto = listDetail;
+
+            return dataModel;
         }
     }
 }

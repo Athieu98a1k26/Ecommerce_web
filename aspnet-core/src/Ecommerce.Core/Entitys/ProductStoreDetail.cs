@@ -43,5 +43,8 @@ namespace Ecommerce.Entitys
 
         [Required]
         public decimal Price { get; set; } // giá của sản phẩm theo phiên bản, màu sắc
+
+        [Required]
+        public int Count {  get; set; } // số lượng sản phẩm
     }
 }

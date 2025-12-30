@@ -2,18 +2,7 @@
 import { Component, Injector, ChangeDetectionStrategy, Input } from '@angular/core';
 import { AppComponentBase } from '../../../shared/app-component-base';
 import { appModuleAnimation } from '../../../shared/animations/routerTransition';
-
-interface Product {
-    id: number;
-    name: string;
-    image: string;
-    price: number;
-    originalPrice?: number;
-    discount: number;
-    rating: number;
-    sold: string;
-    freeShipping: boolean;
-}
+import { ProductStoreDto } from '@shared/service-proxies/service-proxies';
 
 @Component({
     selector: 'product-item',
@@ -24,7 +13,7 @@ interface Product {
   })
 
   export class ProductItemComponent extends AppComponentBase {
-    @Input() product: Product;
+    @Input() product: ProductStoreDto;
     
     constructor(
         injector: Injector

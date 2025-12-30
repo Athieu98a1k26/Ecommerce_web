@@ -27,5 +27,7 @@ namespace Ecommerce.ProductStores.Dto
         public decimal Prepay { get; set; } // trả trước
 
         public decimal Price { get; set; } // giá của sản phẩm theo phiên bản, màu sắc
+
+        public int Count { get; set; } // tổng sản phẩm đang có
     }
 }

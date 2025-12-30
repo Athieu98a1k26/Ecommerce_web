@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20251230084110_Init")]
+    [Migration("20251230105131_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -1964,10 +1964,24 @@ namespace Ecommerce.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("PathImage")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ProductCode")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("Sold")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Stars")
+                        .HasColumnType("real");
 
                     b.Property<string>("StoreCode")
                         .IsRequired()
@@ -2016,19 +2030,17 @@ namespace Ecommerce.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LeaseTermCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("LeaseTermCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("MachineConditionCode")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<long>("PackageCode")
+                    b.Property<string>("PackageCode")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("bigint");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PathImage")
                         .IsRequired()
