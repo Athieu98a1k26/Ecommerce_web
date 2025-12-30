@@ -76,6 +76,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
                 'Pages.Stores'
             ),
             new MenuItem(
+                this.l('Orders'),
+                '/app/orders',
+                'fas fa-store',
+                'Pages.Orders'
+            ),
+            new MenuItem(
                 this.l('ProductStores'),
                 '/app/product-stores',
                 'fas fa-exchange-alt',

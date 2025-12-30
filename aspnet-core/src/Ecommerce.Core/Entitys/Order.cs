@@ -30,6 +30,27 @@ namespace Ecommerce.Entitys
         [Required]
         public long PersonId {  get; set; } //Id người dùng
 
+        [Required]
+        [StringLength(255)]
+        public string FullName {  get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        public string Email { get; set; }
+
+        [StringLength(100)]
+        public string ProvinceCode {  get; set; }
+
+        [StringLength(100)]
+        public string WardCode {  get; set; }
+
+        [StringLength(512)]
+        public string Address {  get; set; }
+
         [StringLength(255)]       
         public string Note {  get; set; } // ghi chú
 

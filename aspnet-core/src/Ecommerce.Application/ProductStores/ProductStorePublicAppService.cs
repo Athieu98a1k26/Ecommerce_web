@@ -90,7 +90,14 @@ namespace Ecommerce.ProductStores
         public async Task<ProductStoreDto> GetDetail(long id)
         {
             var data = await _productStoreRepository.GetAsync(id);
-            var dataModel = ObjectMapper.Map<ProductStoreDto>(data);
+
+            // lấy thông tin name của product
+            Product? product =await _productRepository.GetAll().FirstOrDefaultAsync(s => s.Code == data.ProductCode);
+
+
+            ProductStoreDto dataModel = ObjectMapper.Map<ProductStoreDto>(data);
+
+            dataModel.ProductName = product.Name;
 
             List<ProductStoreDetailDto> listDetail = await GetListProductDetailStore(new List<long>()
             {
@@ -102,7 +109,16 @@ namespace Ecommerce.ProductStores
                 return dataModel;
             }
 
+            var minPriceDetail = listDetail.OrderBy(x => x.Price).First();
+
+            // Set IsActive = true
+            minPriceDetail.IsActive = true;
+
+            // Gán lại nếu cần
             dataModel.ListProductStoreDetailDto = listDetail;
+
+            // set trạng thái defalut active
+
 
             return dataModel;
         }

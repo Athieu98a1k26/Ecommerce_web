@@ -1,170 +1,133 @@
 <div class="product-detail-page container-custom-xxl">
-  <div class="product-main-row row">
-    <!-- Left Column: Image Carousel & Modal -->
-    <div class="product-left col-md-6">
-      <!-- Product Image Carousel -->
+  <div class="row product-main-row">
+    <div class="col-md-6 product-left">
       <section class="image-carousel-section">
         <div class="carousel-container">
           <div class="carousel-wrapper" [style.transform]="'translateX(-' + (currentImageIndex * 100) + '%)'">
-            <div class="carousel-slide" *ngFor="let image of product.images; let i = index" (click)="openImageModal(i)">
-              <img [src]="image" [alt]="product.name + ' ' + (i + 1)" class="product-image">
+            <div class="carousel-slide" *ngFor="let detail of product?.listProductStoreDetailDto; let i = index" (click)="openImageModal(i)">
+              <img [src]="detail.pathImage" [alt]="product?.productName + ' ' + (i + 1)" class="product-image" />
             </div>
           </div>
-          <!-- Navigation Arrows -->
-          <button class="carousel-nav carousel-prev" (click)="prevImage()" *ngIf="product.images.length > 1">
+          <button class="carousel-nav carousel-prev" (click)="prevImage()" *ngIf="countDetail > 1">
             <i class="fas fa-chevron-left"></i>
           </button>
-          <button class="carousel-nav carousel-next" (click)="nextImage()" *ngIf="product.images.length > 1">
+          <button class="carousel-nav carousel-next" (click)="nextImage()" *ngIf="countDetail > 1">
             <i class="fas fa-chevron-right"></i>
           </button>
-          <!-- Pagination Dots -->
-          <div class="carousel-dots" *ngIf="product.images.length > 1">
-            <span class="dot" 
-                  *ngFor="let image of product.images; let i = index"
-                  [class.active]="i === currentImageIndex"
-                  (click)="goToImage(i)">
-            </span>
+          <div class="carousel-dots" *ngIf="countDetail > 1">
+            <span class="dot" *ngFor="let image of product?.listProductStoreDetailDto; let i = index"
+              [class.active]="i === currentImageIndex"
+              (click)="goToImage(i)"></span>
           </div>
         </div>
-        <!-- Thumbnail Gallery -->
-        <div class="thumbnail-gallery" *ngIf="product.images.length > 1">
+        <div class="thumbnail-gallery" *ngIf="countDetail > 1">
           <div class="thumbnail-scroll">
             <div class="thumbnail-item"
-                 *ngFor="let image of product.images; let i = index"
+                 *ngFor="let detail of product?.listProductStoreDetailDto; let i = index"
                  [class.active]="i === currentImageIndex"
                  (click)="goToImage(i)">
-              <img [src]="image" [alt]="'Thumbnail ' + (i + 1)" class="thumbnail-image">
+              <img [src]="detail.pathImage" [alt]="'Thumbnail ' + (i + 1)" class="thumbnail-image" />
             </div>
           </div>
         </div>
       </section>
-      <!-- Image Modal/Fullscreen Viewer -->
-      <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
-        <div class="modal-content" (click)="$event.stopPropagation()">
-          <button class="modal-close" (click)="closeImageModal()">
-            <i class="fas fa-times"></i>
-          </button>
-          <div class="modal-carousel">
-            <div class="modal-wrapper" [style.transform]="'translateX(-' + (modalImageIndex * 100) + '%)'">
-              <div class="modal-slide" *ngFor="let image of product.images">
-                <img [src]="image" [alt]="product.name" class="modal-image">
+      <ng-container *ngIf="showImageModal">
+        <div class="image-modal" (click)="closeImageModal()">
+          <div class="modal-content" (click)="$event.stopPropagation()">
+            <button class="modal-close" (click)="closeImageModal()">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-carousel">
+              <div class="modal-wrapper" [style.transform]="'translateX(-' + (modalImageIndex * 100) + '%)'">
+                <div class="modal-slide" *ngFor="let detail of product?.listProductStoreDetailDto">
+                  <img [src]="detail.pathImage" [alt]="product?.productName" class="modal-image" />
+                </div>
               </div>
-            </div>
-            <button class="modal-nav modal-prev" (click)="prevModalImage()">
-              <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="modal-nav modal-next" (click)="nextModalImage()">
-              <i class="fas fa-chevron-right"></i>
-            </button>
-            <div class="modal-counter">
-              {{ modalImageIndex + 1 }} / {{ product.images.length }}
+              <button class="modal-nav modal-prev" (click)="prevModalImage()">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="modal-nav modal-next" (click)="nextModalImage()">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+              <div class="modal-counter">
+                {{ modalImageIndex + 1 }} / {{ countDetail }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
     </div>
-    <!-- Right Column: Product Information, Options, etc. -->
-    <div class="product-right col-md-6">
-      <!-- Product Info Card -->
+    <!-- Product details right column -->
+    <div class="col-md-6 product-right">
       <section class="product-info-section">
         <div class="product-info-card">
-          <!-- Product Title -->
-          <h2 class="product-title">{{ product.name }}</h2>
-          <!-- Rating and Sold Info -->
+          <h2 class="product-title">{{ product?.productName }}</h2>
           <div class="rating-sold-row">
             <div class="rating-group">
               <div class="stars">
-                <i class="fas fa-star" *ngFor="let star of getStarArray(product.rating)"
-                   [class.full]="star === 1"
-                   [class.half]="star === 0.5"></i>
+                <ng-container *ngFor="let star of getStarArray(product?.stars)">
+                  <i class="fas fa-star"
+                     [ngClass]="{ 'full': star === 1, 'half': star === 0.5 }"></i>
+                </ng-container>
               </div>
-              <span class="rating-value">{{ product.rating }}</span>
+              <span class="rating-value">{{ product?.stars }}</span>
             </div>
             <div class="divider">|</div>
-            <span class="review-count">{{ product.reviewCount }} đánh giá</span>
+            <span class="review-count">0 đánh giá</span>
             <div class="divider">|</div>
-            <span class="sold-count">Đã thuê {{ product.sold | number }}</span>
+            <span class="sold-count">Đã thuê {{ product?.sold | number }}</span>
           </div>
-          <!-- Price Section -->
           <div class="price-section flex">
             <div class="current-price-wrapper">
-              <span class="current-price">{{ product.currentPrice | number }}₫</span>
-              <span class="discount-badge">-{{ product.discount }}%</span>
+              <span class="current-price">{{ selectedDetail?.price | number }}₫</span>
             </div>
-            &nbsp;
-            <div class="original-price-wrapper">
-              <span class="original-price">{{ product.originalPrice | number }}₫</span>
-            </div>
+            
           </div>
         </div>
       </section>
-      <!-- Version Selection Section -->
-      <section class="version-selection-section">
+      
+      <section class="version-selection-section" *ngIf="hasVersion">
         <div class="selection-card">
           <h3 class="selection-title">Lựa chọn phiên bản</h3>
           <div class="version-options">
             <div class="version-option-card"
-                 *ngFor="let version of product.versions"
-                 [class.selected]="selectedVersion === version.value"
-                 (click)="selectVersion(version.value)">
-              <div class="version-name">{{ version.name }}</div>
-              <div class="version-price">{{ version.price | number }}₫</div>
-              <div class="selected-check" *ngIf="selectedVersion === version.value">
+                 *ngFor="let detail of activeCapacityCodeDetails"
+                 [class.selected]="detail.id == selectedDetail.id"
+                 (click)="selectVersion(detail)">
+              <div class="version-name">{{ detail.capacityCode }}</div>
+              <div class="version-price">{{ detail.price | number }}₫</div>
+              <div class="selected-check" *ngIf="detail.id == selectedDetail.id">
                 <i class="fas fa-check"></i>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <!-- Color Selection Section -->
-      <section class="color-selection-section">
+      <section 
+        class="color-selection-section" 
+        *ngIf="hasColor">
         <div class="selection-card">
           <h3 class="selection-title">Lựa chọn màu và xem địa chỉ còn hàng</h3>
           <div class="color-options">
-            <div class="color-option-card"
-                 *ngFor="let color of product.colors"
-                 [class.selected]="selectedColor === color.value"
-                 (click)="selectColor(color.value)">
-              <div class="color-thumbnail">
-                <img [src]="color.image" [alt]="color.name" class="color-image">
-              </div>
-              <div class="color-info">
-                <div class="color-name">{{ color.name }}</div>
-                <div class="color-price">{{ color.price | number }}₫</div>
-              </div>
-              <div class="selected-check" *ngIf="selectedColor === color.value">
-                <i class="fas fa-check"></i>
-              </div>
-            </div>
+            <ng-container *ngFor="let detail of activeColorCodeDetails">
+              <ng-container>
+                <div class="color-option-card"
+                     [class.selected]="detail.id == selectedDetail.id"
+                     (click)="selectColor(detail)">
+                  
+                  <div class="color-info">
+                    <div class="color-name">{{ detail.colorCode }}</div>
+                    <div class="color-price">{{ detail.price | number }}₫</div>
+                  </div>
+                  <div class="selected-check" *ngIf="detail.id == selectedDetail.id">
+                    <i class="fas fa-check"></i>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
           </div>
         </div>
       </section>
-      <!-- Flash Deal Countdown -->
-      <!--
-      <section class="countdown-section">
-        <div class="countdown-label">
-          <i class="fas fa-bolt"></i>
-          <span>Flash Deal kết thúc sau:</span>
-        </div>
-        <div class="countdown-timer">
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.hours | number:'2.0' }}</span>
-            <span class="countdown-label-small">Giờ</span>
-          </div>
-          <span class="countdown-separator">:</span>
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.minutes | number:'2.0' }}</span>
-            <span class="countdown-label-small">Phút</span>
-          </div>
-          <span class="countdown-separator">:</span>
-          <div class="countdown-item">
-            <span class="countdown-value">{{ timeRemaining.seconds | number:'2.0' }}</span>
-            <span class="countdown-label-small">Giây</span>
-          </div>
-        </div>
-      </section>
-      -->
-      <!-- Product Configuration Section -->
       <section class="product-config-section">
         <div class="config-card">
           <div class="config-row">
@@ -174,246 +137,107 @@
                 <button class="quantity-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
                   <i class="fas fa-minus"></i>
                 </button>
-                <input type="number" class="quantity-input" [(ngModel)]="quantity" min="1" readonly>
+                <input type="number" class="quantity-input" [(ngModel)]="quantity" min="1" [readonly]="true">
                 <button class="quantity-btn" (click)="increaseQuantity()">
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
             </div>
-            <div class="config-field">
-              <label class="field-label">Tình trạng máy:</label>
-              <select class="form-select" [(ngModel)]="deviceCondition">
-                <option value="new">Máy mới 100%</option>
-                <option value="like-new">Như mới</option>
-                <option value="good">Tốt</option>
-              </select>
+            <div class="config-field machine-condition-field">
+              <label class="field-label">
+                <i class="fas fa-cogs"></i>
+                Tình trạng máy:
+              </label>
+              <div class="field-value machine-condition-badge">
+                {{selectedDetail?.machineConditionCode}}
+              </div>
             </div>
-            <div class="config-field">
-              <label class="field-label">Thời gian thuê:</label>
-              <select class="form-select" [(ngModel)]="rentalDuration">
-                <option value="1">1 Tháng</option>
-                <option value="2">2 Tháng</option>
-                <option value="3">3 Tháng</option>
-                <option value="4">4 Tháng</option>
-                <option value="6">6 Tháng</option>
-                <option value="12">12 Tháng</option>
-              </select>
+            <div class="config-field lease-term-field">
+              <label class="field-label">
+                <i class="fas fa-clock"></i>
+                Thời gian thuê:
+              </label>
+              <div class="field-value lease-term-badge">
+                {{selectedDetail?.leaseTermCode}}
+              </div>
             </div>
+            <style>
+              
+            </style>
           </div>
-          <div class="stock-info">Còn {{ 50 - quantity }} sản phẩm</div>
+          <div class="stock-info">Còn {{ getStock() }} sản phẩm</div>
         </div>
       </section>
+
+      <div class="bottom-action-bar enhanced-bottom-action-bar">
+        <button class="action-btn cart-btn enhanced-cart-btn" (click)="addToCart()">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Thêm vào giỏ</span>
+        </button>
+        <button class="action-btn buy-btn enhanced-buy-btn" (click)="buyNow()">
+          <span>Mua ngay</span>
+        </button>
+      </div>
     </div>
   </div>
-  <!-- Customer Information & Delivery Section -->
-  <section class="customer-delivery-section">
-    <div class="info-card">
-      <h3 class="section-title">Thông tin khách hàng & Giao hàng</h3>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Họ và tên <span class="required">*</span></label>
-          <input type="text" class="form-input" [(ngModel)]="customerInfo.fullName" placeholder="Nhập họ và tên">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Số điện thoại <span class="required">*</span></label>
-          <input type="tel" class="form-input" [(ngModel)]="customerInfo.phone" placeholder="Nhập số điện thoại">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email <span class="required">*</span></label>
-          <input type="email" class="form-input" [(ngModel)]="customerInfo.email" placeholder="Nhập email">
-        </div>
-      </div>
-      <div class="delivery-options">
-        <div class="delivery-option-card"
-             [class.selected]="deliveryMethod === 'home'"
-             (click)="selectDeliveryMethod('home')">
-          <div class="radio-indicator">
-            <div class="radio-circle" [class.filled]="deliveryMethod === 'home'"></div>
-          </div>
-          <div class="option-content">
-            <div class="option-title">Nhận hàng tại nhà</div>
-            <div class="option-description">Giao hàng tận nơi</div>
-          </div>
-        </div>
-        <div class="delivery-option-card"
-             [class.selected]="deliveryMethod === 'store'"
-             (click)="selectDeliveryMethod('store')">
-          <div class="radio-indicator">
-            <div class="radio-circle" [class.filled]="deliveryMethod === 'store'"></div>
-          </div>
-          <div class="option-content">
-            <div class="option-title">Nhận hàng tại cửa hàng</div>
-            <div class="option-description">Đến cửa hàng để nhận</div>
-          </div>
-        </div>
-      </div>
-      <br/>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Tỉnh/Thành phố <span class="required">*</span></label>
-          <select class="form-select" [(ngModel)]="deliveryAddress.province" [disabled]="deliveryMethod === 'store'">
-            <option value="">Chọn tỉnh/thành phố</option>
-            <option value="hcm">Hồ Chí Minh</option>
-            <option value="hn">Hà Nội</option>
-            <option value="dn">Đà Nẵng</option>
-            <option value="hp">Hải Phòng</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Cửa hàng <span class="required">*</span></label>
-          <select class="form-select" [(ngModel)]="deliveryAddress.store" [disabled]="deliveryMethod === 'home'">
-            <option value="">Chọn cửa hàng</option>
-            <option value="store1">Cửa hàng 1 - Quận 1</option>
-            <option value="store2">Cửa hàng 2 - Quận 3</option>
-            <option value="store3">Cửa hàng 3 - Quận 7</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Order Details Section -->
-  <section class="order-details-section">
-    <div class="info-card">
-      <h3 class="section-title">Chi tiết đơn hàng</h3>
-      <div class="form-group">
-        <label class="form-label">Ghi chú</label>
-        <textarea class="form-textarea"
-                  [(ngModel)]="notes"
-                  placeholder="Nhập ghi chú (nếu có)"
-                  rows="4"></textarea>
-      </div>
-      <div class="checkbox-group">
-        <label class="checkbox-label">
-          <input type="checkbox"
-                 class="checkbox-input"
-                 [(ngModel)]="requireInvoice">
-          <span class="checkbox-text">Yêu cầu xuất hóa đơn công ty (Vui lòng điền email để nhận hóa đơn VAT)</span>
-        </label>
-      </div>
-      <div class="voucher-input-group">
-        <input type="text"
-               class="voucher-input"
-               [(ngModel)]="voucherCode"
-               placeholder="Mã giảm giá (Nếu có)">
-        <button class="voucher-btn" (click)="applyVoucher()">Sử dụng</button>
-      </div>
-    </div>
-  </section>
-  <!-- Product Description & Details Tabs -->
+  <!--
   <section class="details-tabs-section">
     <div class="details-tabs-card">
       <div class="tabs-header">
         <button class="tab-button"
-                [class.active]="descriptionExpanded"
-                (click)="toggleDescription(); showSpecs = false; showReviews = false; showQA = false;">
-          Mô tả
-        </button>
+          [class.active]="tabActive === 'description'"
+          (click)="setTab('description')">Mô tả</button>
         <button class="tab-button"
-                [class.active]="showSpecs"
-                (click)="toggleSpecs(); descriptionExpanded = false; showReviews = false; showQA = false;">
-          Thông số
-        </button>
+          [class.active]="tabActive === 'specs'"
+          (click)="setTab('specs')">Thông số</button>
         <button class="tab-button"
-                [class.active]="showReviews"
-                (click)="toggleReviews(); descriptionExpanded = false; showSpecs = false; showQA = false;">
-          Đánh giá
-        </button>
+          [class.active]="tabActive === 'reviews'"
+          (click)="setTab('reviews')">Đánh giá</button>
         <button class="tab-button"
-                [class.active]="showQA"
-                (click)="toggleQA(); descriptionExpanded = false; showSpecs = false; showReviews = false;">
-          Hỏi đáp
-        </button>
+          [class.active]="tabActive === 'qa'"
+          (click)="setTab('qa')">Hỏi đáp</button>
       </div>
-      <!-- Description Tab Content -->
-      <div class="tab-content" [class.active]="descriptionExpanded">
-        <div class="description-content">
-          <p>Ấm điện đun nước 2.5L với công suất 1500W, đun nước nhanh chóng và tiết kiệm điện. Sản phẩm có tính năng tự động tắt khi nước sôi, đảm bảo an toàn cho người sử dụng.</p>
-          <p><strong>Đặc điểm nổi bật:</strong></p>
-          <ul>
-            <li>Dung tích 2.5L, phù hợp cho gia đình 2-4 người</li>
-            <li>Công suất 1500W, đun nước nhanh trong 3-5 phút</li>
-            <li>Tự động tắt khi nước sôi, an toàn và tiết kiệm điện</li>
-            <li>Chống tràn, chống quá nhiệt</li>
-            <li>Vỏ ngoài bằng nhựa PP cao cấp, cách nhiệt tốt</li>
-            <li>Thiết kế hiện đại, dễ vệ sinh</li>
-          </ul>
-          <div class="rich-text-content">
-            <h4>Hướng dẫn sử dụng:</h4>
-            <ol>
-              <li>Đổ nước vào ấm (không quá mức MAX)</li>
-              <li>Cắm điện và bật công tắc</li>
-              <li>Đợi nước sôi, ấm sẽ tự động tắt</li>
-              <li>Rút phích cắm và sử dụng</li>
-            </ol>
-            <p><strong>Lưu ý:</strong> Không đổ nước quá mức quy định, không sử dụng khi ấm bị hư hỏng.</p>
-          </div>
-        </div>
+      <div class="tab-content" [class.active]="tabActive === 'description'">
+        <div class="description-content" [innerHTML]="product?.description"></div>
       </div>
-      <!-- Specifications Tab Content -->
-      <div class="tab-content" [class.active]="showSpecs">
+      <div class="tab-content" [class.active]="tabActive === 'specs'">
         <div class="specs-content">
           <table class="specs-table">
-            <tr>
-              <td class="spec-label">Dung tích</td>
-              <td class="spec-value">{{ product.specifications.capacity }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Công suất</td>
-              <td class="spec-value">{{ product.specifications.power }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Chất liệu</td>
-              <td class="spec-value">{{ product.specifications.material }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Tính năng an toàn</td>
-              <td class="spec-value">{{ product.specifications.safety }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Kích thước</td>
-              <td class="spec-value">{{ product.specifications.dimensions }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Trọng lượng</td>
-              <td class="spec-value">{{ product.specifications.weight }}</td>
-            </tr>
-            <tr>
-              <td class="spec-label">Bảo hành</td>
-              <td class="spec-value">{{ product.specifications.warranty }}</td>
+            <tr *ngFor="let spec of product?.specList">
+              <td class="spec-label">{{ spec.label }}</td>
+              <td class="spec-value">{{ spec.value }}</td>
             </tr>
           </table>
         </div>
       </div>
-      <!-- Reviews Tab Content -->
-      <div class="tab-content" [class.active]="showReviews">
+      <div class="tab-content" [class.active]="tabActive === 'reviews'">
         <div class="reviews-tab-content">
-          <!-- Star Distribution -->
           <div class="star-distribution">
             <div class="overall-rating">
-              <div class="rating-score">{{ product.rating }}</div>
+              <div class="rating-score">{{ product?.rating }}</div>
               <div class="rating-stars">
-                <i class="fas fa-star" *ngFor="let star of getStarArray(product.rating)"
-                   [class.full]="star === 1"
-                   [class.half]="star === 0.5"></i>
+                <ng-container *ngFor="let star of getStarArray(product?.rating)">
+                  <i class="fas fa-star"
+                     [ngClass]="{ 'full': star === 1, 'half': star === 0.5 }"></i>
+                </ng-container>
               </div>
               <div class="rating-total">{{ getTotalReviews() }} đánh giá</div>
             </div>
             <div class="star-bars">
-              <div class="star-bar" *ngFor="let count of [5,4,3,2,1]; let i = index">
+              <div class="star-bar" *ngFor="let count of [5,4,3,2,1]">
                 <span class="star-label">{{ count }} <i class="fas fa-star"></i></span>
                 <div class="bar-container">
-                  <div class="bar-fill" [style.width.%]="(product.starDistribution[count] / getTotalReviews()) * 100"></div>
+                  <div class="bar-fill" [style.width.%]="(product?.starDistribution[count] / getTotalReviews()) * 100"></div>
                 </div>
-                <span class="bar-count">{{ product.starDistribution[count] }}</span>
+                <span class="bar-count">{{ product?.starDistribution[count] }}</span>
               </div>
             </div>
           </div>
-          <!-- Review List -->
           <div class="review-list">
-            <div class="review-item" *ngFor="let review of product.reviews">
+            <div class="review-item" *ngFor="let review of product?.reviews">
               <div class="review-header">
                 <div class="review-user">
-                  <div class="user-avatar-small">{{ review.user.charAt(0) }}</div>
+                  <div class="user-avatar-small">{{ review.user | userAvatar }}</div>
                   <div class="user-info">
                     <div class="user-name">{{ review.user }}</div>
                     <div class="review-rating">
@@ -421,11 +245,11 @@
                     </div>
                   </div>
                 </div>
-                <div class="review-date">{{ review.date }}</div>
+                <div class="review-date">{{ review.date | date:'shortDate' }}</div>
               </div>
               <div class="review-comment">{{ review.comment }}</div>
               <div class="review-footer">
-                <button class="helpful-btn">
+                <button class="helpful-btn" (click)="markHelpful(review)">
                   <i class="fas fa-thumbs-up"></i>
                   Hữu ích ({{ review.helpful }})
                 </button>
@@ -434,46 +258,41 @@
           </div>
         </div>
       </div>
-      <!-- Q&A Tab Content -->
-      <div class="tab-content" [class.active]="showQA">
+      <div class="tab-content" [class.active]="tabActive === 'qa'">
         <div class="qa-content">
-          <div class="qa-item" *ngFor="let item of product.qa">
+          <div class="qa-item" *ngFor="let item of product?.qa">
             <div class="qa-question">
               <i class="fas fa-question-circle"></i>
               <div class="qa-question-text">
                 <strong>{{ item.question }}</strong>
-                <span class="qa-date">{{ item.date }}</span>
+                <span class="qa-date">{{ item.date | date:'shortDate' }}</span>
               </div>
             </div>
-            <div class="qa-answer">
+            <div class="qa-answer" *ngIf="item.answer">
               <i class="fas fa-check-circle"></i>
               <span>{{ item.answer }}</span>
             </div>
+          </div>
+          <div class="qa-ask">
+            <textarea placeholder="Đặt câu hỏi..." rows="2"></textarea>
+            <button class="ask-btn">Gửi</button>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- Related Products -->
-  <section class="related-products-section">
+  -->
+ <!--
+  <section class="related-products-section" *ngIf="product?.relatedProducts?.length">
     <div class="related-products-card">
       <h3 class="section-title">Có thể bạn cũng thích</h3>
       <div class="related-products-carousel">
         <div class="related-products-scroll">
           <product-item *ngFor="let relatedProduct of product.relatedProducts" [product]="relatedProduct"></product-item>
-          
         </div>
       </div>
     </div>
   </section>
-  <!-- Sticky Bottom Action Bar -->
-  <div class="bottom-action-bar">
-    <button class="action-btn cart-btn" (click)="addToCart()">
-      <i class="fas fa-shopping-cart"></i>
-      <span>Thêm vào giỏ</span>
-    </button>
-    <button class="action-btn buy-btn" (click)="buyNow()">
-      <span>Mua ngay</span>
-    </button>
-  </div>
+  -->
+  
 </div>

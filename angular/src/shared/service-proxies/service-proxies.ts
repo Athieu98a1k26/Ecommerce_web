@@ -206,6 +206,70 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class OrderServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createOrEdit(body: CreateUpdateOrderDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Order/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class ProductServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -932,6 +996,242 @@ export class ProductStorePublicServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = ProductStoreDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getDetail(id: number | undefined): Observable<ProductStoreDto> {
+        let url_ = this.baseUrl + "/api/services/app/ProductStorePublic/GetDetail?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetDetail(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetDetail(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProductStoreDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProductStoreDto>;
+        }));
+    }
+
+    protected processGetDetail(response: HttpResponseBase): Observable<ProductStoreDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ProductStoreDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
+export class ProvinceServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @return Success
+     */
+    initProvince(): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Province/InitProvince";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processInitProvince(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processInitProvince(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processInitProvince(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return Success
+     */
+    getAllProvince(): Observable<ProvinceDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Province/GetAllProvince";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllProvince(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllProvince(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProvinceDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProvinceDto[]>;
+        }));
+    }
+
+    protected processGetAllProvince(response: HttpResponseBase): Observable<ProvinceDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ProvinceDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param code (optional) 
+     * @return Success
+     */
+    getAllWard(code: string | undefined): Observable<ProvinceDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/Province/GetAllWard?";
+        if (code === null)
+            throw new Error("The parameter 'code' cannot be null.");
+        else if (code !== undefined)
+            url_ += "code=" + encodeURIComponent("" + code) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAllWard(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAllWard(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ProvinceDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ProvinceDto[]>;
+        }));
+    }
+
+    protected processGetAllWard(response: HttpResponseBase): Observable<ProvinceDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(ProvinceDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -3229,6 +3529,81 @@ export interface ICreateTenantDto {
     isActive: boolean;
 }
 
+export class CreateUpdateOrderDto implements ICreateUpdateOrderDto {
+    productStoreDetailId: number | undefined;
+    count: number | undefined;
+    note: string | undefined;
+    deliveryMethod: string | undefined;
+    fullName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    provinCode: string | undefined;
+    wardCode: string | undefined;
+
+    constructor(data?: ICreateUpdateOrderDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.productStoreDetailId = _data["productStoreDetailId"];
+            this.count = _data["count"];
+            this.note = _data["note"];
+            this.deliveryMethod = _data["deliveryMethod"];
+            this.fullName = _data["fullName"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
+            this.provinCode = _data["provinCode"];
+            this.wardCode = _data["wardCode"];
+        }
+    }
+
+    static fromJS(data: any): CreateUpdateOrderDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUpdateOrderDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["productStoreDetailId"] = this.productStoreDetailId;
+        data["count"] = this.count;
+        data["note"] = this.note;
+        data["deliveryMethod"] = this.deliveryMethod;
+        data["fullName"] = this.fullName;
+        data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
+        data["provinCode"] = this.provinCode;
+        data["wardCode"] = this.wardCode;
+        return data;
+    }
+
+    clone(): CreateUpdateOrderDto {
+        const json = this.toJSON();
+        let result = new CreateUpdateOrderDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateUpdateOrderDto {
+    productStoreDetailId: number | undefined;
+    count: number | undefined;
+    note: string | undefined;
+    deliveryMethod: string | undefined;
+    fullName: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+    provinCode: string | undefined;
+    wardCode: string | undefined;
+}
+
 export class CreateUpdateProductDto implements ICreateUpdateProductDto {
     id: number | undefined;
     code: string | undefined;
@@ -3288,6 +3663,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
     price: number;
     stars: number | undefined;
     sold: number | undefined;
+    count: number;
     listProductStoreDetailDto: ProductStoreDetailDto[] | undefined;
 
     constructor(data?: ICreateUpdateProductStoreDto) {
@@ -3308,6 +3684,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
             this.price = _data["price"];
             this.stars = _data["stars"];
             this.sold = _data["sold"];
+            this.count = _data["count"];
             if (Array.isArray(_data["listProductStoreDetailDto"])) {
                 this.listProductStoreDetailDto = [] as any;
                 for (let item of _data["listProductStoreDetailDto"])
@@ -3332,6 +3709,7 @@ export class CreateUpdateProductStoreDto implements ICreateUpdateProductStoreDto
         data["price"] = this.price;
         data["stars"] = this.stars;
         data["sold"] = this.sold;
+        data["count"] = this.count;
         if (Array.isArray(this.listProductStoreDetailDto)) {
             data["listProductStoreDetailDto"] = [];
             for (let item of this.listProductStoreDetailDto)
@@ -3356,6 +3734,7 @@ export interface ICreateUpdateProductStoreDto {
     price: number;
     stars: number | undefined;
     sold: number | undefined;
+    count: number;
     listProductStoreDetailDto: ProductStoreDetailDto[] | undefined;
 }
 
@@ -4004,6 +4383,7 @@ export interface IProductDtoPagedResultDto {
 }
 
 export class ProductStoreDetailDto implements IProductStoreDetailDto {
+    id: number | undefined;
     productStoreId: number | undefined;
     pathImage: string | undefined;
     capacityCode: string | undefined;
@@ -4013,6 +4393,8 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
     leaseTermCode: number;
     prepay: number;
     price: number;
+    count: number;
+    isActive: boolean;
 
     constructor(data?: IProductStoreDetailDto) {
         if (data) {
@@ -4025,6 +4407,7 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.productStoreId = _data["productStoreId"];
             this.pathImage = _data["pathImage"];
             this.capacityCode = _data["capacityCode"];
@@ -4034,6 +4417,8 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
             this.leaseTermCode = _data["leaseTermCode"];
             this.prepay = _data["prepay"];
             this.price = _data["price"];
+            this.count = _data["count"];
+            this.isActive = _data["isActive"];
         }
     }
 
@@ -4046,6 +4431,7 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["productStoreId"] = this.productStoreId;
         data["pathImage"] = this.pathImage;
         data["capacityCode"] = this.capacityCode;
@@ -4055,6 +4441,8 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
         data["leaseTermCode"] = this.leaseTermCode;
         data["prepay"] = this.prepay;
         data["price"] = this.price;
+        data["count"] = this.count;
+        data["isActive"] = this.isActive;
         return data;
     }
 
@@ -4067,6 +4455,7 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
 }
 
 export interface IProductStoreDetailDto {
+    id: number | undefined;
     productStoreId: number | undefined;
     pathImage: string | undefined;
     capacityCode: string | undefined;
@@ -4076,6 +4465,8 @@ export interface IProductStoreDetailDto {
     leaseTermCode: number;
     prepay: number;
     price: number;
+    count: number;
+    isActive: boolean;
 }
 
 export class ProductStoreDto implements IProductStoreDto {
@@ -4218,6 +4609,61 @@ export class ProductStoreDtoPagedResultDto implements IProductStoreDtoPagedResul
 export interface IProductStoreDtoPagedResultDto {
     items: ProductStoreDto[] | undefined;
     totalCount: number;
+}
+
+export class ProvinceDto implements IProvinceDto {
+    id: string | undefined;
+    code: string | undefined;
+    parentId: number;
+    name: string | undefined;
+
+    constructor(data?: IProvinceDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.code = _data["code"];
+            this.parentId = _data["parentId"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): ProvinceDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ProvinceDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["code"] = this.code;
+        data["parentId"] = this.parentId;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): ProvinceDto {
+        const json = this.toJSON();
+        let result = new ProvinceDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IProvinceDto {
+    id: string | undefined;
+    code: string | undefined;
+    parentId: number;
+    name: string | undefined;
 }
 
 export class RegisterInput implements IRegisterInput {

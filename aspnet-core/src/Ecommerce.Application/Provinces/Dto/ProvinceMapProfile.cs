@@ -7,15 +7,13 @@ using AutoMapper;
 using Ecommerce.Entitys;
 using Ecommerce.Products.Dto;
 
-namespace Ecommerce.Orders.Dto
+namespace Ecommerce.Provinces.Dto
 {
-    public class OrderMapProfile:Profile
+    public class ProvinceMapProfile:Profile
     {
-        public OrderMapProfile()
+        public ProvinceMapProfile()
         {
-            CreateMap<CreateUpdateOrderDto, Order>();
-
-            CreateMap<Order, OrderDto>();
+            CreateMap<Province, ProvinceDto>();
         }
     }
 }

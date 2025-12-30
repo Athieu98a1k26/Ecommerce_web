@@ -18,13 +18,19 @@ namespace Ecommerce.Orders.Dto
         public long ProductStoreId { get; set; }
 
         public int Count { get; set; }  // số lượng
-
+        public string FullName { get; set; }
         public long PersonId { get; set; } //Id người dùng
+
+        public string PhoneNumber {  get; set; }
+        public string Email {  get; set; }
+
+        public string ProvinCode { get; set; }
+        public string WardCode { get; set; }
 
         public string Note { get; set; } // ghi chú
 
         public string DeliveryMethod { get; set; } // hình thức nhận hàng
 
-        public string OrderStatus { get; set; }
+        public string OrderStatus { get; set; } // trạng thái đơn hàng
     }
 }

@@ -14,6 +14,8 @@ namespace Ecommerce.ProductStores.Dto
         public ProductStoreProfile()
         {
             CreateMap<ProductStoreDetailDto, ProductStoreDetail>();
+            CreateMap<ProductStoreDetail, ProductStoreDetailDto>();
+            CreateMap<ProductStore, ProductStoreDto>();
 
             CreateMap<CreateUpdateProductStoreDto, ProductStore>();
         }

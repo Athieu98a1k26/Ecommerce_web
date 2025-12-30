@@ -17,6 +17,8 @@ import * as ApiServiceProxies from './service-proxies';
         ApiServiceProxies.StoreServiceProxy,
         ApiServiceProxies.ProductStoreServiceProxy,
         ApiServiceProxies.ProductStorePublicServiceProxy,
+        ApiServiceProxies.ProvinceServiceProxy,
+        ApiServiceProxies.OrderServiceProxy,
         { provide: HTTP_INTERCEPTORS, useClass: AbpHttpInterceptor, multi: true }
     ]
 })

@@ -146,11 +146,11 @@
 		<text name="ProductStoreNotFound">Cấu hình cửa hàng, sản phẩm không tồn tại</text>
 		<text name="ProductStoreDuplicate">Cấu hình cửa hàng, sản phẩm đã tồn tại</text>
 		<text name="ProductStoreUser">Sản phẩm thuộc cửa hàng đã tồn tại trong cửa hàng</text>
-
 		<text name="ProductStores">Cấu hình sản phẩn cửa hàng</text>
-
 		<text name="StoreName">Tên cửa hàng</text>
-
 		<text name="ProductName">Tên sản phẩm</text>
+		<text name="ConfirmOrder">Xác nhận đơn hàng</text>
+		<text name="ProductStoreDetailNotFound">Không tìm thấy đơn hàng</text>
+		<text name="Orders">Quản lý đơn hàng</text>
 	</texts>
 </localizationDictionary>

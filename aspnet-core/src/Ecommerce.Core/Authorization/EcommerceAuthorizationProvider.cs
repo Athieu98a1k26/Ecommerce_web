@@ -15,6 +15,7 @@ namespace Ecommerce.Authorization
             context.CreatePermission(PermissionNames.Pages_Products, L("Products"));
             context.CreatePermission(PermissionNames.Pages_Stores, L("Stores"));
             context.CreatePermission(PermissionNames.Pages_ProductStores, L("ProductStores"));
+            context.CreatePermission(PermissionNames.Pages_Orders, L("Orders"));
         }
 
         private static ILocalizableString L(string name)

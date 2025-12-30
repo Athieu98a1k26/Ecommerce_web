@@ -74,6 +74,8 @@ namespace Ecommerce.Common
             "Paid",   // Xác nhận 
             "Reject"   // Hủy
         };
+
+
     }
 }
 

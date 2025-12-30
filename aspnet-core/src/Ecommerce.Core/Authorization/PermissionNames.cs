@@ -11,5 +11,6 @@
         public const string Pages_Products = "Pages.Products";
         public const string Pages_Stores = "Pages.Stores";
         public const string Pages_ProductStores = "Pages.ProductStores";
+        public const string Pages_Orders = "Pages.Orders";
     }
 }

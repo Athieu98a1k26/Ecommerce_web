@@ -1,77 +1,87 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { ProductStorePublicServiceProxy,
+import { 
   ProductStoreDto,
-  ProductStoreDetailDto, } from '@shared/service-proxies/service-proxies';
-import { BsModalRef, BsModalService } from '@node_modules/ngx-bootstrap/modal';
-import { OrderComponent } from '../order/order.component';
-
-
+  ProductStoreDetailDto,
+  ProvinceServiceProxy,
+  ProvinceDto,
+  OrderServiceProxy,
+  CreateUpdateOrderDto, } from '@shared/service-proxies/service-proxies';
+import { BsModalRef } from '@node_modules/ngx-bootstrap/modal';
+import {
+  NotifyService,
+} from 'abp-ng2-module';
+import { AppComponentBase } from '@shared/app-component-base';
 @Component({
   selector: 'app-product',
-  templateUrl: './product.component.html',
-  styleUrls: ['./product.component.css']
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.scss']
 })
-export class ProductComponent implements OnInit {
-  productId: string | null = null;
+export class OrderComponent extends AppComponentBase implements OnInit {
+
+  productStoreId: number;
+  quantity = 1;
+  productId: number = null;
+  saving = false;
+  notify: NotifyService;
   currentImageIndex = 0;
   selectedDetail:ProductStoreDetailDto;
-  countDetail: Number | any = 0;
-  quantity = 1;
-
+  countDetail: Number = 0;
+  deliveryMethodHome: string = 'HomeDelivery';
+  deliveryMethodStore: string = 'InStore';
+  customerInfo = {
+    fullName: '',
+    phone: '',
+    email: ''
+  };
+  deliveryMethod: string = this.deliveryMethodHome;
+  deliveryAddress = {
+    province: '',
+    ward:''
+  };
+  notes = '';
   showImageModal = false;
   modalImageIndex = 0;
   searchQuery = '';
+
   product: ProductStoreDto = null;
-  isLoading = false;
-
+  listProvince: ProvinceDto[]
+  listWard: ProvinceDto[]
   constructor(
-    private route: ActivatedRoute,
+    injector: Injector,
     private router: Router,
-    private location: Location,
-    private productApi: ProductStorePublicServiceProxy,
-    private _modalService: BsModalService
-  ) {}
-
-  ngOnInit(): void {
-    this.productId = this.route.snapshot.paramMap.get('id');
-    if (this.productId) {
-      this.fetchProductDetail(this.productId);
-    }
-    
+    private provinceApi: ProvinceServiceProxy,
+    private orderApi: OrderServiceProxy,
+    public bsModalRef: BsModalRef
+  ) {
+      super(injector);
   }
 
-  fetchProductDetail(id: string): void {
-    this.isLoading = true;
-    const parsedId = parseInt(id);
-    this.productApi.getDetail(parsedId).subscribe({
-      next: (result: any) => {
-        this.product = result;
-        // set default variant selections if available
-        if (this.product && this.product?.listProductStoreDetailDto) {
-          this.selectedDetail = this.product?.listProductStoreDetailDto.find(item => item.isActive);
-        }
-        this.countDetail = this.product?.listProductStoreDetailDto.length;
-        this.isLoading = false;
+  ngOnInit(): void {
+    this.getListProvince();
+  }
+
+  getListProvince(){
+    this.provinceApi.getAllProvince().subscribe({
+      next: (result: ProvinceDto[]) => {
+        this.listProvince = result;
       },
-      error: _ => { this.isLoading = false; }
+      
     });
   }
 
-  goBack(): void {
-    this.location.back();
+  getAllWardByProvince(){
+    this.provinceApi.getAllWard(this.deliveryAddress.province).subscribe({
+      next: (result: ProvinceDto[]) => {
+        this.listWard = result;
+      },
+      
+    });
   }
 
-  shareProduct(): void {
-    if (!this.product) return;
-    if (navigator.share) {
-      navigator.share({
-        title: this.product.productName,
-        text: 'Xem sản phẩm này trên E-Shop',
-        url: window.location.href
-      });
-    }
+  onProvinceChange(){
+    this.listWard = [];
+    this.getAllWardByProvince();
   }
 
   goToCart(): void {
@@ -79,22 +89,46 @@ export class ProductComponent implements OnInit {
   }
 
   get activeCapacityCodeDetails() {
-    return this.product?.listProductStoreDetailDto.filter(d => d.capacityCode);
+    return this.product.listProductStoreDetailDto.filter(d => d.capacityCode);
   }
 
   get activeColorCodeDetails() {
-    return this.product?.listProductStoreDetailDto.filter(d => d.colorCode);
+    return this.product.listProductStoreDetailDto.filter(d => d.colorCode);
+  }
+
+  save(): void {
+    console.log('123123');
+    this.saving = true;
+    let input = new CreateUpdateOrderDto();
+    input.productStoreDetailId = this.selectedDetail.id;
+    input.count = this.quantity;
+    input.note = this.notes?.trim();
+    input.deliveryMethod = this.deliveryMethod;
+    input.phoneNumber = this.customerInfo.phone?.trim();
+    input.fullName = this.customerInfo.fullName?.trim();
+    input.email = this.customerInfo.email?.trim();
+    input.provinCode = this.deliveryAddress.province;
+    this.orderApi.createOrEdit(input).subscribe(
+      () => {
+        this.notify.info(this.l('SavedSuccessfully'));
+        this.bsModalRef.hide();
+      },
+      () => {
+        this.saving = false;
+      }
+    );
+    
   }
 
   nextImage(): void {
     if (!this.product?.listProductStoreDetailDto?.length) return;
-    this.currentImageIndex = (this.currentImageIndex + 1) % this.countDetail;
+    this.currentImageIndex = (this.currentImageIndex + 1) % this.product.listProductStoreDetailDto.length;
   }
 
   prevImage(): void {
     if (!this.product?.listProductStoreDetailDto?.length) return;
     this.currentImageIndex = this.currentImageIndex === 0 
-      ? this.countDetail - 1 
+      ? this.product.listProductStoreDetailDto.length - 1 
       : this.currentImageIndex - 1;
   }
 
@@ -135,12 +169,12 @@ export class ProductComponent implements OnInit {
   nextModalImage(): void {
     if (!this.product?.listProductStoreDetailDto?.length) return;
     const currentDetail = this.selectedDetail;
-    const currentIndex = this.product?.listProductStoreDetailDto.findIndex(
+    const currentIndex = this.product.listProductStoreDetailDto.findIndex(
       d => d === currentDetail
     );
-    const length = this.countDetail;
+    const length = this.product.listProductStoreDetailDto.length;
     const nextIndex = (currentIndex + 1) % length;
-    this.selectedDetail = this.product?.listProductStoreDetailDto[nextIndex];
+    this.selectedDetail = this.product.listProductStoreDetailDto[nextIndex];
     this.modalImageIndex = nextIndex;
     this.currentImageIndex = nextIndex;
   }
@@ -151,7 +185,7 @@ export class ProductComponent implements OnInit {
     const currentIndex = this.product.listProductStoreDetailDto.findIndex(
       d => d === currentDetail
     );
-    const length = this.countDetail;
+    const length = this.product.listProductStoreDetailDto.length;
     const prevIndex = currentIndex === 0 ? length - 1 : currentIndex - 1;
     this.selectedDetail = this.product.listProductStoreDetailDto[prevIndex];
     this.modalImageIndex = prevIndex;
@@ -171,25 +205,20 @@ export class ProductComponent implements OnInit {
   addToCart(): void {
     // Optionally: trigger API/add to cart store here
   }
-
-  buyNow(): void {
-    //this.addToCart();
-    //this.router.navigate(['/ecommerce/cart']);
-    let openOrder: BsModalRef;
-    openOrder = this._modalService.show(
-      OrderComponent,
-      {
-        class: 'modal-xl',
-        initialState: {
-          productStoreId: this.selectedDetail.id,
-          quantity:this.quantity,
-          product:this.product,
-          selectedDetail:this.selectedDetail
-        },
-      }
-    );
+  chatWithSeller(): void {
+    console.log('Chat with seller');
   }
-  
+
+  selectDeliveryMethod(method: string): void {
+    this.deliveryMethod = method;
+    if (method === this.deliveryMethodHome) {
+
+    } else {
+      this.deliveryAddress.ward = '';
+      this.deliveryAddress.province = '';
+    }
+  }
+
   getStarArray(rating: number): number[] {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
@@ -208,12 +237,12 @@ export class ProductComponent implements OnInit {
   }
   hasColor(){
     return this.product?.listProductStoreDetailDto 
-    && this.product?.listProductStoreDetailDto.some(detail => detail.colorCode)
+    && this.product.listProductStoreDetailDto.some(detail => detail.colorCode)
   }
 
   hasVersion(){
     return this.product?.listProductStoreDetailDto 
-    && this.product?.listProductStoreDetailDto.some(detail => detail.capacityCode)
+    && this.product.listProductStoreDetailDto.some(detail => detail.capacityCode)
   }
 
   @HostListener('touchstart', ['$event'])
