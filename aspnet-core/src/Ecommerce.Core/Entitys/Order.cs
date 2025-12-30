@@ -18,11 +18,11 @@ namespace Ecommerce.Entitys
 
         [Required]
         [StringLength(100)]
-        public string ShopCode {  get; set; } // cửa hàng
+        public long ProductStoreDetailId {  get; set; }
 
         [Required]
         [StringLength(100)]
-        public string ProductStore {  get; set; } // sản phẩm thuộc cửa hàng
+        public long ProductStoreId { get; set; }
 
         [Required]
         public int Count {  get; set; }  // số lượng

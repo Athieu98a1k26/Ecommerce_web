@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20251230060313_Init_Table")]
-    partial class Init_Table
+    [Migration("20251230090443_add1")]
+    partial class add1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1781,15 +1781,13 @@ namespace Ecommerce.Migrations
                     b.Property<long>("PersonId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("ProductStore")
-                        .IsRequired()
+                    b.Property<long>("ProductStoreDetailId")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("bigint");
 
-                    b.Property<string>("ShopCode")
-                        .IsRequired()
+                    b.Property<long>("ProductStoreId")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -1832,7 +1830,7 @@ namespace Ecommerce.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("OrderDetailStatus")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -2018,19 +2016,17 @@ namespace Ecommerce.Migrations
                     b.Property<long?>("LastModifierUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LeaseTermCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("LeaseTermCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("MachineConditionCode")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<long>("PackageCode")
+                    b.Property<string>("PackageCode")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("bigint");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PathImage")
                         .IsRequired()
@@ -2043,10 +2039,8 @@ namespace Ecommerce.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProductCode")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<long>("ProductStoreId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 

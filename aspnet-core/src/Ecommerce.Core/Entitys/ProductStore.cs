@@ -19,5 +19,12 @@ namespace Ecommerce.Entitys
         [Required]
         [StringLength(100)]
         public string ProductCode { get; set; }
+
+        [Required]
+        public decimal Price {  get; set; } // giá sản phẩm thấp nhất
+
+        public float? Stars { get; set; } // số sao đánh giá
+
+        public int? Sold { get; set; } // số sản phẩm đã bán
     }
 }

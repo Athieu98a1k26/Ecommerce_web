@@ -117,6 +117,9 @@
 		<text name="ResetPasswordStepOneInfo">1. Nhập mật khẩu quản trị viên của bạn</text>
 		<text name="ResetPasswordStepTwoInfo">2. Sao chép mật khẩu ngẫu nhiên này để gửi cho người dùng</text>
 		<text name="UsersActivation">Kích hoạt người dùng</text>
+		
+		
+		
 		<text name="Products">Sản phẩm</text>
 		<text name="Stores">Cửa hàng</text>
 		<text name="ProductNotFound">Sản phẩm không tồn tại</text>
@@ -136,8 +139,18 @@
 		<text name="CodeStoreMaxLength">Mã cửa hàng không được lớn hơn 100 ký tự</text>
 
 		<text name="NameStoreMaxLength">Tên cửa hàng không được lớn hơn 255 ký tự</text>
-		<text name="StoreDuplicate">ng đã được sử dụnCửa hàng đã tồn tại</text>
+		<text name="StoreDuplicate">Cửa hàng đã tồn tại</text>
 
 		<text name="StoreUse">Cửa hàng đã được sử dụng</text>
+
+		<text name="ProductStoreNotFound">Cấu hình cửa hàng, sản phẩm không tồn tại</text>
+		<text name="ProductStoreDuplicate">Cấu hình cửa hàng, sản phẩm đã tồn tại</text>
+		<text name="ProductStoreUser">Sản phẩm thuộc cửa hàng đã tồn tại trong cửa hàng</text>
+
+		<text name="ProductStores">Cấu hình sản phẩn cửa hàng</text>
+
+		<text name="StoreName">Tên cửa hàng</text>
+
+		<text name="ProductName">Tên sản phẩm</text>
 	</texts>
 </localizationDictionary>

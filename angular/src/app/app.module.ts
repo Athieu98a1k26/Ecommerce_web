@@ -44,6 +44,7 @@ import { ProductsComponent } from './products/products.component';
 import { StoresComponent } from './stores/stores.component';
 import { EditStoreDialogComponent } from './stores/edit-store/edit-store-dialog.component';
 import { CreateStoreDialogComponent } from './stores/create-store/create-store-dialog.component';
+import { ProductStoresComponent } from './product-stores/product-store.component';
 
 @NgModule({
     declarations: [
@@ -82,7 +83,9 @@ import { CreateStoreDialogComponent } from './stores/create-store/create-store-d
 
         StoresComponent,
         EditStoreDialogComponent,
-        CreateStoreDialogComponent
+        CreateStoreDialogComponent,
+
+        ProductStoresComponent
     ],
     imports: [
         CommonModule,

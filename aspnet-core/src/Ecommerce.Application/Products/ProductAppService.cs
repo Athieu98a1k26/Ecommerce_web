@@ -40,6 +40,7 @@ namespace Ecommerce.Services
             _productStoreRepository = productStoreRepository;
         }
 
+
         [HttpPost]
         public async Task<PagedResultDto<ProductDto>> GetPaging(BaseRequest baseRequest)
         {

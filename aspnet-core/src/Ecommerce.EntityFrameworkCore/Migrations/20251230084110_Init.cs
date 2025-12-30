@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class Init_Table : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -65,7 +65,7 @@ namespace Ecommerce.Migrations
                     OrderCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AmounToBePaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    OrderDetailStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -86,8 +86,8 @@ namespace Ecommerce.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ShopCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ProductStore = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProductStoreDetailId = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
+                    ProductStoreId = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
                     PersonId = table.Column<long>(type: "bigint", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
@@ -156,7 +156,7 @@ namespace Ecommerce.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProductStoreId = table.Column<long>(type: "bigint", nullable: false),
                     PathImage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CapacityCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ColorCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),

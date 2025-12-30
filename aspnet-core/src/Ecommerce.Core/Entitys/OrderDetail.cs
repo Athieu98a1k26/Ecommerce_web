@@ -18,6 +18,6 @@ namespace Ecommerce.Entitys
         public decimal AmounToBePaid {  get; set; } // số tiêng phải trả
 
         [StringLength(100)]
-        public string Status {  get; set; } // Trạng thái
+        public string OrderDetailStatus {  get; set; } // Trạng thái
     }
 }

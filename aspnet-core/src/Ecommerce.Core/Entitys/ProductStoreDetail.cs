@@ -14,8 +14,7 @@ namespace Ecommerce.Entitys
     public class ProductStoreDetail : FullAuditedEntity<long>
     {
         [Required]
-        [StringLength(100)]
-        public string ProductCode {  get; set; }
+        public long ProductStoreId {  get; set; }
         
         [Required]
         [StringLength(255)]
@@ -28,21 +27,19 @@ namespace Ecommerce.Entitys
         public string ColorCode {  get; set; } // màu sắc
 
         //tình trạng máy
-        [Required]
         [StringLength(100)]
         public string MachineConditionCode {  get; set; }  // tình trạng máy
 
         // gói trả
         [Required]
         [StringLength(100)]
-        public long PackageCode {  get; set; }
+        public string PackageCode {  get; set; }
 
         [Required]
-        [StringLength(100)]
-        public string LeaseTermCode { get; set; } // thời hạn thuê
+        public int LeaseTermCode { get; set; } // thời hạn thuê
 
         [Required]
-        public decimal Prepay { get; set; } // trả trước
+        public decimal Prepay { get; set; } // trả trước ex:50%
 
         [Required]
         public decimal Price { get; set; } // giá của sản phẩm theo phiên bản, màu sắc

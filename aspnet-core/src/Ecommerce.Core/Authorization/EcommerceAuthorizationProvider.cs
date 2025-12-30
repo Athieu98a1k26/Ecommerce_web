@@ -14,6 +14,7 @@ namespace Ecommerce.Authorization
             context.CreatePermission(PermissionNames.Pages_Tenants, L("Tenants"), multiTenancySides: MultiTenancySides.Host);
             context.CreatePermission(PermissionNames.Pages_Products, L("Products"));
             context.CreatePermission(PermissionNames.Pages_Stores, L("Stores"));
+            context.CreatePermission(PermissionNames.Pages_ProductStores, L("ProductStores"));
         }
 
         private static ILocalizableString L(string name)
