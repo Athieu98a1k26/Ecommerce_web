@@ -4,14 +4,12 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
   PagedListingComponentBase,
-  PagedRequestDto
 } from '@shared/paged-listing-component-base';
 import {
-  ProductServiceServiceProxy,
-  ProductRequestModel,
-  ProductModelPagedResultDto,
+  ProductServiceProxy,
+  ProductDtoPagedResultDto,
   BaseRequest,
-  ProductModel
+  ProductDto
 } from '@shared/service-proxies/service-proxies';
 import { CreateProductDialogComponent } from './create-product/create-product-dialog.component';
 import { EditProductDialogComponent } from './edit-product/edit-product-dialog.component';
@@ -20,13 +18,13 @@ import { EditProductDialogComponent } from './edit-product/edit-product-dialog.c
   templateUrl: './products.component.html',
   animations: [appModuleAnimation()]
 })
-export class ProductsComponent extends PagedListingComponentBase<ProductRequestModel> {
-  products: ProductRequestModel[] = [];
+export class ProductsComponent extends PagedListingComponentBase<ProductDto> {
+  products: ProductDto[] = [];
   keyword = '';
 
   constructor(
     injector: Injector,
-    private _productsService: ProductServiceServiceProxy,
+    private _productsService: ProductServiceProxy,
     private _modalService: BsModalService
   ) {
     super(injector);
@@ -38,7 +36,6 @@ export class ProductsComponent extends PagedListingComponentBase<ProductRequestM
     finishedCallback: Function
   ): void {
     request.search = this.keyword;
-
     this._productsService
       .getPaging(request)
       .pipe(
@@ -46,13 +43,13 @@ export class ProductsComponent extends PagedListingComponentBase<ProductRequestM
           finishedCallback();
         })
       )
-      .subscribe((result: ProductModelPagedResultDto) => {
+      .subscribe((result: ProductDtoPagedResultDto) => {
         this.products = result.items;
         this.showPaging(result, pageNumber);
       });
   }
 
-  delete(product: ProductModel): void {
+  delete(product: ProductDto): void {
     abp.message.confirm(
       this.l('ProductDeleteWarningMessage', product.name),
       undefined,
@@ -76,7 +73,7 @@ export class ProductsComponent extends PagedListingComponentBase<ProductRequestM
     this.showCreateOrEditProductDialog();
   }
 
-  editProduct(product: ProductModel): void {
+  editProduct(product: ProductDto): void {
     this.showCreateOrEditProductDialog(product.id);
   }
 

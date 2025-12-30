@@ -11,23 +11,16 @@ namespace Ecommerce.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "TargetNotifiers",
-                table: "AbpNotificationSubscriptions",
-                type: "nvarchar(1024)",
-                maxLength: 1024,
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "Catalogs",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CatalogType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CatalogType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -69,10 +62,10 @@ namespace Ecommerce.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Time = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AmounToBePaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -93,8 +86,8 @@ namespace Ecommerce.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ShopCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductStore = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShopCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProductStore = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
                     PersonId = table.Column<long>(type: "bigint", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
@@ -143,7 +136,7 @@ namespace Ecommerce.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -163,13 +156,13 @@ namespace Ecommerce.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PathImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CapacityCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MachineConditionCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PackageCode = table.Column<long>(type: "bigint", nullable: false),
-                    LeaseTermCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PathImage = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CapacityCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ColorCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    MachineConditionCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    PackageCode = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
+                    LeaseTermCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Prepay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),

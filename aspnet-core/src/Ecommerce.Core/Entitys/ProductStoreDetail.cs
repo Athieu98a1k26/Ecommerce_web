@@ -14,24 +14,31 @@ namespace Ecommerce.Entitys
     public class ProductStoreDetail : FullAuditedEntity<long>
     {
         [Required]
+        [StringLength(100)]
         public string ProductCode {  get; set; }
         
         [Required]
+        [StringLength(255)]
         public string PathImage {  get; set; }
 
+        [StringLength(100)]
         public string CapacityCode {  get; set; } // dung lượng
 
+        [StringLength(100)]
         public string ColorCode {  get; set; } // màu sắc
 
         //tình trạng máy
         [Required]
+        [StringLength(100)]
         public string MachineConditionCode {  get; set; }  // tình trạng máy
 
         // gói trả
         [Required]
+        [StringLength(100)]
         public long PackageCode {  get; set; }
 
         [Required]
+        [StringLength(100)]
         public string LeaseTermCode { get; set; } // thời hạn thuê
 
         [Required]

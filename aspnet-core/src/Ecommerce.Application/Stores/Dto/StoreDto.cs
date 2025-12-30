@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Stores.Dto
 {
-    public class StoreModel
+    public class StoreDto
     {
         public long Id { get; set; }
         public string Code { get; set; }

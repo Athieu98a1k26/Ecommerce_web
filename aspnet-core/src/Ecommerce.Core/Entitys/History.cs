@@ -13,11 +13,11 @@ namespace Ecommerce.Entitys
     public class History : FullAuditedEntity<long>
     {
         [Required]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string Action {  get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [StringLength(500)]
         public string Note {  get; set; }
 
 

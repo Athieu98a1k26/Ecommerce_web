@@ -17,9 +17,11 @@ namespace Ecommerce.Entitys
         public string Code { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string ShopCode {  get; set; } // cửa hàng
 
         [Required]
+        [StringLength(100)]
         public string ProductStore {  get; set; } // sản phẩm thuộc cửa hàng
 
         [Required]
@@ -28,13 +30,13 @@ namespace Ecommerce.Entitys
         [Required]
         public long PersonId {  get; set; } //Id người dùng
 
-        [MaxLength(255)]       
+        [StringLength(255)]       
         public string Note {  get; set; } // ghi chú
 
-        [MaxLength(50)]
+        [StringLength(50)]
         public string DeliveryMethod {  get; set; } // hình thức nhận hàng
 
-        [MaxLength(50)]
+        [StringLength(50)]
         public string OrderStatus {  get; set; } // trạng thái đơn hàng
     }
 }

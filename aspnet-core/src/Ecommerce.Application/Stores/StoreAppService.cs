@@ -22,27 +22,27 @@ using Ecommerce.Entitys;
 
 namespace Ecommerce.Stores
 {
-    public interface IStoreService
+    public interface IStoreAppService
     {
-        Task<PagedResultDto<StoreModel>> GetPaging(BaseRequest baseRequest);
+        Task<PagedResultDto<StoreDto>> GetPaging(BaseRequest baseRequest);
 
-        Task<StoreModel> Get(long id);
-        Task CreateOrEdit(StoreRequestModel request);
+        Task<StoreDto> Get(long id);
+        Task CreateOrEdit(CreateUpdateStoreDto request);
         Task Delete(long id);
     }
     [AbpAuthorize(PermissionNames.Pages_Stores)]
-    public class StoreService : EcommerceAppServiceBase, IStoreService
+    public class StoreAppService : EcommerceAppServiceBase, IStoreAppService
     {
         private readonly IRepository<Store, long> _storeRepository;
         private readonly IRepository<ProductStore, long> _productStoreRepository;
-        public StoreService(IRepository<Store, long> storeRepository, IRepository<ProductStore, long> productStoreRepository)
+        public StoreAppService(IRepository<Store, long> storeRepository, IRepository<ProductStore, long> productStoreRepository)
         {
             _storeRepository = storeRepository;
             _productStoreRepository = productStoreRepository;
         }
 
         [HttpPost]
-        public async Task<PagedResultDto<StoreModel>> GetPaging(BaseRequest baseRequest)
+        public async Task<PagedResultDto<StoreDto>> GetPaging(BaseRequest baseRequest)
         {
             var query = _storeRepository.GetAll().WhereIf(!string.IsNullOrWhiteSpace(baseRequest.Search), s => s.Code.Contains(baseRequest.Search) || s.Name.Contains(baseRequest.Search));
 
@@ -54,23 +54,23 @@ namespace Ecommerce.Stores
 
             var listData = await pagedAndFiltered.ToListAsync();
 
-            var listDataModel = ObjectMapper.Map<List<StoreModel>>(listData);
+            var listDataModel = ObjectMapper.Map<List<StoreDto>>(listData);
 
-            return new PagedResultDto<StoreModel>(
+            return new PagedResultDto<StoreDto>(
                totalCount,
                listDataModel
            );
         }
 
-        public async Task<StoreModel> Get(long id)
+        public async Task<StoreDto> Get(long id)
         {
             var data = await _storeRepository.GetAsync(id);
-            var dataModel = ObjectMapper.Map<StoreModel>(data);
+            var dataModel = ObjectMapper.Map<StoreDto>(data);
 
             return dataModel;
         }
 
-        public async Task CreateOrEdit(StoreRequestModel request)
+        public async Task CreateOrEdit(CreateUpdateStoreDto request)
         {
             await Validate(request);
 
@@ -90,11 +90,12 @@ namespace Ecommerce.Stores
 
                 data.Code = request.Code;
                 data.Name = request.Name;
+                data.Address = request.Address;
                 await _storeRepository.UpdateAsync(data);
             }
         }
 
-        private async Task Validate(StoreRequestModel request)
+        private async Task Validate(CreateUpdateStoreDto request)
         {
             if (string.IsNullOrEmpty(request.Code))
             {

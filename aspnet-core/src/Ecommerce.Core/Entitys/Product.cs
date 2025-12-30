@@ -5,19 +5,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.AutoMapper;
 using Abp.Domain.Entities.Auditing;
 
 namespace Ecommerce.Entitys
 {
     [Table("Products")]
+    [AutoMapTo(typeof(Product))]
     public class Product : FullAuditedEntity<long>
     {
         [Required]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string Code {  get; set; }
 
         [Required]
-        [MaxLength(250)]
+        [StringLength(255)]
         public string Name {  get; set; }
 
     }

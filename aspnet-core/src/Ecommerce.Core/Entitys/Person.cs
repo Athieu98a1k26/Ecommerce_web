@@ -12,13 +12,13 @@ namespace Ecommerce.Entitys
     [Table("Persons")]
     public class Person : FullAuditedEntity<long>
     {
-        [MaxLength(255)]
+        [StringLength(255)]
         public string FullName {  get; set; }
 
-        [MaxLength(100)]
+        [StringLength(100)]
         public string PhoneNumber {  get; set; }
 
-        [MaxLength(100)]
+        [StringLength(100)]
         public string Email {  get; set; }
 
         [Required]

@@ -19,57 +19,57 @@ using Ecommerce.Entitys;
 
 namespace Ecommerce.Services
 {
-    public interface IProductService
+    public interface IProductAppService
     {
-        Task<PagedResultDto<ProductModel>> GetPaging(BaseRequest baseRequest);
+        Task<PagedResultDto<ProductDto>> GetPaging(BaseRequest baseRequest);
 
-        Task<ProductModel> Get(long id);
-        Task CreateOrEdit(ProductRequestModel request);
+        Task<ProductDto> Get(long id);
+        Task CreateOrEdit(CreateUpdateProductDto request);
         Task Delete(long id);
     }
 
 
     [AbpAuthorize(PermissionNames.Pages_Products)]
-    public class ProductService: EcommerceAppServiceBase,IProductService
+    public class ProductAppService: EcommerceAppServiceBase, IProductAppService
     {
         private readonly IRepository<Product,long> _productRepository;
         private readonly IRepository<ProductStore, long> _productStoreRepository;
-        public ProductService(IRepository<Product, long> productRepository, IRepository<ProductStore, long> productStoreRepository)
+        public ProductAppService(IRepository<Product, long> productRepository, IRepository<ProductStore, long> productStoreRepository)
         {
             _productRepository = productRepository;
             _productStoreRepository = productStoreRepository;
         }
 
         [HttpPost]
-        public async Task<PagedResultDto<ProductModel>> GetPaging(BaseRequest baseRequest)
+        public async Task<PagedResultDto<ProductDto>> GetPaging(BaseRequest baseRequest)
         {
             var query = _productRepository.GetAll().WhereIf(!string.IsNullOrWhiteSpace(baseRequest.Search),s => s.Code.Contains(baseRequest.Search) || s.Name.Contains(baseRequest.Search));
 
             var pagedAndFiltered = query
-                .OrderBy(baseRequest.Sorting ?? "id desc")
+                .OrderBy(baseRequest.Sorting ?? "Id desc")
                 .PageBy(baseRequest);
 
             var totalCount = await query.CountAsync();
 
             var listData = await pagedAndFiltered.ToListAsync();
 
-            var listDataModel = ObjectMapper.Map<List<ProductModel>>(listData);
+            var listDataModel = ObjectMapper.Map<List<ProductDto>>(listData);
 
-            return new PagedResultDto<ProductModel>(
+            return new PagedResultDto<ProductDto>(
                totalCount,
                listDataModel
            );
         }
 
-        public async Task<ProductModel> Get(long id)
+        public async Task<ProductDto> Get(long id)
         {
             var data =await _productRepository.GetAsync(id);
-            var dataModel = ObjectMapper.Map<ProductModel>(data);
+            var dataModel = ObjectMapper.Map<ProductDto>(data);
 
             return dataModel;
         }
 
-        public async Task CreateOrEdit(ProductRequestModel request)
+        public async Task CreateOrEdit(CreateUpdateProductDto request)
         {
             await Validate(request);
 
@@ -93,7 +93,7 @@ namespace Ecommerce.Services
             }
         }
 
-        private async Task Validate(ProductRequestModel request)
+        private async Task Validate(CreateUpdateProductDto request)
         {
             if(string.IsNullOrEmpty(request.Code))
             {

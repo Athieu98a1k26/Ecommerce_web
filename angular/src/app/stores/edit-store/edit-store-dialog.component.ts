@@ -8,39 +8,38 @@ import {
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-  ProductServiceProxy,
-  ProductDto
+  StoreServiceProxy,
+  StoreDto
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
-  templateUrl: 'edit-product-dialog.component.html'
+  templateUrl: 'edit-store-dialog.component.html'
 })
-export class EditProductDialogComponent extends AppComponentBase
-  implements OnInit {
+export class EditStoreDialogComponent extends AppComponentBase implements OnInit {
   saving = false;
-  product: ProductDto = new ProductDto();
+  store: StoreDto = new StoreDto();
   id: number;
 
   @Output() onSave = new EventEmitter<any>();
 
   constructor(
     injector: Injector,
-    public _productService: ProductServiceProxy,
+    public _storeService: StoreServiceProxy,
     public bsModalRef: BsModalRef
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this._productService.get(this.id).subscribe((result: ProductDto) => {
-      this.product = result;
+    this._storeService.get(this.id).subscribe((result: StoreDto) => {
+      this.store = result;
     });
   }
 
   save(): void {
     this.saving = true;
 
-    this._productService.createOrEdit(this.product).subscribe(
+    this._storeService.createOrEdit(this.store).subscribe(
       () => {
         this.notify.info(this.l('SavedSuccessfully'));
         this.bsModalRef.hide();

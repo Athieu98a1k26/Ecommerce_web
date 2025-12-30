@@ -41,6 +41,9 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 import { CreateProductDialogComponent } from './products/create-product/create-product-dialog.component';
 import { EditProductDialogComponent } from './products/edit-product/edit-product-dialog.component';
 import { ProductsComponent } from './products/products.component';
+import { StoresComponent } from './stores/stores.component';
+import { EditStoreDialogComponent } from './stores/edit-store/edit-store-dialog.component';
+import { CreateStoreDialogComponent } from './stores/create-store/create-store-dialog.component';
 
 @NgModule({
     declarations: [
@@ -72,10 +75,14 @@ import { ProductsComponent } from './products/products.component';
         SidebarUserPanelComponent,
         SidebarMenuComponent,
 
-        //product
-        CreateProductDialogComponent,
+        //
+        ProductsComponent,
         EditProductDialogComponent,
-        ProductsComponent
+        CreateProductDialogComponent,
+
+        StoresComponent,
+        EditStoreDialogComponent,
+        CreateStoreDialogComponent
     ],
     imports: [
         CommonModule,

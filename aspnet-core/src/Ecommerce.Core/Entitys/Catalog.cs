@@ -13,14 +13,18 @@ namespace Ecommerce.Entitys
     public class Catalog : FullAuditedEntity<long>
     {
         [Required]
+        [StringLength(100)]
         public string Code {  get; set; }
 
         [Required]
+        [StringLength(255)]
         public string Name { get; set; }
 
         [Required]
+        [StringLength(100)]
         public string CatalogType { get; set; }
 
+        [StringLength(255)]
         public string Description { get; set; }
     }
 }

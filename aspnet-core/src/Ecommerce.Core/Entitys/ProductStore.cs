@@ -13,11 +13,11 @@ namespace Ecommerce.Entitys
     public class ProductStore : FullAuditedEntity<long>
     {
         [Required]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string StoreCode {  get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [StringLength(100)]
         public string ProductCode { get; set; }
     }
 }

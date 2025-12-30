@@ -206,7 +206,7 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
-export class ProductServiceServiceProxy {
+export class ProductServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -220,8 +220,8 @@ export class ProductServiceServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getPaging(body: BaseRequest | undefined): Observable<ProductModelPagedResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/GetPaging";
+    getPaging(body: BaseRequest | undefined): Observable<ProductDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Product/GetPaging";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -243,14 +243,14 @@ export class ProductServiceServiceProxy {
                 try {
                     return this.processGetPaging(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ProductModelPagedResultDto>;
+                    return _observableThrow(e) as any as Observable<ProductDtoPagedResultDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ProductModelPagedResultDto>;
+                return _observableThrow(response_) as any as Observable<ProductDtoPagedResultDto>;
         }));
     }
 
-    protected processGetPaging(response: HttpResponseBase): Observable<ProductModelPagedResultDto> {
+    protected processGetPaging(response: HttpResponseBase): Observable<ProductDtoPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -261,7 +261,7 @@ export class ProductServiceServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductModelPagedResultDto.fromJS(resultData200);
+            result200 = ProductDtoPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -276,8 +276,8 @@ export class ProductServiceServiceProxy {
      * @param id (optional) 
      * @return Success
      */
-    get(id: number | undefined): Observable<ProductModel> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/Get?";
+    get(id: number | undefined): Observable<ProductDto> {
+        let url_ = this.baseUrl + "/api/services/app/Product/Get?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -299,14 +299,14 @@ export class ProductServiceServiceProxy {
                 try {
                     return this.processGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<ProductModel>;
+                    return _observableThrow(e) as any as Observable<ProductDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<ProductModel>;
+                return _observableThrow(response_) as any as Observable<ProductDto>;
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<ProductModel> {
+    protected processGet(response: HttpResponseBase): Observable<ProductDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -317,7 +317,7 @@ export class ProductServiceServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProductModel.fromJS(resultData200);
+            result200 = ProductDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -332,8 +332,8 @@ export class ProductServiceServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createOrEdit(body: ProductRequestModel | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/CreateOrEdit";
+    createOrEdit(body: CreateUpdateProductDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Product/CreateOrEdit";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -385,7 +385,7 @@ export class ProductServiceServiceProxy {
      * @return Success
      */
     delete(id: number | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/Delete?";
+        let url_ = this.baseUrl + "/api/services/app/Product/Delete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -437,7 +437,7 @@ export class ProductServiceServiceProxy {
      * @return Success
      */
     validateDelete(id: number | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/ProductService/ValidateDelete?";
+        let url_ = this.baseUrl + "/api/services/app/Product/ValidateDelete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -1010,7 +1010,7 @@ export class SessionServiceProxy {
 }
 
 @Injectable()
-export class StoreServiceServiceProxy {
+export class StoreServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1024,8 +1024,8 @@ export class StoreServiceServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    getPaging(body: BaseRequest | undefined): Observable<StoreModelPagedResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/StoreService/GetPaging";
+    getPaging(body: BaseRequest | undefined): Observable<StoreDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Store/GetPaging";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1047,14 +1047,14 @@ export class StoreServiceServiceProxy {
                 try {
                     return this.processGetPaging(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<StoreModelPagedResultDto>;
+                    return _observableThrow(e) as any as Observable<StoreDtoPagedResultDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<StoreModelPagedResultDto>;
+                return _observableThrow(response_) as any as Observable<StoreDtoPagedResultDto>;
         }));
     }
 
-    protected processGetPaging(response: HttpResponseBase): Observable<StoreModelPagedResultDto> {
+    protected processGetPaging(response: HttpResponseBase): Observable<StoreDtoPagedResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1065,7 +1065,7 @@ export class StoreServiceServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = StoreModelPagedResultDto.fromJS(resultData200);
+            result200 = StoreDtoPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1080,8 +1080,8 @@ export class StoreServiceServiceProxy {
      * @param id (optional) 
      * @return Success
      */
-    get(id: number | undefined): Observable<StoreModel> {
-        let url_ = this.baseUrl + "/api/services/app/StoreService/Get?";
+    get(id: number | undefined): Observable<StoreDto> {
+        let url_ = this.baseUrl + "/api/services/app/Store/Get?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -1103,14 +1103,14 @@ export class StoreServiceServiceProxy {
                 try {
                     return this.processGet(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<StoreModel>;
+                    return _observableThrow(e) as any as Observable<StoreDto>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<StoreModel>;
+                return _observableThrow(response_) as any as Observable<StoreDto>;
         }));
     }
 
-    protected processGet(response: HttpResponseBase): Observable<StoreModel> {
+    protected processGet(response: HttpResponseBase): Observable<StoreDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1121,7 +1121,7 @@ export class StoreServiceServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = StoreModel.fromJS(resultData200);
+            result200 = StoreDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1136,8 +1136,8 @@ export class StoreServiceServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    createOrEdit(body: StoreRequestModel | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/StoreService/CreateOrEdit";
+    createOrEdit(body: CreateUpdateStoreDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Store/CreateOrEdit";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1189,7 +1189,7 @@ export class StoreServiceServiceProxy {
      * @return Success
      */
     delete(id: number | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/StoreService/Delete?";
+        let url_ = this.baseUrl + "/api/services/app/Store/Delete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -1241,7 +1241,7 @@ export class StoreServiceServiceProxy {
      * @return Success
      */
     validateDelete(id: number | undefined): Observable<void> {
-        let url_ = this.baseUrl + "/api/services/app/StoreService/ValidateDelete?";
+        let url_ = this.baseUrl + "/api/services/app/Store/ValidateDelete?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
         else if (id !== undefined)
@@ -2767,6 +2767,112 @@ export interface ICreateTenantDto {
     isActive: boolean;
 }
 
+export class CreateUpdateProductDto implements ICreateUpdateProductDto {
+    id: number | undefined;
+    code: string | undefined;
+    name: string | undefined;
+
+    constructor(data?: ICreateUpdateProductDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+        }
+    }
+
+    static fromJS(data: any): CreateUpdateProductDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUpdateProductDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        return data;
+    }
+
+    clone(): CreateUpdateProductDto {
+        const json = this.toJSON();
+        let result = new CreateUpdateProductDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateUpdateProductDto {
+    id: number | undefined;
+    code: string | undefined;
+    name: string | undefined;
+}
+
+export class CreateUpdateStoreDto implements ICreateUpdateStoreDto {
+    id: number | undefined;
+    code: string | undefined;
+    name: string | undefined;
+    address: string | undefined;
+
+    constructor(data?: ICreateUpdateStoreDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.code = _data["code"];
+            this.name = _data["name"];
+            this.address = _data["address"];
+        }
+    }
+
+    static fromJS(data: any): CreateUpdateStoreDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUpdateStoreDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["code"] = this.code;
+        data["name"] = this.name;
+        data["address"] = this.address;
+        return data;
+    }
+
+    clone(): CreateUpdateStoreDto {
+        const json = this.toJSON();
+        let result = new CreateUpdateStoreDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateUpdateStoreDto {
+    id: number | undefined;
+    code: string | undefined;
+    name: string | undefined;
+    address: string | undefined;
+}
+
 export class CreateUserDto implements ICreateUserDto {
     userName: string;
     name: string;
@@ -3250,12 +3356,12 @@ export interface IPermissionDtoListResultDto {
     items: PermissionDto[] | undefined;
 }
 
-export class ProductModel implements IProductModel {
+export class ProductDto implements IProductDto {
     id: number;
     code: string | undefined;
     name: string | undefined;
 
-    constructor(data?: IProductModel) {
+    constructor(data?: IProductDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3272,9 +3378,9 @@ export class ProductModel implements IProductModel {
         }
     }
 
-    static fromJS(data: any): ProductModel {
+    static fromJS(data: any): ProductDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ProductModel();
+        let result = new ProductDto();
         result.init(data);
         return result;
     }
@@ -3287,25 +3393,25 @@ export class ProductModel implements IProductModel {
         return data;
     }
 
-    clone(): ProductModel {
+    clone(): ProductDto {
         const json = this.toJSON();
-        let result = new ProductModel();
+        let result = new ProductDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IProductModel {
+export interface IProductDto {
     id: number;
     code: string | undefined;
     name: string | undefined;
 }
 
-export class ProductModelPagedResultDto implements IProductModelPagedResultDto {
-    items: ProductModel[] | undefined;
+export class ProductDtoPagedResultDto implements IProductDtoPagedResultDto {
+    items: ProductDto[] | undefined;
     totalCount: number;
 
-    constructor(data?: IProductModelPagedResultDto) {
+    constructor(data?: IProductDtoPagedResultDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3319,15 +3425,15 @@ export class ProductModelPagedResultDto implements IProductModelPagedResultDto {
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items.push(ProductModel.fromJS(item));
+                    this.items.push(ProductDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
         }
     }
 
-    static fromJS(data: any): ProductModelPagedResultDto {
+    static fromJS(data: any): ProductDtoPagedResultDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ProductModelPagedResultDto();
+        let result = new ProductDtoPagedResultDto();
         result.init(data);
         return result;
     }
@@ -3343,68 +3449,17 @@ export class ProductModelPagedResultDto implements IProductModelPagedResultDto {
         return data;
     }
 
-    clone(): ProductModelPagedResultDto {
+    clone(): ProductDtoPagedResultDto {
         const json = this.toJSON();
-        let result = new ProductModelPagedResultDto();
+        let result = new ProductDtoPagedResultDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IProductModelPagedResultDto {
-    items: ProductModel[] | undefined;
+export interface IProductDtoPagedResultDto {
+    items: ProductDto[] | undefined;
     totalCount: number;
-}
-
-export class ProductRequestModel implements IProductRequestModel {
-    id: number | undefined;
-    code: string | undefined;
-    name: string | undefined;
-
-    constructor(data?: IProductRequestModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.code = _data["code"];
-            this.name = _data["name"];
-        }
-    }
-
-    static fromJS(data: any): ProductRequestModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new ProductRequestModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["code"] = this.code;
-        data["name"] = this.name;
-        return data;
-    }
-
-    clone(): ProductRequestModel {
-        const json = this.toJSON();
-        let result = new ProductRequestModel();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IProductRequestModel {
-    id: number | undefined;
-    code: string | undefined;
-    name: string | undefined;
 }
 
 export class RegisterInput implements IRegisterInput {
@@ -3918,13 +3973,13 @@ export interface IRoleListDtoListResultDto {
     items: RoleListDto[] | undefined;
 }
 
-export class StoreModel implements IStoreModel {
+export class StoreDto implements IStoreDto {
     id: number;
     code: string | undefined;
     name: string | undefined;
     address: string | undefined;
 
-    constructor(data?: IStoreModel) {
+    constructor(data?: IStoreDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3942,9 +3997,9 @@ export class StoreModel implements IStoreModel {
         }
     }
 
-    static fromJS(data: any): StoreModel {
+    static fromJS(data: any): StoreDto {
         data = typeof data === 'object' ? data : {};
-        let result = new StoreModel();
+        let result = new StoreDto();
         result.init(data);
         return result;
     }
@@ -3958,26 +4013,26 @@ export class StoreModel implements IStoreModel {
         return data;
     }
 
-    clone(): StoreModel {
+    clone(): StoreDto {
         const json = this.toJSON();
-        let result = new StoreModel();
+        let result = new StoreDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IStoreModel {
+export interface IStoreDto {
     id: number;
     code: string | undefined;
     name: string | undefined;
     address: string | undefined;
 }
 
-export class StoreModelPagedResultDto implements IStoreModelPagedResultDto {
-    items: StoreModel[] | undefined;
+export class StoreDtoPagedResultDto implements IStoreDtoPagedResultDto {
+    items: StoreDto[] | undefined;
     totalCount: number;
 
-    constructor(data?: IStoreModelPagedResultDto) {
+    constructor(data?: IStoreDtoPagedResultDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -3991,15 +4046,15 @@ export class StoreModelPagedResultDto implements IStoreModelPagedResultDto {
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items.push(StoreModel.fromJS(item));
+                    this.items.push(StoreDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
         }
     }
 
-    static fromJS(data: any): StoreModelPagedResultDto {
+    static fromJS(data: any): StoreDtoPagedResultDto {
         data = typeof data === 'object' ? data : {};
-        let result = new StoreModelPagedResultDto();
+        let result = new StoreDtoPagedResultDto();
         result.init(data);
         return result;
     }
@@ -4015,72 +4070,17 @@ export class StoreModelPagedResultDto implements IStoreModelPagedResultDto {
         return data;
     }
 
-    clone(): StoreModelPagedResultDto {
+    clone(): StoreDtoPagedResultDto {
         const json = this.toJSON();
-        let result = new StoreModelPagedResultDto();
+        let result = new StoreDtoPagedResultDto();
         result.init(json);
         return result;
     }
 }
 
-export interface IStoreModelPagedResultDto {
-    items: StoreModel[] | undefined;
+export interface IStoreDtoPagedResultDto {
+    items: StoreDto[] | undefined;
     totalCount: number;
-}
-
-export class StoreRequestModel implements IStoreRequestModel {
-    id: number | undefined;
-    code: string | undefined;
-    name: string | undefined;
-    address: string | undefined;
-
-    constructor(data?: IStoreRequestModel) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            this.id = _data["id"];
-            this.code = _data["code"];
-            this.name = _data["name"];
-            this.address = _data["address"];
-        }
-    }
-
-    static fromJS(data: any): StoreRequestModel {
-        data = typeof data === 'object' ? data : {};
-        let result = new StoreRequestModel();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        data["id"] = this.id;
-        data["code"] = this.code;
-        data["name"] = this.name;
-        data["address"] = this.address;
-        return data;
-    }
-
-    clone(): StoreRequestModel {
-        const json = this.toJSON();
-        let result = new StoreRequestModel();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IStoreRequestModel {
-    id: number | undefined;
-    code: string | undefined;
-    name: string | undefined;
-    address: string | undefined;
 }
 
 export enum TenantAvailabilityState {
