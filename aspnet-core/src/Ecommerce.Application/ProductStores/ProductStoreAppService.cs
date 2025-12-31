@@ -122,7 +122,7 @@ namespace Ecommerce.ProductStores
                 var store = new CreateUpdateProductStoreDto
                 {
                     StoreCode = $"CH1",
-                    ProductCode = $"Iphone{i}",
+                    ProductCode = $"Iphone17",
                     ListProductStoreDetailDto = new List<ProductStoreDetailDto>()
                 };
 
@@ -140,7 +140,8 @@ namespace Ecommerce.ProductStores
                         LeaseTermCode = j + 2,
                         Prepay = 4 + (j * 10),
                         Price = 25000000 + j * 1000000,
-                        Count = j
+                        DetailPrice = "1-1-12495000,2-4-4915000",
+                        Count = j,
                     });
                 }
 
@@ -256,10 +257,10 @@ namespace Ecommerce.ProductStores
         {
             var product = _productRepository.Get(id);
 
-            if (await _orderRepository.GetAll().AnyAsync(s => s.ProductStoreId == id))
-            {
-                throw new UserFriendlyException(L("ProductStoreUser"));
-            }
+            //if (await _orderRepository.GetAll().AnyAsync(s => s.ProductStoreId == id))
+            //{
+            //    throw new UserFriendlyException(L("ProductStoreUser"));
+            //}
         }
     }
 }

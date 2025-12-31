@@ -152,5 +152,7 @@
 		<text name="ConfirmOrder">Xác nhận đơn hàng</text>
 		<text name="ProductStoreDetailNotFound">Không tìm thấy đơn hàng</text>
 		<text name="Orders">Quản lý đơn hàng</text>
+		<text name="PersonNotFound">Không tìm thấy người dùng</text>
+		<text name="Init">Mới tạo</text>
 	</texts>
 </localizationDictionary>

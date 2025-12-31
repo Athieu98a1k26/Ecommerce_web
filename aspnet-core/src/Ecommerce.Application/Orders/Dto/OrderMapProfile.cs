@@ -15,6 +15,8 @@ namespace Ecommerce.Orders.Dto
         {
             CreateMap<CreateUpdateOrderDto, Order>();
 
+            CreateMap<OrderDetailDto, OrderDetail>();
+
             CreateMap<Order, OrderDto>();
         }
     }

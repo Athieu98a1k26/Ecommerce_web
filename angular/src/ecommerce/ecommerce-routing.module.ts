@@ -7,6 +7,8 @@ import { ProductComponent } from './product/product.component';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { EcommerceComponent } from './ecommerce.component';
 import { ProductSearchComponent } from './product-search/product-search.component';
+import { UserComponent } from './user/user.comopnent';
+
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -23,6 +25,11 @@ import { ProductSearchComponent } from './product-search/product-search.componen
                     { path: 'cart', component: CartComponent },
                     { path: 'product/:id', component: ProductComponent },
                     { path: 'product-search', component: ProductSearchComponent },
+                    {
+                        path: 'user',
+                        component: UserComponent,
+                        canActivate: [AppRouteGuard],
+                      }
                 ]
             }
         ])

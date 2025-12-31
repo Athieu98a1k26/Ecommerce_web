@@ -76,16 +76,16 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
                 'Pages.Stores'
             ),
             new MenuItem(
-                this.l('Orders'),
-                '/app/orders',
-                'fas fa-store',
-                'Pages.Orders'
-            ),
-            new MenuItem(
                 this.l('ProductStores'),
                 '/app/product-stores',
                 'fas fa-exchange-alt',
                 'Pages.ProductStores'
+            ),
+            new MenuItem(
+                this.l('Orders'),
+                '/app/orders',
+                'fas fa-store',
+                'Pages.Orders'
             ),
             new MenuItem(this.l('MultiLevelMenu'), '', 'fas fa-circle', '', [
                 new MenuItem('ASP.NET Boilerplate', '', 'fas fa-dot-circle', '', [

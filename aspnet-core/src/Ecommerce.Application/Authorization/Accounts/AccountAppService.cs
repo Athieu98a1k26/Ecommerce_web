@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abp.Configuration;
 using Abp.Domain.Repositories;
+using Abp.Domain.Uow;
 using Abp.Zero.Configuration;
 using Ecommerce.Authorization.Accounts.Dto;
 using Ecommerce.Authorization.Users;
@@ -39,6 +40,7 @@ namespace Ecommerce.Authorization.Accounts
             return new IsTenantAvailableOutput(TenantAvailabilityState.Available, tenant.Id);
         }
 
+        [UnitOfWork]
         public async Task<RegisterOutput> Register(RegisterInput input)
         {
             var user = await _userRegistrationManager.RegisterAsync(
@@ -56,8 +58,9 @@ namespace Ecommerce.Authorization.Accounts
             Person person = new Person()
             {
                 FullName = input.Name,
-                PhoneNumber = input.Name,
+                PhoneNumber = input.PhoneNumber,
                 Email = input.EmailAddress,
+                UserId = user.Id
             };
 
             await _personRepository.InsertAsync(person);

@@ -5,8 +5,9 @@ import {
   ProductStoreDetailDto,
   ProvinceServiceProxy,
   ProvinceDto,
-  OrderServiceProxy,
-  CreateUpdateOrderDto, } from '@shared/service-proxies/service-proxies';
+  CreateUpdateOrderDto,
+  OrderDetailDto,
+  OrderPublicServiceProxy, } from '@shared/service-proxies/service-proxies';
 import { BsModalRef } from '@node_modules/ngx-bootstrap/modal';
 import {
   NotifyService,
@@ -51,7 +52,7 @@ export class OrderComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     private router: Router,
     private provinceApi: ProvinceServiceProxy,
-    private orderApi: OrderServiceProxy,
+    private orderApi: OrderPublicServiceProxy,
     public bsModalRef: BsModalRef
   ) {
       super(injector);
@@ -100,14 +101,22 @@ export class OrderComponent extends AppComponentBase implements OnInit {
     console.log('123123');
     this.saving = true;
     let input = new CreateUpdateOrderDto();
-    input.productStoreDetailId = this.selectedDetail.id;
-    input.count = this.quantity;
     input.note = this.notes?.trim();
     input.deliveryMethod = this.deliveryMethod;
     input.phoneNumber = this.customerInfo.phone?.trim();
     input.fullName = this.customerInfo.fullName?.trim();
     input.email = this.customerInfo.email?.trim();
-    input.provinCode = this.deliveryAddress.province;
+    input.provinceCode = this.deliveryAddress.province;
+
+    input.listOrderDetailDto = [];
+
+    let orderDetailDto = new OrderDetailDto();
+    orderDetailDto.productStoreDetailId = this.selectedDetail.id;
+    orderDetailDto.count = this.quantity;
+    orderDetailDto.price = this.product.price;
+
+    input.listOrderDetailDto.push(orderDetailDto)
+
     this.orderApi.createOrEdit(input).subscribe(
       () => {
         this.notify.info(this.l('SavedSuccessfully'));

@@ -11,6 +11,7 @@ import { ChangePasswordComponent } from './users/change-password/change-password
 import {ProductsComponent} from 'app/products/products.component';
 import {StoresComponent} from 'app/stores/stores.component';
 import { ProductStoresComponent } from './product-stores/product-store.component';
+import { OrderComponent } from './order/order.component';
 @NgModule({
     imports: [
         RouterModule.forChild([
@@ -26,6 +27,7 @@ import { ProductStoresComponent } from './product-stores/product-store.component
                     { path: 'stores', component: StoresComponent, data: { permission: 'Pages.Stores' }, canActivate: [AppRouteGuard] },
                     { path: 'product-stores', component: ProductStoresComponent, data: { permission: 'Pages.ProductStores' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent, canActivate: [AppRouteGuard] },
+                    { path: 'orders', component: OrderComponent, canActivate: [AppRouteGuard] },
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] }
                 ]
             }

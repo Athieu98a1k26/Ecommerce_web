@@ -1,3 +1,114 @@
-<div>
-    hihih
+<div class="user-dashboard container-custom-xxl">
+    <div class="row user-dashboard-wrap">
+  <!-- Sidebar -->
+  <aside class="user-sidebar col-md-4">
+    <div class="user-profile">
+      <img class="user-avatar" [src]="userAvatar || 'assets/img/user.png'" alt="User Avatar" />
+      <div class="user-name">{{ userName || 'Người dùng' }}</div>
+    </div>
+    <nav class="user-menu">
+      <a class="user-menu-item active" href="#">
+        <i class="fa-regular fa-user"></i>
+        Thông tin cá nhân
+      </a>
+      <a class="user-menu-item" href="#">
+        <i class="fa-solid fa-bag-shopping"></i>
+        Đơn hàng của tôi
+      </a>
+      <a class="user-menu-item" href="#">
+        <i class="fa-solid fa-briefcase"></i>
+        Đơn thuê đang hoạt động
+      </a>
+      <a class="user-menu-item" href="#">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        Lịch sử giao dịch
+      </a>
+      <a class="user-menu-item" href="#">
+        <i class="fa-solid fa-location-dot"></i>
+        Địa chỉ nhận hàng
+      </a>
+      <a class="user-menu-item" href="#">
+        <i class="fa-solid fa-lock"></i>
+        Đổi mật khẩu
+      </a>
+      <a class="user-menu-item logout" href="#">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Đăng xuất
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="user-main-content col-md-9">
+    <!-- Personal Info Card -->
+    <section class="user-card personal-info-card">
+      <h2>Thông tin cá nhân</h2>
+      <form (ngSubmit)="onSubmitPersonalInfo()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="fullName">Họ tên</label>
+            <input id="fullName" type="text" class="form-control" [(ngModel)]="person.fullName" name="name" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" class="form-control" [(ngModel)]="person.email" name="email" />
+          </div>
+          <div class="form-group">
+            <label for="phoneNumber">Số điện thoại</label>
+            <input id="phoneNumber" type="tel" class="form-control" [(ngModel)]="person.phoneNumber" name="phone" />
+          </div>
+          <div class="form-group">
+            <label for="userDob">Ngày sinh</label>
+            <input id="userDob" type="date" class="form-control" [(ngModel)]="userDob" name="dob" />
+          </div>
+        </div>
+        <button type="submit" class="btn-green rounded" style="margin-top: 1rem;">
+          Cập nhật thông tin
+        </button>
+      </form>
+    </section>
+
+    <!-- Order Management Section -->
+    <section class="user-card orders-section">
+      <h2>Quản lý đơn hàng</h2>
+      <!-- Tabs -->
+      <ul class="order-tabs">
+        <li class="tab-item active">Tất cả</li>
+        <li class="tab-item">Chờ xác nhận</li>
+        <li class="tab-item">Đang giao</li>
+        <li class="tab-item">Đang thuê</li>
+        <li class="tab-item">Hoàn thành</li>
+        <li class="tab-item">Đã hủy</li>
+      </ul>
+      <!-- Orders List -->
+      <div class="orders-list">
+        <!-- Mẫu lặp lại từng đơn hàng -->
+        <div class="order-card" *ngFor="let order of orders">
+          <div class="order-product-thumb">
+            <img [src]="order.productImage" alt="Sản phẩm" />
+          </div>
+          <div class="order-product-info">
+            <div class="product-title">{{ order.productName }}</div>
+            <div class="product-version">
+              <span>{{ order.productVariant }}</span>
+            </div>
+          </div>
+          <div class="order-price">
+            <span>{{ order.price | number }} đ</span>
+          </div>
+          <div class="order-status">
+            <span class="order-status-badge" [ngClass]="order.statusClass">{{ order.statusText }}</span>
+          </div>
+          <div class="order-actions">
+            <button class="btn-outline-green rounded" (click)="viewOrderDetail(order)">
+              Xem chi tiết
+            </button>
+          </div>
+        </div>
+        <!-- End mẫu lặp lại -->
+      </div>
+    </section>
+  </main>
+    </div>
+
 </div>

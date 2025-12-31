@@ -62,9 +62,11 @@ namespace Ecommerce.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    Time = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AmounToBePaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OrderId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductStoreDetailId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductStoreId = table.Column<long>(type: "bigint", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDetailStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
@@ -86,10 +88,15 @@ namespace Ecommerce.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ProductStoreDetailId = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
-                    ProductStoreId = table.Column<long>(type: "bigint", maxLength: 100, nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PersonId = table.Column<long>(type: "bigint", nullable: false),
+                    FullName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProvinceCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    WardCode = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
                     Note = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     DeliveryMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     OrderStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -165,6 +172,8 @@ namespace Ecommerce.Migrations
                     LeaseTermCode = table.Column<int>(type: "int", nullable: false),
                     Prepay = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DetailPrice = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -190,6 +199,7 @@ namespace Ecommerce.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Stars = table.Column<float>(type: "real", nullable: true),
                     Sold = table.Column<int>(type: "int", nullable: true),
+                    Count = table.Column<int>(type: "int", nullable: false),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
                     LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -201,6 +211,28 @@ namespace Ecommerce.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductStores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Provinces",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Provinces", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,6 +255,30 @@ namespace Ecommerce.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDetailId = table.Column<long>(type: "bigint", nullable: false),
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AmounToBePaid = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TranSactionStatus = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorUserId = table.Column<long>(type: "bigint", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierUserId = table.Column<long>(type: "bigint", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeleterUserId = table.Column<long>(type: "bigint", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                 });
         }
 
@@ -254,7 +310,13 @@ namespace Ecommerce.Migrations
                 name: "ProductStores");
 
             migrationBuilder.DropTable(
+                name: "Provinces");
+
+            migrationBuilder.DropTable(
                 name: "Stores");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropColumn(
                 name: "TargetNotifiers",

@@ -63,15 +63,16 @@ namespace Ecommerce.Common
 
         public static HashSet<string> OrderStatus = new HashSet<string>
         {
-            "Pending",       // Mới tạo
+            "Init",       // Mới tạo
             "Confirmed",   // Xác nhận 
             "Reject"   // Hủy
         };
 
         public static HashSet<string> OrderDetailStatus = new HashSet<string>
         {
-            "WaitingForPayment",       // Mới tạo
-            "Paid",   // Xác nhận 
+            "Init",       // Mới tạo
+            "Processing", // Đang xử lý
+            "Paid",   // Đã thanh toán
             "Reject"   // Hủy
         };
 

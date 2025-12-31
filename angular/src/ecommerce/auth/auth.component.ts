@@ -1,14 +1,18 @@
 import { Component, OnInit, Injector, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
+import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
 import { AppAuthService } from '@shared/auth/app-auth.service';
+import { AccountServiceProxy, RegisterInput, RegisterOutput } from '@shared/service-proxies/service-proxies';
 import { AppSessionService } from '@shared/session/app-session.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css','../css/base.css',]
+  styleUrls: ['./auth.component.css','../css/base.css',],
+  animations: [appModuleAnimation()],
 })
 export class AuthComponent extends AppComponentBase implements OnInit {
   activeTab: 'login' | 'register' = 'login';
@@ -28,7 +32,8 @@ export class AuthComponent extends AppComponentBase implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AppAuthService,
-    private sessionService: AppSessionService
+    private sessionService: AppSessionService,
+    private accountService: AccountServiceProxy,
   ) {
     super(injector);
   }
@@ -157,15 +162,37 @@ export class AuthComponent extends AppComponentBase implements OnInit {
       this.markFormGroupTouched(this.registerForm);
       return;
     }
-
+    
     this.submitting = true;
-    // TODO: Implement registration logic
-    // For now, just show a message
-    this.message.success('Đăng ký thành công!', 'Thành công');
-    setTimeout(() => {
-      this.submitting = false;
-      this.switchTab('login');
-    }, 1500);
+    let data = new RegisterInput();
+    data.emailAddress = this.registerForm.value.email;
+    data.phoneNumber = this.registerForm.value.phoneNumber;
+    data.password = this.registerForm.value.password;
+    data.userName = this.registerForm.value.email;
+    data.surname = this.registerForm.value.email;
+    data.name = this.registerForm.value.email;
+    this.accountService
+      .register(data)
+      .pipe(
+        finalize(() => {
+          this.submitting = false;
+        })
+      )
+      .subscribe((result: RegisterOutput) => {
+        if (!result.canLogin) {
+          this.notify.success(this.l('SuccessfullyRegistered'));
+          return;
+        }
+
+        // Autheticate
+        this.submitting = true;
+        this.authService.authenticateModel.userNameOrEmailAddress = data.emailAddress;
+        this.authService.authenticateModel.password = data.password;
+        this.authService.authenticate(() => {
+          this.submitting = false;
+        });
+      });
+    
   }
 
   onSocialLogin(provider: 'facebook' | 'google' | 'apple'): void {

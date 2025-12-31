@@ -13,22 +13,26 @@ namespace Ecommerce.Orders.Dto
 
         public string Code { get; set; }
 
-        public long ProductStoreDetailId { get; set; }
+        public int Count { get; set; }
 
+        public decimal Price { get; set; } // tổng tiền đơn hàng
 
-        public long ProductStoreId { get; set; }
-
-        public int Count { get; set; }  // số lượng
-        public string FullName { get; set; }
         public long PersonId { get; set; } //Id người dùng
 
-        public string PhoneNumber {  get; set; }
-        public string Email {  get; set; }
+        public string FullName { get; set; }
 
-        public string ProvinCode { get; set; }
-        public string ProvinName { get; set; }
+        public string PhoneNumber { get; set; }
+
+        public string Email { get; set; }
+
+        public string ProvinceCode { get; set; }
+        public string ProvinceName { get; set; }
+
         public string WardCode { get; set; }
         public string WardName { get; set; }
+
+        public string Address { get; set; }
+
         public string Note { get; set; } // ghi chú
 
         public string DeliveryMethod { get; set; } // hình thức nhận hàng

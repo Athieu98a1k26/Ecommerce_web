@@ -17,15 +17,10 @@ namespace Ecommerce.Entitys
         public string Code { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public long ProductStoreDetailId {  get; set; }
+        public int Count { get; set; }
 
         [Required]
-        [StringLength(100)]
-        public long ProductStoreId { get; set; }
-
-        [Required]
-        public int Count {  get; set; }  // số lượng
+        public decimal Price { get; set; } // tổng tiền đơn hàng
 
         [Required]
         public long PersonId {  get; set; } //Id người dùng
@@ -59,5 +54,8 @@ namespace Ecommerce.Entitys
 
         [StringLength(50)]
         public string OrderStatus {  get; set; } // trạng thái đơn hàng
+
+        [StringLength(255)]
+        public string Reason { get; set; } // Lý do từ chối , xác nhận
     }
 }
