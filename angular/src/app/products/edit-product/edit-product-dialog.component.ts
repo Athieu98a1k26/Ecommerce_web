@@ -25,14 +25,14 @@ export class EditProductDialogComponent extends AppComponentBase
 
   constructor(
     injector: Injector,
-    public _productService: ProductServiceProxy,
+    public productService: ProductServiceProxy,
     public bsModalRef: BsModalRef
   ) {
     super(injector);
   }
 
   ngOnInit(): void {
-    this._productService.get(this.id).subscribe((result: ProductDto) => {
+    this.productService.get(this.id).subscribe((result: ProductDto) => {
       this.product = result;
     });
   }
@@ -40,7 +40,7 @@ export class EditProductDialogComponent extends AppComponentBase
   save(): void {
     this.saving = true;
 
-    this._productService.createOrEdit(this.product).subscribe(
+    this.productService.createOrEdit(this.product).subscribe(
       () => {
         this.notify.info(this.l('SavedSuccessfully'));
         this.bsModalRef.hide();

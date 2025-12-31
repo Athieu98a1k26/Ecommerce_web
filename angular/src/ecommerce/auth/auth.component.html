@@ -1,3 +1,4 @@
+<div [@routerTransition]>
 <div class="ecommerce-auth-page">
   <!-- Header -->
   <header class="ecommerce-header">
@@ -16,39 +17,6 @@
           Flash Sale
         </a>
       </nav>
-
-      <!-- User Actions -->
-      <div class="header-actions">
-        <!-- Not Logged In -->
-        <div class="auth-buttons" *ngIf="!isLoggedIn">
-          <button class="btn-login" (click)="scrollToAuth()">Đăng nhập</button>
-          <button class="btn-register" (click)="switchTab('register'); scrollToAuth()">Đăng ký</button>
-        </div>
-
-        <!-- Logged In -->
-        <div class="user-menu" *ngIf="isLoggedIn">
-          <div class="user-info" (click)="toggleUserDropdown()">
-            <img [src]="userAvatar" alt="User" class="user-avatar" onerror="this.src='assets/img/user.png'">
-            <span class="username">{{ userName }}</span>
-            <i class="fas fa-chevron-down" [class.rotated]="showUserDropdown"></i>
-          </div>
-          <div class="user-dropdown" [class.show]="showUserDropdown">
-            <a href="#" class="dropdown-item" (click)="navigateToAccount(); $event.preventDefault()">
-              <i class="fas fa-user"></i>
-              Tài khoản của tôi
-            </a>
-            <a href="#" class="dropdown-item" (click)="navigateToOrders(); $event.preventDefault()">
-              <i class="fas fa-shopping-bag"></i>
-              Đơn mua
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item" (click)="onLogout(); $event.preventDefault()">
-              <i class="fas fa-sign-out-alt"></i>
-              Đăng xuất
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -122,7 +90,7 @@
           <div class="tab-content" [class.active]="activeTab === 'login'">
             <h2 class="auth-title">Đăng nhập</h2>
 
-            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+            <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form" novalidate>
               <!-- Username/Email/Phone Input -->
               <div class="form-group">
                 <div class="input-wrapper">
@@ -348,3 +316,4 @@
   </main>
 </div>
 
+</div>

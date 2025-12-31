@@ -265,9 +265,8 @@
   
   /* Product Info Section */
   .product-info-section {
-    padding: 16px 16px 0 16px;
+    padding: 0px 8px 0 8px;
     background-color: #fff;
-    margin-top: 8px;
   }
   
   .product-info-card {
@@ -282,57 +281,6 @@
     line-height: 1.4;
   }
   
-  .rating-sold-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-  }
-  
-  .rating-group {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  
-  .stars {
-    display: flex;
-    gap: 2px;
-    color: #ffc107;
-  }
-  
-  .stars i {
-    font-size: 14px;
-  }
-  
-  .stars i.full {
-    color: #ffc107;
-  }
-  
-  .stars i.half {
-    background: linear-gradient(90deg, #ffc107 50%, #ddd 50%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .rating-value {
-    font-size: 14px;
-    font-weight: 600;
-    color: #333;
-  }
-  
-  .divider {
-    color: #ddd;
-    font-size: 12px;
-  }
-  
-  .review-count,
-  .sold-count {
-    font-size: 13px;
-    color: #666;
-  }
   
   /* Price Section */
   .price-section {
@@ -369,115 +317,6 @@
     font-size: 12px;
     color: #999;
     text-decoration: line-through;
-  }
-  
-  
-  /* Countdown Timer */
-  .countdown-section {
-    margin-top: 16px;
-    padding: 12px;
-    background: var(--brand-light-bg);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--brand-secondary);
-  }
-  
-  .countdown-label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: var(--brand-primary);
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-  
-  .countdown-label i {
-    font-size: 14px;
-  }
-  
-  .countdown-timer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-  
-  .countdown-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 6px;
-    padding: 8px 12px;
-    min-width: 50px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .countdown-value {
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--brand-primary);
-    line-height: 1;
-  }
-  
-  .countdown-label-small {
-    font-size: 10px;
-    color: var(--text-medium);
-    margin-top: 4px;
-  }
-  
-  .countdown-separator {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--brand-primary);
-    margin: 0 -4px;
-  }
-  
-  /* Product Highlights */
-  .highlights-section {
-    padding: 16px 16px 0 16px;
-    background-color: #fff;
-    margin-top: 8px;
-  }
-  
-  .highlights-card {
-    width: 100%;
-  }
-  
-  .highlights-title {
-    font-size: 12px;
-    font-weight: 600;
-    color: #333;
-    margin: 0 0 16px 0;
-  }
-  
-  .highlights-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .highlight-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    background-color: var(--brand-light-bg);
-    border-radius: var(--radius-md);
-    border-left: 3px solid var(--brand-primary);
-  }
-  
-  .highlight-item i {
-    color: var(--brand-primary);
-    font-size: 18px;
-    margin-top: 2px;
-    flex-shrink: 0;
-  }
-  
-  .highlight-item span {
-    font-size: 14px;
-    color: #333;
-    line-height: 1.5;
   }
   
   /* Product Configuration Section */

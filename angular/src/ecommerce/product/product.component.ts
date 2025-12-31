@@ -3,9 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ProductStorePublicServiceProxy,
   ProductStoreDto,
-  ProductStoreDetailDto, } from '@shared/service-proxies/service-proxies';
+  ProductStoreDetailDto,
+  BaseRequest,
+  ProductStoreDtoPagedResultDto, } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from '@node_modules/ngx-bootstrap/modal';
 import { OrderComponent } from '../order/order.component';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -25,13 +28,16 @@ export class ProductComponent implements OnInit {
   searchQuery = '';
   product: ProductStoreDto = null;
   isLoading = false;
+  tabActive :string = 'specs';
 
+  products: ProductStoreDto[] = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private productApi: ProductStorePublicServiceProxy,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private productStorePublicService: ProductStorePublicServiceProxy
   ) {}
 
   ngOnInit(): void {
@@ -39,9 +45,29 @@ export class ProductComponent implements OnInit {
     if (this.productId) {
       this.fetchProductDetail(this.productId);
     }
-    
+    this.getFeaturedProducts()
   }
 
+  getFeaturedProducts(): void {
+    const input = new BaseRequest();
+    // Set paging as you need (for example, maxResultCount, skipCount)
+    input.storeCode =environment.storeCode;
+    input.maxResultCount = 12;
+    input.skipCount = 0;
+
+    this.productStorePublicService.getPagingFeaturedProduct(input)
+      .subscribe({
+        next: (result: ProductStoreDtoPagedResultDto) => {
+          this.products = result.items || [];
+        },
+        error: () => {
+          this.products = [];
+        }
+      });
+  }
+  setTab(tab:string){
+    this.tabActive = tab;
+  }
   fetchProductDetail(id: string): void {
     this.isLoading = true;
     const parsedId = parseInt(id);
@@ -189,7 +215,7 @@ export class ProductComponent implements OnInit {
       }
     );
   }
-  
+
   getStarArray(rating: number): number[] {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;

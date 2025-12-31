@@ -99,7 +99,6 @@ export class HomeComponent extends AppComponentBase implements OnInit {
         next: (result: ProductStoreDtoPagedResultDto) => {
           this.products = result.items || [];
           this.isProductsLoading = false;
-          console.log(this.products)
         },
         error: () => {
           this.products = [];

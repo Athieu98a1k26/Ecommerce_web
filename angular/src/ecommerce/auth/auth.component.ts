@@ -27,7 +27,7 @@ export class AuthComponent extends AppComponentBase implements OnInit {
     injector: Injector,
     private fb: FormBuilder,
     private router: Router,
-    public authService: AppAuthService,
+    private authService: AppAuthService,
     private sessionService: AppSessionService
   ) {
     super(injector);
@@ -148,6 +148,7 @@ export class AuthComponent extends AppComponentBase implements OnInit {
 
     this.authService.authenticate(() => {
       this.submitting = false;
+      
     });
   }
 

@@ -180,7 +180,7 @@
       </div>
     </div>
   </div>
-  <!--
+
   <section class="details-tabs-section">
     <div class="details-tabs-card">
       <div class="tabs-header">
@@ -198,15 +198,12 @@
           (click)="setTab('qa')">Hỏi đáp</button>
       </div>
       <div class="tab-content" [class.active]="tabActive === 'description'">
-        <div class="description-content" [innerHTML]="product?.description"></div>
+        
       </div>
       <div class="tab-content" [class.active]="tabActive === 'specs'">
         <div class="specs-content">
           <table class="specs-table">
-            <tr *ngFor="let spec of product?.specList">
-              <td class="spec-label">{{ spec.label }}</td>
-              <td class="spec-value">{{ spec.value }}</td>
-            </tr>
+            
           </table>
         </div>
       </div>
@@ -214,85 +211,44 @@
         <div class="reviews-tab-content">
           <div class="star-distribution">
             <div class="overall-rating">
-              <div class="rating-score">{{ product?.rating }}</div>
+              <div class="rating-score">{{ product?.stars }}</div>
               <div class="rating-stars">
-                <ng-container *ngFor="let star of getStarArray(product?.rating)">
+                <ng-container *ngFor="let star of getStarArray(product?.stars)">
                   <i class="fas fa-star"
                      [ngClass]="{ 'full': star === 1, 'half': star === 0.5 }"></i>
                 </ng-container>
               </div>
-              <div class="rating-total">{{ getTotalReviews() }} đánh giá</div>
+              <div class="rating-total">5 đánh giá</div>
             </div>
             <div class="star-bars">
               <div class="star-bar" *ngFor="let count of [5,4,3,2,1]">
                 <span class="star-label">{{ count }} <i class="fas fa-star"></i></span>
                 <div class="bar-container">
-                  <div class="bar-fill" [style.width.%]="(product?.starDistribution[count] / getTotalReviews()) * 100"></div>
+                  <div class="bar-fill" [style.width.%]="2"></div>
                 </div>
-                <span class="bar-count">{{ product?.starDistribution[count] }}</span>
+                <span class="bar-count">0</span>
               </div>
             </div>
           </div>
           <div class="review-list">
-            <div class="review-item" *ngFor="let review of product?.reviews">
-              <div class="review-header">
-                <div class="review-user">
-                  <div class="user-avatar-small">{{ review.user | userAvatar }}</div>
-                  <div class="user-info">
-                    <div class="user-name">{{ review.user }}</div>
-                    <div class="review-rating">
-                      <i class="fas fa-star" *ngFor="let i of [1,2,3,4,5]" [class.active]="i <= review.rating"></i>
-                    </div>
-                  </div>
-                </div>
-                <div class="review-date">{{ review.date | date:'shortDate' }}</div>
-              </div>
-              <div class="review-comment">{{ review.comment }}</div>
-              <div class="review-footer">
-                <button class="helpful-btn" (click)="markHelpful(review)">
-                  <i class="fas fa-thumbs-up"></i>
-                  Hữu ích ({{ review.helpful }})
-                </button>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
       <div class="tab-content" [class.active]="tabActive === 'qa'">
-        <div class="qa-content">
-          <div class="qa-item" *ngFor="let item of product?.qa">
-            <div class="qa-question">
-              <i class="fas fa-question-circle"></i>
-              <div class="qa-question-text">
-                <strong>{{ item.question }}</strong>
-                <span class="qa-date">{{ item.date | date:'shortDate' }}</span>
-              </div>
-            </div>
-            <div class="qa-answer" *ngIf="item.answer">
-              <i class="fas fa-check-circle"></i>
-              <span>{{ item.answer }}</span>
-            </div>
-          </div>
-          <div class="qa-ask">
-            <textarea placeholder="Đặt câu hỏi..." rows="2"></textarea>
-            <button class="ask-btn">Gửi</button>
-          </div>
-        </div>
+        
       </div>
     </div>
   </section>
-  -->
- <!--
-  <section class="related-products-section" *ngIf="product?.relatedProducts?.length">
+  <section class="related-products-section">
     <div class="related-products-card">
       <h3 class="section-title">Có thể bạn cũng thích</h3>
       <div class="related-products-carousel">
         <div class="related-products-scroll">
-          <product-item *ngFor="let relatedProduct of product.relatedProducts" [product]="relatedProduct"></product-item>
+          <product-item *ngFor="let relatedProduct of products" [product]="relatedProduct"></product-item>
         </div>
       </div>
     </div>
   </section>
-  -->
   
 </div>

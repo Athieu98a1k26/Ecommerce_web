@@ -68,21 +68,7 @@
           <section class="product-info-section">
             <div class="product-info-card">
               <h2 class="product-title">{{ product?.productName }}</h2>
-              <div class="rating-sold-row">
-                <div class="rating-group">
-                  <div class="stars">
-                    <ng-container *ngFor="let star of getStarArray(product?.stars)">
-                      <i class="fas fa-star"
-                         [ngClass]="{ 'full': star === 1, 'half': star === 0.5 }"></i>
-                    </ng-container>
-                  </div>
-                  <span class="rating-value">{{ product?.stars }}</span>
-                </div>
-                <div class="divider">|</div>
-                <span class="review-count">0 đánh giá</span>
-                <div class="divider">|</div>
-                <span class="sold-count">Đã thuê {{ product?.sold | number }}</span>
-              </div>
+              
               <div class="price-section flex">
                 <div class="current-price-wrapper">
                   <span class="current-price">{{ selectedDetail?.price | number }}₫</span>

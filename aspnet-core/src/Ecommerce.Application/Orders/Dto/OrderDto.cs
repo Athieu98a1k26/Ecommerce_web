@@ -15,6 +15,7 @@ namespace Ecommerce.Orders.Dto
 
         public long ProductStoreDetailId { get; set; }
 
+
         public long ProductStoreId { get; set; }
 
         public int Count { get; set; }  // số lượng
@@ -25,8 +26,9 @@ namespace Ecommerce.Orders.Dto
         public string Email {  get; set; }
 
         public string ProvinCode { get; set; }
+        public string ProvinName { get; set; }
         public string WardCode { get; set; }
-
+        public string WardName { get; set; }
         public string Note { get; set; } // ghi chú
 
         public string DeliveryMethod { get; set; } // hình thức nhận hàng

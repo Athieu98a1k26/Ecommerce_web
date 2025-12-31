@@ -218,17 +218,7 @@ export class OrderComponent extends AppComponentBase implements OnInit {
       this.deliveryAddress.province = '';
     }
   }
-
-  getStarArray(rating: number): number[] {
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
-    return Array(5).fill(0).map((_, i) => {
-      if (i < fullStars) return 1;
-      if (i === fullStars && hasHalfStar) return 0.5;
-      return 0;
-    });
-  }
-
+  
   getTotalReviews(): number {
     return 0;
   }

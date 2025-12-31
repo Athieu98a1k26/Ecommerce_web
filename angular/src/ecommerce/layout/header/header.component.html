@@ -88,10 +88,25 @@
           </a>
         </div>
         <!-- User Avatar / Login -->
-        <div class="user-avatar-wrapper">
-          <a href="#" class="user-link" *ngIf="isLoggedIn">
-            <img src="assets/img/user.png" alt="User" class="user-avatar" />
-          </a>
+        <div class="user-wrap">
+          <div class="user-menu" *ngIf="isLoggedIn">
+            <div class="user-info" (click)="toggleUserDropdown()">
+              <img [src]="userAvatar" alt="User" class="user-avatar" onerror="this.src='assets/img/user.png'">
+              <span class="username">{{ userName }}</span>
+              <i class="fas fa-chevron-down" [class.rotated]="showUserDropdown"></i>
+            </div>
+            <div class="user-dropdown" [class.show]="showUserDropdown">
+              <a href="#" class="dropdown-item" (click)="navigateToAccount(); $event.preventDefault()">
+                <i class="fas fa-user"></i>
+                Tài khoản của tôi
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="#" class="dropdown-item" (click)="onLogout(); $event.preventDefault()">
+                <i class="fas fa-sign-out-alt"></i>
+                Đăng xuất
+              </a>
+            </div>
+          </div>
           <a href="/ecommerce/auth" class="login-button" *ngIf="!isLoggedIn">
             Đăng nhập / Đăng ký
           </a>
