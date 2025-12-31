@@ -14,9 +14,6 @@ namespace Ecommerce.Orders.Dto
         public OrderMapProfile()
         {
             CreateMap<CreateUpdateOrderDto, Order>();
-
-            CreateMap<OrderDetailDto, OrderDetail>();
-
             CreateMap<Order, OrderDto>();
         }
     }

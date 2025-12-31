@@ -1,6 +1,6 @@
 export class OrderActionHelper {
 
-  canOrder(action: OrderAction,orderStatus: string): boolean {
+  canOrder(action: string,orderStatus: string): boolean {
     if (!action) return false;
 
     switch (action) {

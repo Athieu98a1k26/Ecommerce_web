@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Orders.Dto
+namespace Ecommerce.OrderDetails.Dto
 {
     public class OrderDetailDto
     {
@@ -16,11 +16,13 @@ namespace Ecommerce.Orders.Dto
 
         public long ProductStoreId { get; set; }
 
+        public string ProductName {  get; set; }
+
+        public string StoreName { get; set; }
 
         public int Count { get; set; }  // số lượng
 
         public decimal Price { get; set; } // số tiền
-
-        public string OrderDetailStatus { get; set; } // Trạng thái
+        public string DetailPrice { get; set; } // gen ngày tháng
     }
 }

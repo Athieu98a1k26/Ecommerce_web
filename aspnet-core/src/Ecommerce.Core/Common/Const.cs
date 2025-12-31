@@ -62,7 +62,7 @@ namespace Ecommerce.Common
         public static string Cancelled = "Cancelled";
     }
 
-    public static class TransactionStatus
+    public static class TransactionOrderStatus
     {
         public static string Init = "Init";
         public static string Processing = "Processing";

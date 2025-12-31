@@ -117,9 +117,6 @@
 		<text name="ResetPasswordStepOneInfo">1. Nhập mật khẩu quản trị viên của bạn</text>
 		<text name="ResetPasswordStepTwoInfo">2. Sao chép mật khẩu ngẫu nhiên này để gửi cho người dùng</text>
 		<text name="UsersActivation">Kích hoạt người dùng</text>
-		
-		
-		
 		<text name="Products">Sản phẩm</text>
 		<text name="Stores">Cửa hàng</text>
 		<text name="ProductNotFound">Sản phẩm không tồn tại</text>
@@ -129,19 +126,14 @@
 
 		<text name="NameProductMaxLength">Tên sản phẩm không được lớn hơn 255 ký tự</text>
 		<text name="ProductDuplicate">Sản phẩm đã tồn tại</text>
-
 		<text name="ProductUse">Sản phẩm đã được sử dụng</text>
-
 		<text name="StoreNotFound">Cửa hàng không tồn tại</text>
 		<text name="CodeStoreRequired">Mã cửa hàng không được để trống</text>
 		<text name="NameStoreRequired">Tên cửa hàng không được để trống</text>
 		<text name="CodeStoreMaxLength">Mã cửa hàng không được lớn hơn 100 ký tự</text>
-
 		<text name="NameStoreMaxLength">Tên cửa hàng không được lớn hơn 255 ký tự</text>
 		<text name="StoreDuplicate">Cửa hàng đã tồn tại</text>
-
 		<text name="StoreUse">Cửa hàng đã được sử dụng</text>
-
 		<text name="ProductStoreNotFound">Cấu hình cửa hàng, sản phẩm không tồn tại</text>
 		<text name="ProductStoreDuplicate">Cấu hình cửa hàng, sản phẩm đã tồn tại</text>
 		<text name="ProductStoreUser">Sản phẩm thuộc cửa hàng đã tồn tại trong cửa hàng</text>
@@ -155,5 +147,14 @@
 		<text name="OrderNotFound">Đơn hàng không tồn tại</text>
 		<text name="OrderDetailNotFound">Đơn hàng không tồn tại</text>
 		<text name="Init">Mới tạo</text>
+		<text name="TransactionError">Lỗi trong quá trình khởi tạo dữ liệu giá theo từng tháng</text>
+		<text name="DetailPriceNotFound">Không tìm thấy dữ liệu giá theo từng tháng</text>
+		<text name="ConfirmedNotValid">Không thể xác nhận đơn hàng này!</text>
+		<text name="CancelledNotValid">Không thể hủy nhận đơn hàng này!</text>
+		<text name="ConfirmedSuccess">Xác nhận đơn hàng thành công!</text>
+		<text name="CancelledSuccess">Hủy đơn hàng thành công!</text>
+		<text name="Cancelled">Đã hủy</text> 
+		<text name="Quantity">Số lượng</text> 
+		
 	</texts>
 </localizationDictionary>

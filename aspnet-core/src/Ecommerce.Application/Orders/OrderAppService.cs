@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
 using Ecommerce.Entitys;
 using Ecommerce.Orders.Dto;
+using Ecommerce.Common;
+using Abp.Domain.Uow;
 
 namespace Ecommerce.Orders
 {
@@ -30,12 +32,15 @@ namespace Ecommerce.Orders
         private readonly IRepository<ProductStoreDetail, long> _productStoreDetailRepository;
         private readonly IRepository<Province, long> _provinceRepository;
         private readonly IRepository<OrderDetail, long> _orderDetailRepository;
-        public OrderAppService(IRepository<Order, long> orderRepository, IRepository<ProductStoreDetail, long> productStoreDetailRepository, IRepository<OrderDetail, long> orderDetailRepository, IRepository<Province, long> provinceRepository)
+        private readonly IRepository<Transaction, long> _transactionRepository;
+        public OrderAppService(IRepository<Order, long> orderRepository, IRepository<ProductStoreDetail, long> productStoreDetailRepository, IRepository<OrderDetail, long> orderDetailRepository, IRepository<Province, long> provinceRepository,
+            IRepository<Transaction, long> transactionRepository)
         {
             _orderRepository = orderRepository;
             _productStoreDetailRepository = productStoreDetailRepository;
             _orderDetailRepository = orderDetailRepository;
             _provinceRepository = provinceRepository;
+            _transactionRepository = transactionRepository;
         }
 
         [HttpPost]
@@ -89,6 +94,7 @@ namespace Ecommerce.Orders
            );
         }
 
+        [UnitOfWork]
         public async Task ConfirmedOrder(long orderId)
         {
             // lấy danh sách đơn
@@ -97,7 +103,12 @@ namespace Ecommerce.Orders
             if(order == null )
             {
                 throw new UserFriendlyException(L("OrderNotFound"));
-            }    
+            }
+
+            if (!IsConfirmed(order.OrderStatus))
+            {
+                throw new UserFriendlyException(L("ConfirmedNotValid"));
+            }
 
             List<OrderDetail> listOrderDetail = _orderDetailRepository.GetAll().Where(s=>s.OrderId == order.Id).ToList();
 
@@ -108,11 +119,111 @@ namespace Ecommerce.Orders
 
             foreach (OrderDetail orderDetail in listOrderDetail)
             {
-
+                await ProcessTransaction(orderDetail);
             }
+
+            //update trạng thái order là đã xác nhận
+            order.OrderStatus = OrderStatus.Confirmed;
+
+            await _orderRepository.UpdateAsync(order);
         }
 
-        
+        private bool IsConfirmed(string status)
+        {
+            if(status == OrderStatus.Confirmed ||
+                status == OrderStatus.Cancelled)
+            {
+                return false;
+            }
 
+            return true;
+        }
+
+        private bool IsCancelled(string status)
+        {
+            if (status == OrderStatus.Confirmed ||
+                status == OrderStatus.Cancelled)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task CancelledOrder(long orderId)
+        {
+            // lấy danh sách đơn
+            Order order = _orderRepository.Get(orderId);
+
+            if (order == null)
+            {
+                throw new UserFriendlyException(L("OrderNotFound"));
+            }
+
+            if (!IsCancelled(order.OrderStatus))
+            {
+                throw new UserFriendlyException(L("CancelledNotValid"));
+            }
+
+            //update trạng thái order là đã xác nhận
+            order.OrderStatus = OrderStatus.Cancelled;
+            await _orderRepository.UpdateAsync(order);
+        }
+
+        private async Task ProcessTransaction(OrderDetail orderDetail)
+        {
+            try
+            {
+                List<Transaction> transactions = new List<Transaction>();
+
+                if (string.IsNullOrEmpty(orderDetail.DetailPrice))
+                {
+                    throw new UserFriendlyException(L("DetailPriceNotFound"));
+                }
+
+                //tình toán giá theo từng tháng
+                DateTime now = DateTime.Now; // ví dụ 31/12/2025
+                int startYear = now.Year;
+
+                string[] parts = orderDetail.DetailPrice.Split(',', StringSplitOptions.RemoveEmptyEntries);
+
+                DateTime previousToDate = now;
+
+                foreach (string part in parts)
+                {
+                    string[] values = part.Split('-', StringSplitOptions.RemoveEmptyEntries);
+                    if (values.Length != 3) continue;
+
+                    int fromMonth = int.Parse(values[0]);
+                    int toMonth = int.Parse(values[1]);
+                    decimal amount = decimal.Parse(values[2]);
+
+                    int fromYear = startYear;
+                    int toYear = toMonth < fromMonth ? startYear + 1 : startYear;
+
+                    // FromDate = ngày hiện tại hoặc ngày sau của khoảng trước
+                    DateTime fromDate = previousToDate;
+                    DateTime toDate = new DateTime(toYear, toMonth, DateTime.DaysInMonth(toYear, toMonth));
+
+                    Transaction transaction = new Transaction
+                    {
+                        OrderDetailId = orderDetail.Id,
+                        FromDate = fromDate,
+                        ToDate = toDate,
+                        AmounToBePaid = amount,
+                        TranSactionStatus = TransactionOrderStatus.Init
+                    };
+
+                    await _transactionRepository.InsertAsync(transaction);
+
+                    // Cập nhật ngày kết thúc của khoảng vừa thêm
+                    previousToDate = toDate.AddDays(1);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new UserFriendlyException(L("TransactionError"));
+            }
+        }
     }
 }

@@ -54,5 +54,8 @@ namespace Ecommerce.Entitys
 
         [StringLength(50)]
         public string OrderStatus {  get; set; } // trạng thái đơn hang
+
+        [StringLength(50)]
+        public string Reason { get; set; }
     }
 }

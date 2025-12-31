@@ -25,7 +25,11 @@ namespace Ecommerce.Entitys
         public int Count { get; set; }  // số lượng
 
         [Required]
-        public decimal Price { get; set; } // số tiền
+        public decimal Price { get; set; } // số tiền.
+
+        [Required]
+        [StringLength(255)]
+        public string DetailPrice { get; set; } // dữ liệu giá tiền theo từng tháng
 
         [StringLength(100)]
         public string OrderDetailStatus { get; set; } // Trạng thái

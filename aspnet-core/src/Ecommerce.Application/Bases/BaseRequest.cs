@@ -9,7 +9,7 @@ namespace Ecommerce.Bases
 {
     public class BaseRequest: PagedAndSortedResultRequestDto
     {
-        public string Search {  get; set; }
-        public string StoreCode { get; set; }
+        public string? Search {  get; set; }
+        public string? StoreCode { get; set; }
     }
 }

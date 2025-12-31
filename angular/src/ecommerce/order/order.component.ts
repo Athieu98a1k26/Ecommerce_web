@@ -98,7 +98,6 @@ export class OrderComponent extends AppComponentBase implements OnInit {
   }
 
   save(): void {
-    console.log('123123');
     this.saving = true;
     let input = new CreateUpdateOrderDto();
     input.note = this.notes?.trim();
@@ -113,7 +112,6 @@ export class OrderComponent extends AppComponentBase implements OnInit {
     let orderDetailDto = new OrderDetailDto();
     orderDetailDto.productStoreDetailId = this.selectedDetail.id;
     orderDetailDto.count = this.quantity;
-    orderDetailDto.price = this.product.price;
 
     input.listOrderDetailDto.push(orderDetailDto)
 

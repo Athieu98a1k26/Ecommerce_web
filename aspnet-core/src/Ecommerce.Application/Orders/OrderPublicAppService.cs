@@ -27,7 +27,6 @@ namespace Ecommerce.Orders
     }
     public class OrderPublicAppService : EcommerceAppServiceBase, IOrderPublicAppService
     {
-
         private readonly IRepository<Order, long> _orderRepository;
         private readonly IRepository<ProductStoreDetail, long> _productStoreDetailRepository;
         private readonly IRepository<Province, long> _provinceRepository;
@@ -69,8 +68,9 @@ namespace Ecommerce.Orders
                 OrderDetail orderDetail = ObjectMapper.Map<OrderDetail>(item);
                 orderDetail.OrderId = id;
                 orderDetail.ProductStoreId = productStoreDetail1?.ProductStoreId ?? 0;
+                orderDetail.Price = productStoreDetail1.Price;
+                orderDetail.DetailPrice = productStoreDetail1.DetailPrice;
 
-                orderDetail.OrderDetailStatus = null;
 
                 await _orderDetailRepository.InsertAsync(orderDetail);
             }
@@ -84,7 +84,6 @@ namespace Ecommerce.Orders
                 throw new UserFriendlyException(L("ProductStoreDetailNotFound"));
             }
         }
-
 
         [HttpPost]
         public async Task<PagedResultDto<OrderDto>> GetPagingForUser(OrderRequestDto request)

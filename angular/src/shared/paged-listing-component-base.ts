@@ -52,7 +52,6 @@ export abstract class PagedListingComponentBase<TEntityDto> extends AppComponent
 
         this.isTableLoading = true;
         this.list(req, page, () => {
-            console.log('ttttttttt')
             this.isTableLoading = false;
         });
     }

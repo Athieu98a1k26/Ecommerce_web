@@ -11,8 +11,6 @@ using Abp.UI;
 using Ecommerce.Authorization;
 using Ecommerce.Bases;
 using Ecommerce.Entity;
-using Ecommerce.Products.Dto;
-using Ecommerce.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
