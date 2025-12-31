@@ -6,77 +6,68 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Common
 {
-    public static class CatalogType
+    public static class Capacity
     {
-        public static HashSet<string> Capacitys = new HashSet<string>
-        {
-            "64GB",
-            "128GB",
-            "256GB",
-            "512GB"
-        };
+        public static string Capacity64GB = "64GB";
+        public static string Capacity128GB = "128GB";
+        public static string Capacity256GB = "256GB";
+        public static string Capacity512GB = "512GB";
+    }
 
-        public static HashSet<string> Colors = new HashSet<string>
-        {
-            "Black",
-            "White",
-            "Blue",
-            "Red"
-        };
+    public static class Color
+    {
+        public static string Black = "Black";
+        public static string White = "White";
+        public static string Blue = "Blue";
+        public static string Red = "Red";
+    }
 
-        public static HashSet<string> Conditions = new HashSet<string>
-        {
-            "New",
-            "Used",
-            "Refurbished"
-        };
+    public static class Condition
+    {
+        public static string New = "New";
+        public static string Used = "Used";
+    }
 
-        //
-        public static HashSet<string> PackageCodes = new HashSet<string>
-        {
-            "RentThenBuy",
-        };
+    public static class PackageCode
+    {
+        public static string RentThenBuy = "RentThenBuy";
+    }
 
-        // Package Codes (1 month to 12 months)
-        public static readonly Dictionary<int, string> LeaseTermCodes = new Dictionary<int, string>
-        {
-            { 1, "1Month" },
-            { 2, "2Months" },
-            { 3, "3Months" },
-            { 4, "4Months" },
-            { 5, "5Months" },
-            { 6, "6Months" },
-            { 7, "7Months" },
-            { 8, "8Months" },
-            { 9, "9Months" },
-            { 10, "10Months" },
-            { 11, "11Months" },
-            { 12, "12Months" }
-        };
+    public static class LeaseTermCode
+    {
+        public static int Month1 = 1;
+        public static int Month2 = 2;
+        public static int Month3 = 3;
+        public static int Month4 = 4;
+        public static int Month5 = 5;
+        public static int Month6 = 6;
+        public static int Month7 = 7;
+        public static int Month8 = 8;
+        public static int Month9 = 9;
+        public static int Month10 = 10;
+        public static int Month11 = 11;
+        public static int Month12 = 12;
+    }
 
-        // hình thức nhận hàng
-        public static HashSet<string> DeliveryMethods = new HashSet<string>
-        {
-            "InStore",       // Nhận tại cửa hàng
-            "HomeDelivery"   // Giao hàng tận nhà
-        };
+    public static class DeliveryMethod
+    {
+        public static string InStore = "InStore";
+        public static string HomeDelivery = "HomeDelivery";
+    }
 
-        public static HashSet<string> OrderStatus = new HashSet<string>
-        {
-            "Init",       // Mới tạo
-            "Confirmed",   // Xác nhận 
-            "Reject"   // Hủy
-        };
+    public static class OrderStatus
+    {
+        public static string Init = "Init";
+        public static string Confirmed = "Confirmed";
+        public static string Cancelled = "Cancelled";
+    }
 
-        public static HashSet<string> OrderDetailStatus = new HashSet<string>
-        {
-            "Init",       // Mới tạo
-            "Processing", // Đang xử lý
-            "Paid",   // Đã thanh toán
-            "Reject"   // Hủy
-        };
-
-
+    public static class TransactionStatus
+    {
+        public static string Init = "Init";
+        public static string Processing = "Processing";
+        public static string Paid = "Paid";
+        public static string Reject = "Reject";
     }
 }
 

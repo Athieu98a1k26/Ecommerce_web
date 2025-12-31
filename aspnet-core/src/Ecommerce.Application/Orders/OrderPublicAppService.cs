@@ -4,21 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
-using Abp.Domain.Uow;
-using Abp.UI;
-using Ecommerce.Bases;
-using Ecommerce.Common;
-using Ecommerce.Entitys;
-using Ecommerce.Helper;
-using Ecommerce.Orders.Dto;
+using Abp.Linq.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
+using Microsoft.AspNetCore.Mvc;
+using Abp.UI;
+using Ecommerce.Entitys;
+using Ecommerce.Orders.Dto;
+using Abp.Domain.Uow;
+using Ecommerce.Helper;
+using Ecommerce.Common;
+using Ecommerce.Persons.Dto;
 
 namespace Ecommerce.Orders
 {
     public interface IOrderPublicAppService
     {
         Task CreateOrEdit(CreateUpdateOrderDto request);
+        Task<PagedResultDto<OrderDto>> GetPagingForUser(OrderRequestDto request);
     }
     public class OrderPublicAppService : EcommerceAppServiceBase, IOrderPublicAppService
     {
@@ -52,7 +57,7 @@ namespace Ecommerce.Orders
             order.Code = OrderHelper.GenerateOrderCode();
             order.Count = request.ListOrderDetailDto.Sum(s => s.Count);
             order.Price = request.ListOrderDetailDto.Sum(s => s.Price);
-            order.OrderStatus = CatalogType.OrderStatus.First();
+            order.OrderStatus = OrderStatus.Init;
             long id = await _orderRepository.InsertAndGetIdAsync(order);
 
             //thêm vào bảng detail
@@ -65,7 +70,7 @@ namespace Ecommerce.Orders
                 orderDetail.OrderId = id;
                 orderDetail.ProductStoreId = productStoreDetail1?.ProductStoreId ?? 0;
 
-                orderDetail.OrderDetailStatus = CatalogType.OrderDetailStatus.First();
+                orderDetail.OrderDetailStatus = null;
 
                 await _orderDetailRepository.InsertAsync(orderDetail);
             }
@@ -78,6 +83,58 @@ namespace Ecommerce.Orders
             {
                 throw new UserFriendlyException(L("ProductStoreDetailNotFound"));
             }
+        }
+
+
+        [HttpPost]
+        public async Task<PagedResultDto<OrderDto>> GetPagingForUser(OrderRequestDto request)
+        {
+            var query = _orderRepository.GetAll().Where(s => s.PhoneNumber==request.PhoneNumber || s.Email == request.Email && (string.IsNullOrEmpty(request.OrderStatus) || s.OrderStatus == request.OrderStatus));
+
+            var pagedAndFiltered = query
+                .OrderBy(request.Sorting ?? "Id desc")
+                .PageBy(request);
+
+            var totalCount = await query.CountAsync();
+
+            var listData = await pagedAndFiltered.ToListAsync();
+
+            List<OrderDto> listDataModel = ObjectMapper.Map<List<OrderDto>>(listData);
+
+            if (listDataModel.Count == 0)
+            {
+                return new PagedResultDto<OrderDto>(
+                   totalCount,
+                   listDataModel
+                );
+            }
+
+            //lấy thông tin tỉnh , xã
+            List<string> listProvinceCode = new List<string>();
+
+            foreach (var item in listDataModel)
+            {
+                listProvinceCode.Add(item.ProvinceCode);
+                listProvinceCode.Add(item.WardCode);
+            }
+
+            List<Province> listProvince = await _provinceRepository.GetAll().Where(s => listProvinceCode.Contains(s.Code)).ToListAsync();
+
+            foreach (var item in listDataModel)
+            {
+                Province province = listProvince.FirstOrDefault(s => s.Code == item.ProvinceCode);
+
+                item.ProvinceName = province?.Name;
+
+                Province ward = listProvince.FirstOrDefault(s => s.Code == item.WardCode);
+
+                item.WardName = ward?.Name;
+            }
+
+            return new PagedResultDto<OrderDto>(
+               totalCount,
+               listDataModel
+           );
         }
     }
 }

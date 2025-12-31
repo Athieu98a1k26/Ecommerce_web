@@ -9,17 +9,12 @@ using Abp.Domain.Repositories;
 using Abp.Linq.Extensions;
 using Ecommerce.Authorization;
 using Ecommerce.Bases;
-using Ecommerce.Entity;
-using Ecommerce.Products.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Mvc;
 using Abp.UI;
 using Ecommerce.Entitys;
 using Ecommerce.Orders.Dto;
-using Abp.Domain.Uow;
-using Ecommerce.Helper;
-using Ecommerce.Common;
 
 namespace Ecommerce.Orders
 {
@@ -93,6 +88,31 @@ namespace Ecommerce.Orders
                listDataModel
            );
         }
+
+        public async Task ConfirmedOrder(long orderId)
+        {
+            // lấy danh sách đơn
+            Order order = _orderRepository.Get(orderId);
+
+            if(order == null )
+            {
+                throw new UserFriendlyException(L("OrderNotFound"));
+            }    
+
+            List<OrderDetail> listOrderDetail = _orderDetailRepository.GetAll().Where(s=>s.OrderId == order.Id).ToList();
+
+            if (order == null)
+            {
+                throw new UserFriendlyException(L("OrderNotFound"));
+            }
+
+            foreach (OrderDetail orderDetail in listOrderDetail)
+            {
+
+            }
+        }
+
+        
 
     }
 }

@@ -335,6 +335,62 @@ export class OrderPublicServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPagingForUser(body: OrderRequestDto | undefined): Observable<OrderDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/OrderPublic/GetPagingForUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPagingForUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPagingForUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<OrderDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<OrderDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetPagingForUser(response: HttpResponseBase): Observable<OrderDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = OrderDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
 }
 
 @Injectable()
@@ -4652,6 +4708,73 @@ export class OrderDtoPagedResultDto implements IOrderDtoPagedResultDto {
 export interface IOrderDtoPagedResultDto {
     items: OrderDto[] | undefined;
     totalCount: number;
+}
+
+export class OrderRequestDto implements IOrderRequestDto {
+    maxResultCount: number;
+    skipCount: number;
+    sorting: string | undefined;
+    search: string | undefined;
+    storeCode: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
+
+    constructor(data?: IOrderRequestDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.maxResultCount = _data["maxResultCount"];
+            this.skipCount = _data["skipCount"];
+            this.sorting = _data["sorting"];
+            this.search = _data["search"];
+            this.storeCode = _data["storeCode"];
+            this.phoneNumber = _data["phoneNumber"];
+            this.email = _data["email"];
+        }
+    }
+
+    static fromJS(data: any): OrderRequestDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new OrderRequestDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["maxResultCount"] = this.maxResultCount;
+        data["skipCount"] = this.skipCount;
+        data["sorting"] = this.sorting;
+        data["search"] = this.search;
+        data["storeCode"] = this.storeCode;
+        data["phoneNumber"] = this.phoneNumber;
+        data["email"] = this.email;
+        return data;
+    }
+
+    clone(): OrderRequestDto {
+        const json = this.toJSON();
+        let result = new OrderRequestDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IOrderRequestDto {
+    maxResultCount: number;
+    skipCount: number;
+    sorting: string | undefined;
+    search: string | undefined;
+    storeCode: string | undefined;
+    phoneNumber: string | undefined;
+    email: string | undefined;
 }
 
 export class PermissionDto implements IPermissionDto {

@@ -56,7 +56,12 @@ namespace Ecommerce.Authorization.Users
             };
 
             user.SetNormalizedNames();
-           
+
+            foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
+            {
+                user.Roles.Add(new UserRole(tenant?.Id, user.Id, defaultRole.Id));
+            }
+
             await _userManager.InitializeOptionsAsync(tenant?.Id);
 
             CheckErrors(await _userManager.CreateAsync(user, plainPassword));

@@ -125,7 +125,7 @@ namespace Ecommerce.Services
         public async Task Delete(long id)
         {
             await ValidateDelete(id);
-            await _productStoreRepository.DeleteAsync(id);
+            await _productRepository.DeleteAsync(id);
         }
 
         public async Task ValidateDelete(long id)

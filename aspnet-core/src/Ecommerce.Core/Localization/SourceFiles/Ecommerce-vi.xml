@@ -132,7 +132,6 @@
 
 		<text name="ProductUse">Sản phẩm đã được sử dụng</text>
 
-
 		<text name="StoreNotFound">Cửa hàng không tồn tại</text>
 		<text name="CodeStoreRequired">Mã cửa hàng không được để trống</text>
 		<text name="NameStoreRequired">Tên cửa hàng không được để trống</text>
@@ -153,6 +152,8 @@
 		<text name="ProductStoreDetailNotFound">Không tìm thấy đơn hàng</text>
 		<text name="Orders">Quản lý đơn hàng</text>
 		<text name="PersonNotFound">Không tìm thấy người dùng</text>
+		<text name="OrderNotFound">Đơn hàng không tồn tại</text>
+		<text name="OrderDetailNotFound">Đơn hàng không tồn tại</text>
 		<text name="Init">Mới tạo</text>
 	</texts>
 </localizationDictionary>

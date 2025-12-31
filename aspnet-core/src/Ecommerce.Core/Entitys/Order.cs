@@ -53,9 +53,6 @@ namespace Ecommerce.Entitys
         public string DeliveryMethod {  get; set; } // hình thức nhận hàng
 
         [StringLength(50)]
-        public string OrderStatus {  get; set; } // trạng thái đơn hàng
-
-        [StringLength(255)]
-        public string Reason { get; set; } // Lý do từ chối , xác nhận
+        public string OrderStatus {  get; set; } // trạng thái đơn hang
     }
 }
