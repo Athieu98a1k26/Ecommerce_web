@@ -142,6 +142,146 @@ export class AccountServiceProxy {
 }
 
 @Injectable()
+export class CartServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createOrEdit(body: CreateUpdateCartDto | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Cart/CreateOrEdit";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrEdit(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrEdit(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processCreateOrEdit(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param search (optional) 
+     * @param storeCode (optional) 
+     * @param sorting (optional) 
+     * @param skipCount (optional) 
+     * @param maxResultCount (optional) 
+     * @return Success
+     */
+    getPaging(search: string | undefined, storeCode: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CartDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Cart/GetPaging?";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "Search=" + encodeURIComponent("" + search) + "&";
+        if (storeCode === null)
+            throw new Error("The parameter 'storeCode' cannot be null.");
+        else if (storeCode !== undefined)
+            url_ += "StoreCode=" + encodeURIComponent("" + storeCode) + "&";
+        if (sorting === null)
+            throw new Error("The parameter 'sorting' cannot be null.");
+        else if (sorting !== undefined)
+            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPaging(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPaging(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<CartDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<CartDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetPaging(response: HttpResponseBase): Observable<CartDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = CartDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class ConfigurationServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -3754,6 +3894,128 @@ export interface IBaseRequest {
     storeCode: string | undefined;
 }
 
+export class CartDto implements ICartDto {
+    personId: number;
+    quantity: number;
+    productStoreDetailId: number;
+    productName: string | undefined;
+    productCode: string | undefined;
+    pathImage: string | undefined;
+    price: number;
+
+    constructor(data?: ICartDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.personId = _data["personId"];
+            this.quantity = _data["quantity"];
+            this.productStoreDetailId = _data["productStoreDetailId"];
+            this.productName = _data["productName"];
+            this.productCode = _data["productCode"];
+            this.pathImage = _data["pathImage"];
+            this.price = _data["price"];
+        }
+    }
+
+    static fromJS(data: any): CartDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CartDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["personId"] = this.personId;
+        data["quantity"] = this.quantity;
+        data["productStoreDetailId"] = this.productStoreDetailId;
+        data["productName"] = this.productName;
+        data["productCode"] = this.productCode;
+        data["pathImage"] = this.pathImage;
+        data["price"] = this.price;
+        return data;
+    }
+
+    clone(): CartDto {
+        const json = this.toJSON();
+        let result = new CartDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICartDto {
+    personId: number;
+    quantity: number;
+    productStoreDetailId: number;
+    productName: string | undefined;
+    productCode: string | undefined;
+    pathImage: string | undefined;
+    price: number;
+}
+
+export class CartDtoPagedResultDto implements ICartDtoPagedResultDto {
+    items: CartDto[] | undefined;
+    totalCount: number;
+
+    constructor(data?: ICartDtoPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(CartDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): CartDtoPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CartDtoPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+
+    clone(): CartDtoPagedResultDto {
+        const json = this.toJSON();
+        let result = new CartDtoPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICartDtoPagedResultDto {
+    items: CartDto[] | undefined;
+    totalCount: number;
+}
+
 export class ChangePasswordDto implements IChangePasswordDto {
     currentPassword: string;
     newPassword: string;
@@ -4011,6 +4273,53 @@ export interface ICreateTenantDto {
     adminEmailAddress: string;
     connectionString: string | undefined;
     isActive: boolean;
+}
+
+export class CreateUpdateCartDto implements ICreateUpdateCartDto {
+    quantity: number | undefined;
+    productStoreDetailId: number | undefined;
+
+    constructor(data?: ICreateUpdateCartDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.quantity = _data["quantity"];
+            this.productStoreDetailId = _data["productStoreDetailId"];
+        }
+    }
+
+    static fromJS(data: any): CreateUpdateCartDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUpdateCartDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["quantity"] = this.quantity;
+        data["productStoreDetailId"] = this.productStoreDetailId;
+        return data;
+    }
+
+    clone(): CreateUpdateCartDto {
+        const json = this.toJSON();
+        let result = new CreateUpdateCartDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateUpdateCartDto {
+    quantity: number | undefined;
+    productStoreDetailId: number | undefined;
 }
 
 export class CreateUpdateOrderDto implements ICreateUpdateOrderDto {
@@ -5419,7 +5728,7 @@ export interface IProductDtoPagedResultDto {
 }
 
 export class ProductStoreDetailDto implements IProductStoreDetailDto {
-    id: number | undefined;
+    id: number;
     productStoreId: number | undefined;
     pathImage: string | undefined;
     capacityCode: string | undefined;
@@ -5432,6 +5741,10 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
     detailPrice: string | undefined;
     count: number;
     isActive: boolean;
+    productName: string | undefined;
+    productCode: string | undefined;
+    storeName: string | undefined;
+    storeCode: string | undefined;
 
     constructor(data?: IProductStoreDetailDto) {
         if (data) {
@@ -5457,6 +5770,10 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
             this.detailPrice = _data["detailPrice"];
             this.count = _data["count"];
             this.isActive = _data["isActive"];
+            this.productName = _data["productName"];
+            this.productCode = _data["productCode"];
+            this.storeName = _data["storeName"];
+            this.storeCode = _data["storeCode"];
         }
     }
 
@@ -5482,6 +5799,10 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
         data["detailPrice"] = this.detailPrice;
         data["count"] = this.count;
         data["isActive"] = this.isActive;
+        data["productName"] = this.productName;
+        data["productCode"] = this.productCode;
+        data["storeName"] = this.storeName;
+        data["storeCode"] = this.storeCode;
         return data;
     }
 
@@ -5494,7 +5815,7 @@ export class ProductStoreDetailDto implements IProductStoreDetailDto {
 }
 
 export interface IProductStoreDetailDto {
-    id: number | undefined;
+    id: number;
     productStoreId: number | undefined;
     pathImage: string | undefined;
     capacityCode: string | undefined;
@@ -5507,6 +5828,10 @@ export interface IProductStoreDetailDto {
     detailPrice: string | undefined;
     count: number;
     isActive: boolean;
+    productName: string | undefined;
+    productCode: string | undefined;
+    storeName: string | undefined;
+    storeCode: string | undefined;
 }
 
 export class ProductStoreDto implements IProductStoreDto {

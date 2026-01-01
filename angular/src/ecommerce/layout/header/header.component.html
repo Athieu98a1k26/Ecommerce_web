@@ -50,7 +50,7 @@
 
       <!-- Right Actions -->
       <div class="header-actions">
-        <div class="notification-icon-wrapper" (clickOutside)="closeDropdown()">
+        <div class="notification-icon-wrapper" (clickOutside)="closeDropdown()" *ngIf="isLoggedIn">
           <a
             href="javascript:void(0)"
             class="notification-link"
@@ -79,7 +79,7 @@
           </div>
         </div>
         <!-- Cart -->
-        <div class="cart-icon-wrapper">
+        <div class="cart-icon-wrapper" *ngIf="isLoggedIn">
           <a routerLink="/ecommerce/cart" class="cart-link">
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-badge" *ngIf="cartItemCount > 0">{{

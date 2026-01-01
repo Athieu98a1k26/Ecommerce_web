@@ -59,7 +59,7 @@ export class HeaderComponent extends AppComponentBase implements OnInit{
     const user = this.sessionService.user;
     this.isLoggedIn = !!user;
     if (user) {
-      this.userName = user.userName || user.name || 'Người dùng';
+      this.userName = user.userName || user.name;
     }
   }
 

@@ -9,7 +9,7 @@ namespace Ecommerce.ProductStores.Dto
 {
     public class ProductStoreDetailDto
     {
-        public long? Id { get; set; }
+        public long Id { get; set; }
         public long? ProductStoreId { get; set; }
 
         public string PathImage { get; set; } // ảnh
@@ -32,5 +32,11 @@ namespace Ecommerce.ProductStores.Dto
         public int Count { get; set; } // tổng sản phẩm đang có
 
         public bool IsActive {  get; set; } // biến dùng trên angular
+
+        public string ProductName {  get; set; }
+        public string ProductCode {  get; set; }
+
+        public string StoreName {  get; set; }
+        public string StoreCode {  get; set; }
     }
 }

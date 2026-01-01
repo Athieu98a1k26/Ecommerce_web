@@ -1,14 +1,18 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ProductStorePublicServiceProxy,
   ProductStoreDto,
   ProductStoreDetailDto,
   BaseRequest,
-  ProductStoreDtoPagedResultDto, } from '@shared/service-proxies/service-proxies';
+  ProductStoreDtoPagedResultDto,
+  CartServiceProxy,
+  CreateUpdateCartDto, } from '@shared/service-proxies/service-proxies';
 import { BsModalRef, BsModalService } from '@node_modules/ngx-bootstrap/modal';
 import { OrderComponent } from '../order/order.component';
 import { environment } from 'environments/environment';
+import { AppSessionService } from '@shared/session/app-session.service';
+import { AppComponentBase } from '@shared/app-component-base';
 
 
 @Component({
@@ -16,7 +20,7 @@ import { environment } from 'environments/environment';
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css']
 })
-export class ProductComponent implements OnInit {
+export class ProductComponent extends AppComponentBase implements OnInit {
   productId: string | null = null;
   currentImageIndex = 0;
   selectedDetail:ProductStoreDetailDto;
@@ -29,16 +33,19 @@ export class ProductComponent implements OnInit {
   product: ProductStoreDto = null;
   isLoading = false;
   tabActive :string = 'specs';
-
+  isLoggedIn: boolean = false;
   products: ProductStoreDto[] = [];
   constructor(
+    injector: Injector,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location,
-    private productApi: ProductStorePublicServiceProxy,
+    private cartService: CartServiceProxy,
     private _modalService: BsModalService,
-    private productStorePublicService: ProductStorePublicServiceProxy
-  ) {}
+    private productStorePublicService: ProductStorePublicServiceProxy,
+    private sessionService: AppSessionService,
+  ) {
+    super(injector);
+  }
 
   ngOnInit(): void {
     this.productId = this.route.snapshot.paramMap.get('id');
@@ -46,6 +53,7 @@ export class ProductComponent implements OnInit {
       this.fetchProductDetail(this.productId);
     }
     this.getFeaturedProducts()
+    this.isLoggedIn = !!this.sessionService.user;
   }
 
   getFeaturedProducts(): void {
@@ -71,7 +79,7 @@ export class ProductComponent implements OnInit {
   fetchProductDetail(id: string): void {
     this.isLoading = true;
     const parsedId = parseInt(id);
-    this.productApi.getDetail(parsedId).subscribe({
+    this.productStorePublicService.getDetail(parsedId).subscribe({
       next: (result: any) => {
         this.product = result;
         // set default variant selections if available
@@ -83,25 +91,6 @@ export class ProductComponent implements OnInit {
       },
       error: _ => { this.isLoading = false; }
     });
-  }
-
-  goBack(): void {
-    this.location.back();
-  }
-
-  shareProduct(): void {
-    if (!this.product) return;
-    if (navigator.share) {
-      navigator.share({
-        title: this.product.productName,
-        text: 'Xem sản phẩm này trên E-Shop',
-        url: window.location.href
-      });
-    }
-  }
-
-  goToCart(): void {
-    this.router.navigate(['/ecommerce/cart']);
   }
 
   get activeCapacityCodeDetails() {
@@ -138,6 +127,7 @@ export class ProductComponent implements OnInit {
 
   increaseQuantity(): void {
     this.quantity++;
+    
   }
 
   decreaseQuantity(): void {
@@ -184,25 +174,26 @@ export class ProductComponent implements OnInit {
     this.currentImageIndex = prevIndex;
   }
 
-  onSearch(): void {
-    console.log('Search:', this.searchQuery);
-  }
-
-  viewRelatedProduct(productId: string): void {
-    this.router.navigate(['/ecommerce/product', productId]);
-  }
-
-  Math = Math;
-
   addToCart(): void {
-    // Optionally: trigger API/add to cart store here
+    if(this.isLoggedIn){
+      let data = new CreateUpdateCartDto();
+      data.productStoreDetailId = this.selectedDetail.id;
+      data.quantity = this.quantity;
+      this.cartService.createOrEdit(data).subscribe({
+        next: () => {
+          abp.notify.success(this.l('SuccessfullyAddedToCart'));
+        },
+        error: () => {
+          abp.notify.error(this.l('FailedToAddToCart'));
+        }
+      });
+    } else {
+      this.router.navigate(['/ecommerce/login']);
+    }
   }
 
   buyNow(): void {
-    //this.addToCart();
-    //this.router.navigate(['/ecommerce/cart']);
-    let openOrder: BsModalRef;
-    openOrder = this._modalService.show(
+    let openOrder = this._modalService.show(
       OrderComponent,
       {
         class: 'modal-xl',

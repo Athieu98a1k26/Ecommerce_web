@@ -3,7 +3,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-6">
-            <h1>{{ "Orders" | localize }}</h1>
+            <h1>{{ "TransactionManager" | localize }}</h1>
           </div>
         </div>
       </div>
@@ -20,6 +20,7 @@
                     <th>{{ "FromDate" | localize }}</th>
                     <th>{{ "ToDate" | localize }}</th>
                     <th>{{ "AmounToBePaid" | localize }}</th>
+                    <th>{{ "Status" | localize }}</th>
                     <th style="width: 20%;">{{ "Actions" | localize }}</th>
                   </tr>
                 </thead>
@@ -36,9 +37,10 @@
                             }
                     "
                   >
-                    <td>{{ transaction.fromDate }}</td>
-                    <td>{{ transaction.toDate }}</td>
+                    <td>{{ transaction.fromDate | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ transaction.toDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ transaction.amounToBePaid | currency:'VND':'symbol':'1.0-0':'vi-VN' }}</td>
+                    <td>{{ transaction.tranSactionStatus | localize }}</td>
                     <td>
                       
                     </td>

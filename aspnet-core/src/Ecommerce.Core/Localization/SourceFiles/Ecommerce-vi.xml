@@ -141,7 +141,7 @@
 		<text name="StoreName">Tên cửa hàng</text>
 		<text name="ProductName">Tên sản phẩm</text>
 		<text name="ConfirmOrder">Xác nhận đơn hàng</text>
-		<text name="ProductStoreDetailNotFound">Không tìm thấy đơn hàng</text>
+		<text name="ProductStoreDetailNotFound">Không tìm thấy chi tiết đơn hàng</text>
 		<text name="Orders">Quản lý đơn hàng</text>
 		<text name="PersonNotFound">Không tìm thấy người dùng</text>
 		<text name="OrderNotFound">Đơn hàng không tồn tại</text>
@@ -155,6 +155,16 @@
 		<text name="CancelledSuccess">Hủy đơn hàng thành công!</text>
 		<text name="Cancelled">Đã hủy</text> 
 		<text name="Quantity">Số lượng</text> 
-		
+		<text name="FromDate">Từ ngày</text> 
+		<text name="ToDate">Tới ngày</text> 
+		<text name="AmounToBePaid">Số tiền cần thanh toán</text> 
+		<text name="Status">Trạng thái</text> 
+		<text name="OrderDetailManager">Quản lý chi tiết đơn hàng</text>
+		<text name="TransactionManager">Chi tiết giao dịch</text> 
+		<text name="ViewDetail">Xem chi tiết</text> 
+		<text name="Cart">Giỏ hàng</text> 
+		<text name="QuantityNotValid">Số lượng không hợp lệ</text> 
+		<text name="SuccessfullyAddedToCart">Thêm vào giỏ hàng thành công</text> 
+		<text name="FailedToAddToCart">Thêm vào giỏ hàng thất bại</text> 
 	</texts>
 </localizationDictionary>

@@ -22,6 +22,7 @@ namespace Ecommerce.EntityFrameworkCore
         public DbSet<ProductStoreDetail> ProductStoreDetails { get; set; } 
         public DbSet<Province> Provinces { get; set; } 
         public DbSet<Transaction> Transactions { get; set; } 
+        public DbSet<Cart> Carts { get; set; } 
 
 
         public EcommerceDbContext(DbContextOptions<EcommerceDbContext> options)
