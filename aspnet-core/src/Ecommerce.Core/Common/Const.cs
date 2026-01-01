@@ -65,9 +65,28 @@ namespace Ecommerce.Common
     public static class TransactionOrderStatus
     {
         public static string Init = "Init";
-        public static string Processing = "Processing";
-        public static string Paid = "Paid";
-        public static string Reject = "Reject";
+        public static string AwaitingApproval = "AwaitingApproval"; // chờ phê duyệt
+        public static string Paid = "Paid"; // Đã thanh toán
+        public static string Reject = "Reject"; // từ chối  
+    }
+
+    public static class SubSystem
+    {
+        public static string Transaction = "Transaction";
+    }
+
+
+    public static class HistoryOrder
+    {
+        public static string InitOrder = "InitOrder"; // đơn hàng đã được khởi tạo
+        public static string ConfirmedOrder = "Confirmed"; // đơn hàng đã được xác nhận
+        public static string CancelledOrder = "CancelledOrder"; // đơn hàng đã bị từ chối
+
+        public static string AwaitingApprovalTransaction = "AwaitingApprovalTransaction"; // giao dịch thuộc đơn hàng A đang chờ phê duyệt
+
+        public static string PaidTransaction = "PaidTransaction"; // giao dịch thuộc đơn hàng A đã thanh toán thành công
+
+        public static string RejectTransaction = "PaidTransaction"; // giao dịch thuộc đơn hàng A bị từ chối
     }
 }
 

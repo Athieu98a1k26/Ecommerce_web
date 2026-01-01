@@ -10,24 +10,16 @@
       <!-- Language Selector -->
       <div class="lang-dropdown">
         <button class="lang-selected">
-          <img src="https://flagcdn.com/w20/vn.png" alt="VN" />
-          <span>Tiếng việt</span>
+          <img [src]="currentLanguage.flag" [alt]="currentLanguage.code" />
+          <span>{{currentLanguage.name}}</span>
           <svg viewBox="0 0 24 24">
             <path d="M7 10l5 5 5-5z"></path>
           </svg>
         </button>
         <ul class="lang-menu">
-          <li>
-            <img src="https://flagcdn.com/w20/vn.png" alt="VN" />
-            <span>Tiếng Việt</span>
-          </li>
-          <li>
-            <img src="https://flagcdn.com/w20/us.png" alt="EN" />
-            <span>English</span>
-          </li>
-          <li>
-            <img src="https://flagcdn.com/w20/jp.png" alt="JP" />
-            <span>日本語</span>
+          <li *ngFor="let lang of languages" (click)="setLanguage(lang.code)" [class.active]="currentLanguage === lang.code">
+            <img [src]="lang.flag" [alt]="lang.code" />
+            <span>{{ lang.name }}</span>
           </li>
         </ul>
       </div>

@@ -378,6 +378,141 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class FileMangerServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param subsystem (optional) 
+     * @param files (optional) 
+     * @return Success
+     */
+    uploadFiles(subsystem: string | undefined, files: FileParameter[] | undefined): Observable<number[]> {
+        let url_ = this.baseUrl + "/api/services/app/FileManger/UploadFiles?";
+        if (subsystem === null)
+            throw new Error("The parameter 'subsystem' cannot be null.");
+        else if (subsystem !== undefined)
+            url_ += "subsystem=" + encodeURIComponent("" + subsystem) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (files === null || files === undefined)
+            throw new Error("The parameter 'files' cannot be null.");
+        else
+            files.forEach(item_ => content_.append("files", item_.data, item_.fileName ? item_.fileName : "files") );
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUploadFiles(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUploadFiles(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number[]>;
+        }));
+    }
+
+    protected processUploadFiles(response: HttpResponseBase): Observable<number[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(item);
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param ids (optional) 
+     * @return Success
+     */
+    deleteFiles(ids: number[] | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/FileManger/DeleteFiles?";
+        if (ids === null)
+            throw new Error("The parameter 'ids' cannot be null.");
+        else if (ids !== undefined)
+            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDeleteFiles(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDeleteFiles(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDeleteFiles(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class OrderServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -3064,6 +3199,66 @@ export class TransactionServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = TransactionDtoPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param transactionId (optional) 
+     * @param files (optional) 
+     * @return Success
+     */
+    paymentWithEvidence(transactionId: number | undefined, files: FileParameter[] | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Transaction/PaymentWithEvidence";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = new FormData();
+        if (transactionId === null || transactionId === undefined)
+            throw new Error("The parameter 'transactionId' cannot be null.");
+        else
+            content_.append("TransactionId", transactionId.toString());
+        if (files === null || files === undefined)
+            throw new Error("The parameter 'files' cannot be null.");
+        else
+            files.forEach(item_ => content_.append("Files", item_.data, item_.fileName ? item_.fileName : "Files") );
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processPaymentWithEvidence(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processPaymentWithEvidence(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processPaymentWithEvidence(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -6868,6 +7063,7 @@ export interface ITenantLoginInfoDto {
 }
 
 export class TransactionDto implements ITransactionDto {
+    id: number;
     orderDetailId: number;
     fromDate: moment.Moment;
     toDate: moment.Moment;
@@ -6886,6 +7082,7 @@ export class TransactionDto implements ITransactionDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.orderDetailId = _data["orderDetailId"];
             this.fromDate = _data["fromDate"] ? moment(_data["fromDate"].toString()) : <any>undefined;
             this.toDate = _data["toDate"] ? moment(_data["toDate"].toString()) : <any>undefined;
@@ -6904,6 +7101,7 @@ export class TransactionDto implements ITransactionDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["orderDetailId"] = this.orderDetailId;
         data["fromDate"] = this.fromDate ? this.fromDate.toISOString() : <any>undefined;
         data["toDate"] = this.toDate ? this.toDate.toISOString() : <any>undefined;
@@ -6922,6 +7120,7 @@ export class TransactionDto implements ITransactionDto {
 }
 
 export interface ITransactionDto {
+    id: number;
     orderDetailId: number;
     fromDate: moment.Moment;
     toDate: moment.Moment;
@@ -7247,6 +7446,11 @@ export interface IUserLoginInfoDto {
     surname: string | undefined;
     userName: string | undefined;
     emailAddress: string | undefined;
+}
+
+export interface FileParameter {
+    data: any;
+    fileName: string;
 }
 
 export class ApiException extends Error {

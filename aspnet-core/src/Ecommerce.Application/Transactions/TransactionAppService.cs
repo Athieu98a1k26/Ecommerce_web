@@ -14,20 +14,27 @@ using Ecommerce.Transactions.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Abp.Linq.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Ecommerce.FileManagers;
+using Abp.UI;
+using Ecommerce.Common;
 
 namespace Ecommerce.Transactions
 {
     public interface ITransactionAppService
     {
         Task<PagedResultDto<TransactionDto>> GetPaging(TransactionRequestModel request);
+        Task PaymentWithEvidence([FromForm] TransactionPaymentRequestModel request);
     }
     public class TransactionAppService : EcommerceAppServiceBase, ITransactionAppService
     {
         private readonly IRepository<Transaction, long> _transactionRepository;
+        private readonly FileMangerAppService _fileMangerAppService;
 
-        public TransactionAppService(IRepository<Transaction, long> transactionRepository)
+        public TransactionAppService(IRepository<Transaction, long> transactionRepository, FileMangerAppService fileMangerAppService)
         {
             _transactionRepository = transactionRepository;
+            _fileMangerAppService = fileMangerAppService;
         }
 
         [HttpPost]
@@ -49,6 +56,32 @@ namespace Ecommerce.Transactions
                totalCount,
                listDataModel
             );
+        }
+
+        [DisableRequestSizeLimit]
+        public async Task PaymentWithEvidence([FromForm] TransactionPaymentRequestModel request)
+        {
+            if(!request.TransactionId.HasValue)
+            {
+                throw new UserFriendlyException(L("TransactionNotFound"));
+            }    
+
+            Transaction transaction = _transactionRepository.Get(request.TransactionId.Value);
+
+            if(transaction == null)
+            {
+                throw new UserFriendlyException(L("TransactionNotFound"));
+            }    
+
+            if(transaction.TranSactionStatus == TransactionOrderStatus.AwaitingApproval)
+            {
+                throw new UserFriendlyException(L("TransactionNotWorking"));
+            }
+
+            List<long> listId = await _fileMangerAppService.UploadFilesAsync(request.Files, SubSystem.Transaction);
+
+            transaction.TranSactionStatus = TransactionOrderStatus.AwaitingApproval;
+            transaction.FileId = string.Join(",", listId);
         }
     }
 }

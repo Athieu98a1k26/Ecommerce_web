@@ -167,6 +167,16 @@
 		<text name="SuccessfullyAddedToCart">Thêm vào giỏ hàng thành công</text> 
 		<text name="FailedToAddToCart">Thêm vào giỏ hàng thất bại</text> 
 		<text name="FailedToDeleteItem">Lỗi không xóa được sản phẩm</text> 
-		<text name="Pay">Thanh toán</text> 
+		<text name="Pay">Thanh toán</text>
+		<text name="TransactionNotFound">Giao dịch không tồn tại</text>
+
+		<text name="TransactionNotWorking">Không thể thực hiện giao dịch này</text>
+
+		<text name="NoFileUpload">Không có file để tải lên</text>
+
+		<text name="FileTooLarge">Kích cỡ file quá lớn, không thể upload</text>
+		<text name="PleaseUploadFile">Vui lòng upload file</text>
+		<text name="PaymentSubmitSuccess">Thanh toán đã đươc gửi đi thành công</text>
+		<text name="PaymentError">Lỗi trong quá trình gửi thông tin thanh toán</text>
 	</texts>
 </localizationDictionary>

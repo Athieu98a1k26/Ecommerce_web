@@ -25,8 +25,7 @@ import {OrderComponent} from '@ecommerce/order/order.component';
 import { UserComponent } from './user/user.component';
 import { OrderDetailComponent } from './user/order-detail/order-detail.component';
 import { UploadFileComponent } from '@ecommerce/component/file-upload/file-upload.component';
-
-//import {PaymentComponent} from './user/payment/payment.component';
+import {PaymentComponent} from './user/payment/payment.component';
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -42,8 +41,8 @@ import { UploadFileComponent } from '@ecommerce/component/file-upload/file-uploa
 
         UserComponent,      
         OrderDetailComponent,
-        UploadFileComponent
-        //PaymentComponent
+        UploadFileComponent,
+        PaymentComponent,
     ],
     imports: [
         CommonModule,

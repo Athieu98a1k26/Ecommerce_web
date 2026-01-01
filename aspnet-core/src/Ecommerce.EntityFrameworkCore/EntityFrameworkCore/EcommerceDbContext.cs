@@ -14,7 +14,7 @@ namespace Ecommerce.EntityFrameworkCore
         public DbSet<Product> Products { get; set; } 
         public DbSet<Store> Stores { get; set; } 
         public DbSet<Catalog> Catalogs { get; set; } 
-        public DbSet<History> Historys { get; set; } 
+        public DbSet<HistoryOrder> Historys { get; set; } 
         public DbSet<Order> Orders { get; set; } 
         public DbSet<OrderDetail> OrderDetails { get; set; } 
         public DbSet<Person> Persons { get; set; } 

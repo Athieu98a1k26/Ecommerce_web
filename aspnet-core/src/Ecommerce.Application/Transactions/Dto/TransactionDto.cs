@@ -9,6 +9,7 @@ namespace Ecommerce.Transactions.Dto
 {
     public class TransactionDto
     {
+        public long Id {  get; set; }
         public long OrderDetailId { get; set; } // chi tiết đơn hàng
         public DateTime FromDate { get; set; }  // bắt đầu
         public DateTime ToDate { get; set; } // kết thúc

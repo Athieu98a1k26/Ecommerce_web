@@ -18,10 +18,10 @@ export class UserComponent extends PagedListingComponentBase<OrderDto> implement
   userAvatar: string | null = null;
   userName: string | null = null;
   person: PersonDto = new PersonDto();
-  tabActive: string = 'Person';
+  tabActive: string = 'Order';
   tabOrder: string =''
   orders: OrderDto[];
-  orderId: number;
+  orderId: number = 5;
 
   constructor(
     injector: Injector,

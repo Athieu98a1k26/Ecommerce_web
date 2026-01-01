@@ -5,6 +5,8 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
   PagedListingComponentBase,
 } from '@shared/paged-listing-component-base';
+import { PaymentComponent } from '../payment/payment.component';
+import {TransactionActionHelper} from '@helper/transaction-action.hepler';
 import {
   BaseRequest,
   OrderDetailDto,
@@ -30,6 +32,7 @@ export class OrderDetailComponent extends PagedListingComponentBase<OrderDetailD
     injector: Injector,
     private orderDetailService: OrderDetailServiceProxy,
     private transactionService: TransactionServiceProxy,
+    private modalService: BsModalService
   ) {
     super(injector);
   }
@@ -67,12 +70,26 @@ export class OrderDetailComponent extends PagedListingComponentBase<OrderDetailD
     throw new Error('Method not implemented.');
   }
 
-  showDetail(orderDetail:OrderDetailDto){
-    
+  payTransaction(transaction:TransactionDto){
+    let paymentDialog: BsModalRef;
+    paymentDialog = this.modalService.show(
+      PaymentComponent,
+        {
+          class: 'modal-xl',
+          initialState: {
+            transactionId:transaction.id
+          },
+        }
+      );
+
+      paymentDialog.content.onSave.subscribe(() => {
+        this.refresh();
+      });
   }
 
-  payTransaction(transaction:TransactionDto){
-    
+  canTransaction(action: string,transactionStatus: string){
+    let helper = new TransactionActionHelper();
+    return helper.canTransaction(action,transactionStatus);
   }
 
   toggleRow(orderDetail:OrderDetailDto){

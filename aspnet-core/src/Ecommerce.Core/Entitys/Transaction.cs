@@ -24,6 +24,9 @@ namespace Ecommerce.Entitys
         public string TranSactionStatus { get; set; } // Trạng thái
 
         [StringLength(50)]
-        public string Reason { get; set; }
+        public string Reason { get; set; } // lý do
+
+        [StringLength(255)]
+        public string FileId {  get; set; } // danh sách file
     }
 }

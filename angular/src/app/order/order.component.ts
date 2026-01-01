@@ -11,7 +11,7 @@ import {
   OrderDto,
   OrderServiceProxy
 } from '@shared/service-proxies/service-proxies';
-import {OrderActionHelper} from './order-action.helper';
+import {OrderActionHelper} from '@helper/order-action.helper';
 import { ViewOrderComponent } from './view-order/view-order.component';
 
 @Component({

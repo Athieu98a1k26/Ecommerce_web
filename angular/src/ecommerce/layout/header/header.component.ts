@@ -27,7 +27,14 @@ export class HeaderComponent extends AppComponentBase implements OnInit{
     { title: 'Khuyến mãi mới hôm nay', time: 'Hôm qua' },
   ];
 
-  constructor(injector: Injector,
+  languages = [
+    { code: 'vi', name: 'Tiếng Việt', flag: 'https://flagcdn.com/w20/vn.png' },
+    { code: 'en', name: 'English', flag: 'https://flagcdn.com/w20/us.png' }
+  ];
+  currentLanguage = this.languages[0];
+
+  constructor(
+    injector: Injector,
     private sessionService: AppSessionService,
     private router: Router,
     private authService: AppAuthService,
@@ -37,6 +44,25 @@ export class HeaderComponent extends AppComponentBase implements OnInit{
 
   ngOnInit(): void {
     this.checkLoginStatus();
+    const langFromCookie = abp?.utils?.getCookieValue?.('Abp.Localization.CultureName');
+    const matchedLang = this.languages.find(l => l.code === langFromCookie);
+    if (matchedLang) {
+      this.currentLanguage = matchedLang;
+    } else {
+      this.currentLanguage = this.languages[0];
+    }
+  }
+
+  setLanguage(langCode: string): void {
+    if (langCode !== this.currentLanguage.code) {
+      abp.utils.setCookieValue(
+        'Abp.Localization.CultureName',
+        langCode,
+        new Date(new Date().getTime() + 5 * 365 * 86400000), // 5 years
+        abp.appPath
+      );
+      location.reload();
+    }
   }
 
   toggleUserDropdown(): void {

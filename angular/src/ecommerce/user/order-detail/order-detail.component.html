@@ -86,8 +86,8 @@
                                 <td>
                                 <button
                                   class="btn btn-success btn-sm"
-                                  [disabled]="transaction.tranSactionStatus === 'Paid'"
                                   (click)="payTransaction(transaction)"
+                                  *ngIf="canTransaction('Payment', transaction.tranSactionStatus)"
                                 >
                                   <i class="fas fa-money-bill-wave"></i>
                                   {{ "Pay" | localize }}

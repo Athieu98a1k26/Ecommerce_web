@@ -1776,7 +1776,7 @@ namespace Ecommerce.Migrations
                     b.ToTable("FileManagers");
                 });
 
-            modelBuilder.Entity("Ecommerce.Entitys.History", b =>
+            modelBuilder.Entity("Ecommerce.Entitys.HistoryOrder", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -1815,12 +1815,15 @@ namespace Ecommerce.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<long>("PersonId")
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("TransactionId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Historys");
+                    b.ToTable("HistoryOrders");
                 });
 
             modelBuilder.Entity("Ecommerce.Entitys.Order", b =>
@@ -2272,6 +2275,10 @@ namespace Ecommerce.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FileId")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");

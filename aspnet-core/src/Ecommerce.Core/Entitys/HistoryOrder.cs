@@ -9,8 +9,8 @@ using Abp.Domain.Entities.Auditing;
 
 namespace Ecommerce.Entitys
 {
-    [Table("Historys")]
-    public class History : FullAuditedEntity<long>
+    [Table("HistoryOrders")]
+    public class HistoryOrder : FullAuditedEntity<long>
     {
         [Required]
         [StringLength(100)]
@@ -20,8 +20,9 @@ namespace Ecommerce.Entitys
         [StringLength(500)]
         public string Note {  get; set; }
 
-
         [Required]
-        public long PersonId {  get; set; }
+        public long OrderId {  get; set; }
+
+        public long? TransactionId { get; set; }
     }
 }

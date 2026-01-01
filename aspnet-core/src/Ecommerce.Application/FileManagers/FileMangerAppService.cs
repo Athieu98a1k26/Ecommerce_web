@@ -37,7 +37,7 @@ namespace Ecommerce.FileManagers
         )
         {
             if (files == null || !files.Any())
-                throw new UserFriendlyException("No file uploaded");
+                throw new UserFriendlyException("NoFileUpload");
 
             var resultIds = new List<long>();
             var uploadRoot = Path.Combine(
