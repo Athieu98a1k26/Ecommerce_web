@@ -205,46 +205,26 @@ export class CartServiceProxy {
     }
 
     /**
-     * @param search (optional) 
-     * @param storeCode (optional) 
-     * @param sorting (optional) 
-     * @param skipCount (optional) 
-     * @param maxResultCount (optional) 
+     * @param body (optional) 
      * @return Success
      */
-    getPaging(search: string | undefined, storeCode: string | undefined, sorting: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<CartDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/Cart/GetPaging?";
-        if (search === null)
-            throw new Error("The parameter 'search' cannot be null.");
-        else if (search !== undefined)
-            url_ += "Search=" + encodeURIComponent("" + search) + "&";
-        if (storeCode === null)
-            throw new Error("The parameter 'storeCode' cannot be null.");
-        else if (storeCode !== undefined)
-            url_ += "StoreCode=" + encodeURIComponent("" + storeCode) + "&";
-        if (sorting === null)
-            throw new Error("The parameter 'sorting' cannot be null.");
-        else if (sorting !== undefined)
-            url_ += "Sorting=" + encodeURIComponent("" + sorting) + "&";
-        if (skipCount === null)
-            throw new Error("The parameter 'skipCount' cannot be null.");
-        else if (skipCount !== undefined)
-            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
-        if (maxResultCount === null)
-            throw new Error("The parameter 'maxResultCount' cannot be null.");
-        else if (maxResultCount !== undefined)
-            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+    getPaging(body: BaseRequest | undefined): Observable<CartDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/Cart/GetPaging";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ : any = {
+            body: content_,
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             })
         };
 
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
             return this.processGetPaging(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
@@ -271,6 +251,58 @@ export class CartServiceProxy {
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = CartDtoPagedResultDto.fromJS(resultData200);
             return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    delete(id: number | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/Cart/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -3895,6 +3927,7 @@ export interface IBaseRequest {
 }
 
 export class CartDto implements ICartDto {
+    id: number;
     personId: number;
     quantity: number;
     productStoreDetailId: number;
@@ -3902,6 +3935,8 @@ export class CartDto implements ICartDto {
     productCode: string | undefined;
     pathImage: string | undefined;
     price: number;
+    inStock: boolean;
+    selected: boolean;
 
     constructor(data?: ICartDto) {
         if (data) {
@@ -3914,6 +3949,7 @@ export class CartDto implements ICartDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.personId = _data["personId"];
             this.quantity = _data["quantity"];
             this.productStoreDetailId = _data["productStoreDetailId"];
@@ -3921,6 +3957,8 @@ export class CartDto implements ICartDto {
             this.productCode = _data["productCode"];
             this.pathImage = _data["pathImage"];
             this.price = _data["price"];
+            this.inStock = _data["inStock"];
+            this.selected = _data["selected"];
         }
     }
 
@@ -3933,6 +3971,7 @@ export class CartDto implements ICartDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["personId"] = this.personId;
         data["quantity"] = this.quantity;
         data["productStoreDetailId"] = this.productStoreDetailId;
@@ -3940,6 +3979,8 @@ export class CartDto implements ICartDto {
         data["productCode"] = this.productCode;
         data["pathImage"] = this.pathImage;
         data["price"] = this.price;
+        data["inStock"] = this.inStock;
+        data["selected"] = this.selected;
         return data;
     }
 
@@ -3952,6 +3993,7 @@ export class CartDto implements ICartDto {
 }
 
 export interface ICartDto {
+    id: number;
     personId: number;
     quantity: number;
     productStoreDetailId: number;
@@ -3959,6 +4001,8 @@ export interface ICartDto {
     productCode: string | undefined;
     pathImage: string | undefined;
     price: number;
+    inStock: boolean;
+    selected: boolean;
 }
 
 export class CartDtoPagedResultDto implements ICartDtoPagedResultDto {
@@ -5044,6 +5088,7 @@ export class OrderDetailDto implements IOrderDetailDto {
     count: number;
     price: number;
     detailPrice: string | undefined;
+    isExpanded: boolean;
 
     constructor(data?: IOrderDetailDto) {
         if (data) {
@@ -5065,6 +5110,7 @@ export class OrderDetailDto implements IOrderDetailDto {
             this.count = _data["count"];
             this.price = _data["price"];
             this.detailPrice = _data["detailPrice"];
+            this.isExpanded = _data["isExpanded"];
         }
     }
 
@@ -5086,6 +5132,7 @@ export class OrderDetailDto implements IOrderDetailDto {
         data["count"] = this.count;
         data["price"] = this.price;
         data["detailPrice"] = this.detailPrice;
+        data["isExpanded"] = this.isExpanded;
         return data;
     }
 
@@ -5107,6 +5154,7 @@ export interface IOrderDetailDto {
     count: number;
     price: number;
     detailPrice: string | undefined;
+    isExpanded: boolean;
 }
 
 export class OrderDetailDtoPagedResultDto implements IOrderDetailDtoPagedResultDto {

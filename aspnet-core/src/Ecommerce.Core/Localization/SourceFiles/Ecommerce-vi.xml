@@ -166,5 +166,7 @@
 		<text name="QuantityNotValid">Số lượng không hợp lệ</text> 
 		<text name="SuccessfullyAddedToCart">Thêm vào giỏ hàng thành công</text> 
 		<text name="FailedToAddToCart">Thêm vào giỏ hàng thất bại</text> 
+		<text name="FailedToDeleteItem">Lỗi không xóa được sản phẩm</text> 
+		<text name="Pay">Thanh toán</text> 
 	</texts>
 </localizationDictionary>

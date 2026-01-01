@@ -21,6 +21,7 @@ export class UserComponent extends PagedListingComponentBase<OrderDto> implement
   tabActive: string = 'Person';
   tabOrder: string =''
   orders: OrderDto[];
+  orderId: number;
 
   constructor(
     injector: Injector,
@@ -51,6 +52,7 @@ export class UserComponent extends PagedListingComponentBase<OrderDto> implement
     input.email = this.sessionService.user.emailAddress;
     input.maxResultCount = request.maxResultCount;
     input.skipCount = request.skipCount;
+    input.orderStatus = this.tabOrder;
     this.orderService
     .getPagingForUser(input)
     .pipe(
@@ -77,10 +79,16 @@ export class UserComponent extends PagedListingComponentBase<OrderDto> implement
 
   onChangeTab(tab: string){
     this.tabActive = tab;
+    this.orderId = null;
     if(tab == 'Order'){
       this.refresh()
     }
     
+  }
+
+  onChangeOrderTab(tab: string){
+    this.tabOrder = tab;
+    this.refresh()
   }
 
   onLogOut(){
@@ -88,8 +96,7 @@ export class UserComponent extends PagedListingComponentBase<OrderDto> implement
   }
 
   viewOrderDetail(order: OrderDto) {
-    // Implement logic to show order details, e.g., open modal or navigate
-    // alert(JSON.stringify(order));
+    this.orderId = order.id;
   }
 
   // Add more methods for menu actions, tab change, info update, etc. as needed

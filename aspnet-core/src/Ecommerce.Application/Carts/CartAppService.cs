@@ -18,6 +18,7 @@ using Ecommerce.Entitys;
 using Ecommerce.Orders;
 using Ecommerce.ProductStores.Dto;
 using Ecommerce.Transactions.Dto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Carts
@@ -26,6 +27,7 @@ namespace Ecommerce.Carts
     {
         Task CreateOrEdit(CreateUpdateCartDto request);
         Task<PagedResultDto<CartDto>> GetPaging(BaseRequest request);
+        Task Delete(long id);
     }
 
     public class CartAppService : EcommerceAppServiceBase, ICartAppService
@@ -62,6 +64,7 @@ namespace Ecommerce.Carts
             {
                 // chưa có , thêm mới
                 cart = ObjectMapper.Map<Cart>(request);
+                cart.PersonId = person.Id;
                 await _cartRepository.InsertAsync(cart);
             }
             else
@@ -90,6 +93,7 @@ namespace Ecommerce.Carts
             }
         }
 
+        [HttpPost]
         public async Task<PagedResultDto<CartDto>> GetPaging(BaseRequest request)
         {
             User user = await GetCurrentUserAsync();
@@ -121,6 +125,8 @@ namespace Ecommerce.Carts
                 cart.ProductCode = productStoreDetail.ProductCode;
                 cart.PathImage = productStoreDetail.PathImage;
                 cart.Price = productStoreDetail.Price;
+                cart.Selected = true;
+                cart.InStock = productStoreDetail.Count > 0;
             }
 
             return new PagedResultDto<CartDto>(
@@ -129,6 +135,9 @@ namespace Ecommerce.Carts
             );
         }
 
-        
+        public async Task Delete(long id)
+        {
+            await _cartRepository.DeleteAsync(id);
+        }
     }
 }

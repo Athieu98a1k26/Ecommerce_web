@@ -24,5 +24,7 @@ namespace Ecommerce.OrderDetails.Dto
 
         public decimal Price { get; set; } // số tiền
         public string DetailPrice { get; set; } // gen ngày tháng
+
+        public bool IsExpanded {  get; set; }
     }
 }

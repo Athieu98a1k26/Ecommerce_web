@@ -7,7 +7,7 @@ import { ProductComponent } from './product/product.component';
 import { AppRouteGuard } from '../shared/auth/auth-route-guard';
 import { EcommerceComponent } from './ecommerce.component';
 import { ProductSearchComponent } from './product-search/product-search.component';
-import { UserComponent } from './user/user.comopnent';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
     imports: [

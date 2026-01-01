@@ -1,145 +1,54 @@
-import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Injector, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { AppComponentBase } from '../../shared/app-component-base';
-
-interface CartItem {
-  id: number;
-  shopId: number;
-  shopName: string;
-  shopIcon: string;
-  productId: number;
-  productName: string;
-  productImage: string;
-  variation: {
-    color?: string;
-    size?: string;
-  };
-  price: number;
-  originalPrice?: number;
-  quantity: number;
-  selected: boolean;
-  inStock?: boolean;
-}
+import { BaseRequest, CartDto, CartDtoPagedResultDto, CartServiceProxy } from '@shared/service-proxies/service-proxies';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CartComponent extends AppComponentBase {
+export class CartComponent extends AppComponentBase implements OnInit {
   searchQuery: string = '';
   isLoggedIn: boolean = false;
   voucherCode: string = '';
   discountAmount: number = 0;
 
-  // Sample cart data grouped by shop
-  cartItems: CartItem[] = [
-    {
-      id: 1,
-      shopId: 1,
-      shopName: 'Shop Thời Trang ABC',
-      shopIcon: 'fas fa-store',
-      productId: 1,
-      productName: 'Áo thun nam cổ tròn chất liệu cotton cao cấp, thoáng mát, nhiều màu sắc',
-      productImage: 'assets/img/product/iphone_17pro.png',
-      variation: { color: 'Đỏ', size: 'L' },
-      price: 199000,
-      originalPrice: 299000,
-      quantity: 2,
-      selected: true,
-      inStock: true
-    },
-    {
-      id: 2,
-      shopId: 1,
-      shopName: 'Shop Thời Trang ABC',
-      shopIcon: 'fas fa-store',
-      productId: 2,
-      productName: 'Quần jean nam form slim fit, chất liệu denim cao cấp',
-      productImage: 'assets/img/product/iphone_17pro.png',
-      variation: { color: 'Xanh', size: 'M' },
-      price: 450000,
-      originalPrice: 650000,
-      quantity: 1,
-      selected: true,
-      inStock: true
-    },
-    {
-      id: 3,
-      shopId: 2,
-      shopName: 'Shop Điện Tử XYZ',
-      shopIcon: 'fas fa-mobile-alt',
-      productId: 3,
-      productName: 'Điện thoại smartphone màn hình 6.5 inch, RAM 8GB, bộ nhớ 128GB',
-      productImage: 'assets/img/product/iphone_17pro.png',
-      variation: { color: 'Đen' },
-      price: 5990000,
-      originalPrice: 7990000,
-      quantity: 1,
-      selected: false,
-      inStock: false
-    },
-    {
-      id: 4,
-      shopId: 3,
-      shopName: 'Shop Mỹ Phẩm Beauty',
-      shopIcon: 'fas fa-palette',
-      productId: 4,
-      productName: 'Kem dưỡng da mặt chống lão hóa, làm trắng da, dưỡng ẩm sâu',
-      productImage: 'assets/img/product/iphone_17pro.png',
-      variation: {},
-      price: 450000,
-      originalPrice: 650000,
-      quantity: 3,
-      selected: true,
-      inStock: true
-    }
-  ];
+  cartItems: CartDto[] = [];
+  isLoading: boolean = false;
 
-  constructor(injector: Injector) {
+  constructor(injector: Injector, private cartService: CartServiceProxy) {
     super(injector);
   }
-
-  // Group items by shop
-  get shops() {
-    const shopMap = new Map<number, { shopId: number; shopName: string; shopIcon: string; items: CartItem[] }>();
-    
-    this.cartItems.forEach(item => {
-      if (!shopMap.has(item.shopId)) {
-        shopMap.set(item.shopId, {
-          shopId: item.shopId,
-          shopName: item.shopName,
-          shopIcon: item.shopIcon,
-          items: []
-        });
+  
+  ngOnInit(): void {
+    this.isLoading = true;
+    let request = new BaseRequest();
+    request.skipCount = 0;
+    request.maxResultCount = 1000;
+    this.cartService.getPaging(request).subscribe({
+      next: (result: CartDtoPagedResultDto) => {
+        this.cartItems = result.items || [];
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
       }
-      shopMap.get(item.shopId)!.items.push(item);
     });
-    
-    return Array.from(shopMap.values());
   }
-
   // Check if all items in a shop are selected
   isShopAllSelected(shopId: number): boolean {
-    const shop = this.shops.find(s => s.shopId === shopId);
-    if (!shop || shop.items.length === 0) return false;
-    return shop.items.every(item => item.selected);
+    return this.cartItems.every(item => item.selected);
   }
 
   // Check if any item in a shop is selected
   isShopPartiallySelected(shopId: number): boolean {
-    const shop = this.shops.find(s => s.shopId === shopId);
-    if (!shop) return false;
-    return shop.items.some(item => item.selected) && !this.isShopAllSelected(shopId);
+    return this.cartItems.some(item => item.selected) && !this.isShopAllSelected(shopId);
   }
 
   // Toggle select all items in a shop
   toggleShopSelectAll(shopId: number): void {
-    const shop = this.shops.find(s => s.shopId === shopId);
-    if (!shop) return;
-    
     const allSelected = this.isShopAllSelected(shopId);
-    shop.items.forEach(item => {
+    this.cartItems.forEach(item => {
       item.selected = !allSelected;
     });
   }
@@ -157,7 +66,7 @@ export class CartComponent extends AppComponentBase {
   }
 
   // Toggle select single item
-  toggleItemSelect(item: CartItem): void {
+  toggleItemSelect(item: CartDto): void {
     if (item.inStock === false) return;
     // Default inStock to true if undefined
     if (item.inStock === undefined) {
@@ -167,7 +76,7 @@ export class CartComponent extends AppComponentBase {
   }
 
   // Update quantity
-  updateQuantity(item: CartItem, change: number): void {
+  updateQuantity(item: CartDto, change: number): void {
     if (item.inStock === false) return;
     const newQuantity = item.quantity + change;
     if (newQuantity >= 1 && newQuantity <= 99) {
@@ -176,7 +85,7 @@ export class CartComponent extends AppComponentBase {
   }
 
   // Handle quantity input change
-  onQuantityInputChange(event: Event, item: CartItem): void {
+  onQuantityInputChange(event: Event, item: CartDto): void {
     const input = event.target as HTMLInputElement;
     const newQuantity = parseInt(input.value, 10);
     
@@ -199,16 +108,18 @@ export class CartComponent extends AppComponentBase {
 
   // Delete item
   deleteItem(itemId: number): void {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?')) {
-      const index = this.cartItems.findIndex(item => item.id === itemId);
-      if (index > -1) {
-        this.cartItems.splice(index, 1);
+    this.cartService.delete(itemId).subscribe({
+      next: () => {
+        this.cartItems = this.cartItems.filter(item => item.id !== itemId);
+      },
+      error: () => {
+        this.notify.error(this.l('FailedToDeleteItem'));
       }
-    }
+    });
   }
 
   // Get selected items
-  get selectedItems(): CartItem[] {
+  get selectedItems(): CartDto[] {
     return this.cartItems.filter(item => item.selected);
   }
 
@@ -241,7 +152,6 @@ export class CartComponent extends AppComponentBase {
       alert('Vui lòng chọn ít nhất một sản phẩm để mua hàng');
       return;
     }
-    alert(`Đang xử lý đơn hàng với ${this.totalItemsCount} sản phẩm. Tổng tiền: ${this.formatCurrency(this.total)}`);
   }
 
   // Format currency

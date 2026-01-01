@@ -22,7 +22,11 @@ import {ProductItemComponent} from '@ecommerce/component/product-item/product-it
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import {ProductSearchComponent} from '@ecommerce/product-search/product-search.component';
 import {OrderComponent} from '@ecommerce/order/order.component';
-import { UserComponent } from './user/user.comopnent';
+import { UserComponent } from './user/user.component';
+import { OrderDetailComponent } from './user/order-detail/order-detail.component';
+import { UploadFileComponent } from '@ecommerce/component/file-upload/file-upload.component';
+
+//import {PaymentComponent} from './user/payment/payment.component';
 @NgModule({
     declarations: [
         EcommerceComponent,
@@ -36,7 +40,10 @@ import { UserComponent } from './user/user.comopnent';
         ProductSearchComponent,
         OrderComponent,
 
-        UserComponent
+        UserComponent,      
+        OrderDetailComponent,
+        UploadFileComponent
+        //PaymentComponent
     ],
     imports: [
         CommonModule,

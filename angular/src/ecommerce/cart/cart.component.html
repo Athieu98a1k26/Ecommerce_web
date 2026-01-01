@@ -20,115 +20,86 @@
         <!-- Cart List Section -->
         <div class="cart-list-section">
           <!-- Shop Group -->
-          <div class="shop-group" *ngFor="let shop of shops">
-            <!-- Shop Header -->
-            <div class="shop-header">
-              <div class="shop-select-all">
+          <div class="cart-items">
+            <div class="cart-item" *ngFor="let item of cartItems" [class.selected]="item.selected" [class.out-of-stock]="item.inStock === false">
+              <!-- Selection Checkbox -->
+              <div class="item-checkbox">
                 <input 
                   type="checkbox" 
-                  [checked]="isShopAllSelected(shop.shopId)"
-                  [indeterminate]="isShopPartiallySelected(shop.shopId)"
-                  (change)="toggleShopSelectAll(shop.shopId)"
-                  class="shop-checkbox"
-                  id="shop-{{shop.shopId}}">
-                <label for="shop-{{shop.shopId}}" class="checkbox-label"></label>
+                  [checked]="item.selected"
+                  (change)="toggleItemSelect(item)"
+                  class="item-checkbox-input"
+                  [disabled]="item.inStock === false"
+                  [id]="'item-' + item.id">
+                <label [for]="'item-' + item.id" class="checkbox-label"></label>
               </div>
-              <div class="shop-info">
-                <i [class]="shop.shopIcon" class="shop-icon"></i>
-                <span class="shop-name">{{ shop.shopName }}</span>
+
+              <!-- Product Image -->
+              <div class="item-image">
+                <img [src]="item.productImage" [alt]="item.productName" class="product-thumbnail">
               </div>
-            </div>
 
-            <!-- Cart Items -->
-            <div class="cart-items">
-              <div class="cart-item" *ngFor="let item of shop.items" [class.selected]="item.selected" [class.out-of-stock]="item.inStock === false">
-                <!-- Selection Checkbox -->
-                <div class="item-checkbox">
-                  <input 
-                    type="checkbox" 
-                    [checked]="item.selected"
-                    (change)="toggleItemSelect(item)"
-                    class="item-checkbox-input"
-                    [disabled]="item.inStock === false"
-                    [id]="'item-' + item.id">
-                  <label [for]="'item-' + item.id" class="checkbox-label"></label>
+              <!-- Product Info -->
+              <div class="item-info">
+                <h3 class="product-name" [title]="item.productName">{{ item.productName }}</h3>
+                
+                <!-- Variant Info -->
+                <div class="product-variation" *ngIf="item.variation && (item.variation.color || item.variation.size)">
+                  <span *ngIf="item.variation.color">Phân loại: {{ item.variation.color }}</span>
+                  <span *ngIf="item.variation.color && item.variation.size">, </span>
+                  <span *ngIf="item.variation.size">{{ item.variation.size }}</span>
                 </div>
 
-                <!-- Product Image -->
-                <div class="item-image">
-                  <img [src]="item.productImage" [alt]="item.productName" class="product-thumbnail">
+                <!-- Stock Status -->
+                <div class="stock-status">
+                  <span class="in-stock" *ngIf="item.inStock !== false">
+                    <i class="fas fa-check-circle"></i> Còn hàng
+                  </span>
+                  <span class="out-of-stock" *ngIf="item.inStock === false">
+                    <i class="fas fa-times-circle"></i> Hết hàng
+                  </span>
                 </div>
+              </div>
 
-                <!-- Product Info -->
-                <div class="item-info">
-                  <h3 class="product-name" [title]="item.productName">{{ item.productName }}</h3>
-                  
-                  <!-- Variant Info -->
-                  <div class="product-variation" *ngIf="item.variation && (item.variation.color || item.variation.size)">
-                    <span *ngIf="item.variation.color">Phân loại: {{ item.variation.color }}</span>
-                    <span *ngIf="item.variation.color && item.variation.size">, </span>
-                    <span *ngIf="item.variation.size">{{ item.variation.size }}</span>
-                  </div>
+              <!-- Quantity Selector -->
+              <div class="item-quantity">
+                <button 
+                  type="button"
+                  class="quantity-btn" 
+                  (click)="updateQuantity(item, -1)"
+                  [disabled]="item.quantity <= 1 || item.inStock === false"
+                  title="Giảm số lượng">
+                  <i class="fas fa-minus"></i>
+                </button>
+                <input 
+                  type="number" 
+                  class="quantity-input" 
+                  [value]="item.quantity"
+                  [min]="1"
+                  [max]="99"
+                  [disabled]="item.inStock === false"
+                  (change)="onQuantityInputChange($event, item)"
+                  [name]="'quantity-' + item.id">
+                <button 
+                  type="button"
+                  class="quantity-btn" 
+                  (click)="updateQuantity(item, 1)"
+                  [disabled]="item.quantity >= 99 || item.inStock === false"
+                  title="Tăng số lượng">
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
 
-                  <!-- Stock Status -->
-                  <div class="stock-status">
-                    <span class="in-stock" *ngIf="item.inStock !== false">
-                      <i class="fas fa-check-circle"></i> Còn hàng
-                    </span>
-                    <span class="out-of-stock" *ngIf="item.inStock === false">
-                      <i class="fas fa-times-circle"></i> Hết hàng
-                    </span>
-                  </div>
+              <!-- Total Price -->
+              <div class="item-total">
+                <div class="total-price">{{ formatCurrency(item.price * item.quantity) }}</div>
+              </div>
 
-                  <!-- Price Info -->
-                  <div class="item-price">
-                    <span class="current-price">{{ formatCurrency(item.price) }}</span>
-                    <span class="original-price" *ngIf="item.originalPrice && item.originalPrice > item.price">
-                      {{ formatCurrency(item.originalPrice) }}
-                    </span>
-                  </div>
-                </div>
-
-                <!-- Quantity Selector -->
-                <div class="item-quantity">
-                  <button 
-                    type="button"
-                    class="quantity-btn" 
-                    (click)="updateQuantity(item, -1)"
-                    [disabled]="item.quantity <= 1 || item.inStock === false"
-                    title="Giảm số lượng">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <input 
-                    type="number" 
-                    class="quantity-input" 
-                    [value]="item.quantity"
-                    [min]="1"
-                    [max]="99"
-                    [disabled]="item.inStock === false"
-                    (change)="onQuantityInputChange($event, item)"
-                    [name]="'quantity-' + item.id">
-                  <button 
-                    type="button"
-                    class="quantity-btn" 
-                    (click)="updateQuantity(item, 1)"
-                    [disabled]="item.quantity >= 99 || item.inStock === false"
-                    title="Tăng số lượng">
-                    <i class="fas fa-plus"></i>
-                  </button>
-                </div>
-
-                <!-- Total Price -->
-                <div class="item-total">
-                  <div class="total-price">{{ formatCurrency(item.price * item.quantity) }}</div>
-                </div>
-
-                <!-- Delete Button -->
-                <div class="item-delete">
-                  <button type="button" class="delete-btn" (click)="deleteItem(item.id)" title="Xóa sản phẩm">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                </div>
+              <!-- Delete Button -->
+              <div class="item-delete">
+                <button type="button" class="delete-btn" (click)="deleteItem(item.id)" title="Xóa sản phẩm">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -157,17 +128,6 @@
                 <span class="total-label">Tổng tiền:</span>
                 <span class="total-amount">{{ formatCurrency(total) }}</span>
               </div>
-            </div>
-
-            <!-- Voucher Input -->
-            <div class="summary-voucher">
-              <input 
-                type="text" 
-                class="voucher-input" 
-                placeholder="Nhập mã giảm giá"
-                [(ngModel)]="voucherCode"
-                name="voucherCode">
-              <button class="voucher-btn" (click)="applyVoucher()">Áp dụng</button>
             </div>
 
             <!-- Checkout Button -->

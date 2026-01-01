@@ -2,7 +2,6 @@
 // ===== Variables & Mixins =====
 $user-green: #2e7d32;
 $user-green-light: #388e3c;
-$user-bg-light: #f7f7fa;
 $user-card-shadow: 0 2px 12px 0 rgba(44,62,80,.05);
 $user-border-radius: 14px;
 
@@ -37,9 +36,9 @@ $user-border-radius: 14px;
 
 .user-dashboard {
   font-family: 'Inter', 'Roboto', Arial, Helvetica, sans-serif;
-  background: $user-bg-light;
-  min-height: 100vh;
+
   display: flex;
+  margin-top: 20px;
   @media (max-width: 991px){
     flex-direction: column;
   }
@@ -273,7 +272,7 @@ $user-border-radius: 14px;
   padding: 0.2rem 0.18rem;
 
   .tab-item {
-    padding: 0.64rem 1.5rem;
+    padding: 0.34rem 1rem;
     background: transparent;
     color: #677079;
     border-radius: 7px;

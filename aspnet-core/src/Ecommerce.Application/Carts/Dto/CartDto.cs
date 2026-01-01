@@ -9,6 +9,7 @@ namespace Ecommerce.Carts.Dto
 {
     public class CartDto
     {
+        public long Id {  get; set; }
         public long PersonId { get; set; }  // người dùng nào
 
         public int Quantity { get; set; } // số lượng bao nhiêu
@@ -18,5 +19,8 @@ namespace Ecommerce.Carts.Dto
         public string ProductCode {  get; set; }
         public string PathImage {  get; set; }
         public decimal Price {  get; set; }
+
+        public bool InStock {  get; set; }
+        public bool Selected {  get; set; }
     }
 }

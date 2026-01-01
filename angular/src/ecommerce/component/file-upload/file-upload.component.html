@@ -1,0 +1,37 @@
+<div class="file-upload-wrapper">
+    <!-- DANH SÁCH FILE -->
+    <div class="file-item" *ngFor="let file of files; let i = index">
+      <i class="fas fa-file-alt file-icon"></i>
+      <span class="file-name" title="{{ file.name }}">
+        {{ file.name }}
+      </span>
+  
+      <button
+        type="button"
+        class="remove-btn"
+        (click)="removeFile(i)"
+      >
+        ✕
+      </button>
+    </div>
+  
+    <!-- NÚT THÊM FILE -->
+    <label
+      class="file-upload-btn"
+      *ngIf="files.length < maxFiles"
+    >
+      <input
+        type="file"
+        hidden
+        multiple
+        (change)="onFileChange($event)"
+      />
+      <i class="fas fa-plus"></i>
+      <span>Thêm file</span>
+      <small>{{ files.length }}/{{ maxFiles }}</small>
+    </label>
+  
+    <p class="upload-hint">
+      Tối đa {{ maxFiles }} file, mỗi file ≤ 5MB
+    </p>
+  </div>
