@@ -18,6 +18,7 @@ using Ecommerce.Authorization;
 using Ecommerce.Authorization.Accounts;
 using Ecommerce.Authorization.Roles;
 using Ecommerce.Authorization.Users;
+using Ecommerce.Entitys;
 using Ecommerce.Roles.Dto;
 using Ecommerce.Users.Dto;
 using Microsoft.AspNetCore.Identity;
@@ -34,6 +35,7 @@ namespace Ecommerce.Users
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IAbpSession _abpSession;
         private readonly LogInManager _logInManager;
+        private readonly IRepository<Person,long> _personRepository;
 
         public UserAppService(
             IRepository<User, long> repository,
@@ -42,7 +44,8 @@ namespace Ecommerce.Users
             IRepository<Role> roleRepository,
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
-            LogInManager logInManager)
+            LogInManager logInManager, 
+            IRepository<Person, long> personRepository)
             : base(repository)
         {
             _userManager = userManager;
@@ -51,6 +54,7 @@ namespace Ecommerce.Users
             _passwordHasher = passwordHasher;
             _abpSession = abpSession;
             _logInManager = logInManager;
+            _personRepository = personRepository;
         }
 
         public override async Task<UserDto> CreateAsync(CreateUserDto input)
@@ -64,12 +68,24 @@ namespace Ecommerce.Users
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
-            CheckErrors(await _userManager.CreateAsync(user, input.Password));
+            IdentityResult identityResult = await _userManager.CreateAsync(user, input.Password);
+
+            CheckErrors(identityResult);
 
             if (input.RoleNames != null)
             {
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
+
+            Person person = new Person()
+            {
+                FullName = input.Name,
+                PhoneNumber = null,
+                Email = input.EmailAddress,
+                UserId = user.Id
+            };
+
+            await _personRepository.InsertAsync(person);
 
             CurrentUnitOfWork.SaveChanges();
 
@@ -91,6 +107,17 @@ namespace Ecommerce.Users
                 CheckErrors(await _userManager.SetRolesAsync(user, input.RoleNames));
             }
 
+            Person person = _personRepository.GetAll().FirstOrDefault(s => s.UserId == user.Id);
+
+            if (person != null)
+            {
+                person.FullName = input.Name;
+                person.PhoneNumber = null;
+                person.Email = input.EmailAddress;
+
+                await _personRepository.UpdateAsync(person);
+            }
+            
             return await GetAsync(input);
         }
 
@@ -98,6 +125,13 @@ namespace Ecommerce.Users
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
+
+            Person person = _personRepository.GetAll().FirstOrDefault(s => s.UserId == user.Id);
+
+            if(person != null)
+            {
+                await _personRepository.DeleteAsync(person);
+            }
         }
 
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]

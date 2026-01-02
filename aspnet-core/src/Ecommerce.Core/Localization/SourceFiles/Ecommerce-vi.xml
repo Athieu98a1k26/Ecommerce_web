@@ -193,5 +193,7 @@
 		<text name="Price">Giá đơn hàng</text>
 		<text name="Note">Ghi chú</text>
 		<text name="ConfigUserStore">Cấu hình nhân viên cửa hàng</text>
+		<text name="ProductCode">Mã sản phẩm</text>
+		<text name="StoreCode">Mã cửa hàng</text>
 	</texts>
 </localizationDictionary>

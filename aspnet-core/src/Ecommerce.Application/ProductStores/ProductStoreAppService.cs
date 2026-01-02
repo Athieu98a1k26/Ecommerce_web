@@ -121,8 +121,8 @@ namespace Ecommerce.ProductStores
             {
                 var store = new CreateUpdateProductStoreDto
                 {
-                    StoreCode = $"CH1",
-                    ProductCode = $"Iphone17",
+                    StoreCode = $"CH2",
+                    ProductCode = $"Iphone16",
                     ListProductStoreDetailDto = new List<ProductStoreDetailDto>()
                 };
 
