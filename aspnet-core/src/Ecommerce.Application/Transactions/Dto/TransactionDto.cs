@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ecommerce.FileManagers.Dto;
 
 namespace Ecommerce.Transactions.Dto
 {
@@ -19,5 +20,9 @@ namespace Ecommerce.Transactions.Dto
         public string TranSactionStatus { get; set; } // Trạng thái
 
         public string Reason { get; set; }
+
+        public List<FileManagerDto> ListFile {  get; set; }
+
+        public List<long> ListFileId { get; set; }
     }
 }

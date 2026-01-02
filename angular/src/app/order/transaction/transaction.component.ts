@@ -14,7 +14,7 @@ import { TransactionDto, TransactionDtoPagedResultDto, TransactionRequestModel, 
 })
 export class TransactionComponent extends PagedListingComponentBase<TransactionDto> {
   transactions: TransactionDto[] = [];
-  @Input() orderDetailId: number;
+  orderDetailId: number;
   constructor(
     injector: Injector,
     private transactionService: TransactionServiceProxy,

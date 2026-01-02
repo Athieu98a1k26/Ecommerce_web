@@ -5,10 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Ecommerce.Entitys;
-using Ecommerce.Historys.Dto;
-using Ecommerce.Transactions.Dto;
 
-namespace Ecommerce.HistoryTransactions.Dto
+namespace Ecommerce.HistoryOrders.Dto
 {
     public class HistoryOrderMapProfile:Profile
     {

@@ -59,7 +59,8 @@ namespace Ecommerce.Services
             return new PagedResultDto<ProductDto>(
                totalCount,
                listDataModel
-           );
+            );
+
         }
 
         public async Task<ProductDto> Get(long id)

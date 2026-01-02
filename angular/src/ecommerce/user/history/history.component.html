@@ -1,0 +1,26 @@
+<div class="history-container" *ngIf="historyOrders && historyOrders.length > 0; else noData">
+  <h2>{{'HistoryTransaction' | localize}}</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>{{'OrderCode' | localize}}</th>
+        <th>{{'Content' | localize}}</th>
+        <th>{{'Time' | localize}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of historyOrders; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ order.orderCode }}</td>
+        <td>{{ order.name }}</td>
+        <td>{{ order.creationTime | date:'dd/MM/yyyy hh:mm:ss' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-template #noData>
+  <div class="alert alert-info mt-3">
+    Không có lịch sử giao dịch nào.
+  </div>
+</ng-template>

@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Abp.Authorization;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.UI;
 using Ecommerce.Entitys;
+using Ecommerce.FileManagers.Dto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +23,11 @@ namespace Ecommerce.FileManagers
         );
 
         Task DeleteFilesAsync(List<long> ids);
+
+        Task<List<FileManagerDto>> GetByListId(List<long> ids);
     }
+
+    [AbpAuthorize]
     public class FileMangerAppService: EcommerceAppServiceBase,IFileMangerAppService
     {
         private readonly IRepository<FileManager,long> _fileManagerRepository;
@@ -29,6 +35,13 @@ namespace Ecommerce.FileManagers
         public FileMangerAppService(IRepository<FileManager, long> fileManagerRepository)
         {
             _fileManagerRepository = fileManagerRepository;
+        }
+
+        public async Task<List<FileManagerDto>> GetByListId(List<long> ids)
+        {
+            List<FileManager> listFile = await _fileManagerRepository.GetAll().Where(s=>ids.Contains(s.Id)).ToListAsync();
+
+            return ObjectMapper.Map<List<FileManagerDto>>(listFile);
         }
 
         public async Task<List<long>> UploadFilesAsync(

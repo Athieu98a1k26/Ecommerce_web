@@ -14,7 +14,18 @@ namespace Ecommerce.Transactions.Dto
     {
         public TransactionMapProfile()
         {
-            CreateMap<Transaction, TransactionDto>();
+            CreateMap<Transaction, TransactionDto>()
+            .ForMember(
+                dest => dest.ListFileId,
+                opt => opt.MapFrom(src =>
+                    string.IsNullOrWhiteSpace(src.FileId)
+                        ? new List<long>()
+                        : src.FileId
+                            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                            .Select(x => long.Parse(x.Trim()))
+                            .ToList()
+                )
+            );
         }
     }
 }

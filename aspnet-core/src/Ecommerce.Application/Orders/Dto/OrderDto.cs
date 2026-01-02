@@ -38,5 +38,7 @@ namespace Ecommerce.Orders.Dto
         public string DeliveryMethod { get; set; } // hình thức nhận hàng
 
         public string OrderStatus { get; set; } // trạng thái đơn hàng
+
+        public bool IsExpanded {  get; set; }
     }
 }

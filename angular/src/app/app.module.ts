@@ -46,7 +46,6 @@ import { EditStoreDialogComponent } from './stores/edit-store/edit-store-dialog.
 import { CreateStoreDialogComponent } from './stores/create-store/create-store-dialog.component';
 import { ProductStoresComponent } from './product-stores/product-store.component';
 import { OrderComponent } from './order/order.component';
-import { ViewOrderComponent } from './order/view-order/view-order.component';
 import { TransactionComponent } from './order/transaction/transaction.component';
 
 @NgModule({
@@ -91,7 +90,6 @@ import { TransactionComponent } from './order/transaction/transaction.component'
         ProductStoresComponent,
 
         OrderComponent,
-        ViewOrderComponent,
         TransactionComponent
     ],
     imports: [

@@ -76,7 +76,7 @@ namespace Ecommerce.Common
     }
 
 
-    public static class HistoryOrder
+    public static class HistoryOrderAction
     {
         public static string InitOrder = "InitOrder"; // đơn hàng đã được khởi tạo
         public static string ConfirmedOrder = "Confirmed"; // đơn hàng đã được xác nhận

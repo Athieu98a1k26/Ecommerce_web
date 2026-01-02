@@ -147,10 +147,12 @@
             </div>
           </div>
       </div>
-      
-
       <!-- Order Detail Modal -->
        <order-detail *ngIf="orderId" [orderId]="orderId"></order-detail>
+    </section>
+
+    <section class="user-card orders-section" *ngIf="tabActive == 'History'">
+      <history></history>
     </section>
   </main>
     </div>

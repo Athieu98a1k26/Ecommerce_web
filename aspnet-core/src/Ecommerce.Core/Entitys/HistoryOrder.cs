@@ -17,12 +17,15 @@ namespace Ecommerce.Entitys
         public string Action {  get; set; }
 
         [Required]
-        [StringLength(500)]
+        [StringLength(512)]
         public string Note {  get; set; }
 
         [Required]
         public long OrderId {  get; set; }
 
         public long? TransactionId { get; set; }
+
+        [Required]
+        public long PersonId {  get; set; }
     }
 }

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Ecommerce.FileManagers;
 using Abp.UI;
 using Ecommerce.Common;
+using Ecommerce.FileManagers.Dto;
 
 namespace Ecommerce.Transactions
 {
@@ -50,7 +51,33 @@ namespace Ecommerce.Transactions
 
             var listData = await pagedAndFiltered.ToListAsync();
 
-            var listDataModel = ObjectMapper.Map<List<TransactionDto>>(listData);
+            List<TransactionDto> listDataModel = ObjectMapper.Map<List<TransactionDto>>(listData);
+
+            //lấy thông tin file
+            
+            List<long> listFileId = listDataModel.SelectMany(s=>s.ListFileId).ToList();
+
+            if (listFileId == null || listFileId.Count == 0)
+            {
+                return new PagedResultDto<TransactionDto>(
+               totalCount,
+               listDataModel
+            );
+            }
+
+            List<FileManagerDto> listFileManager = await _fileMangerAppService.GetByListId(listFileId);
+
+            foreach (TransactionDto transaction in listDataModel)
+            {
+                List<FileManagerDto> listFileTransaction = listFileManager.Where(s=>transaction.ListFileId.Contains(s.Id)).ToList();
+
+                if(listFileTransaction==null || listFileTransaction.Count == 0)
+                {
+                    continue;
+                }    
+
+                transaction.ListFile = listFileTransaction;
+            }
 
             return new PagedResultDto<TransactionDto>(
                totalCount,

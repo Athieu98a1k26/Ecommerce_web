@@ -513,6 +513,126 @@ export class FileMangerServiceProxy {
 }
 
 @Injectable()
+export class HistoryOrderServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    createOrUpdate(body: CreateUpdateHistoryOrder | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/HistoryOrder/CreateOrUpdate";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreateOrUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreateOrUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processCreateOrUpdate(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return Success
+     */
+    getPaging(body: HistoyOrderRequestModel | undefined): Observable<HistoryOrderDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/HistoryOrder/GetPaging";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetPaging(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetPaging(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<HistoryOrderDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<HistoryOrderDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetPaging(response: HttpResponseBase): Observable<HistoryOrderDtoPagedResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = HistoryOrderDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class OrderServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -4561,6 +4681,61 @@ export interface ICreateUpdateCartDto {
     productStoreDetailId: number | undefined;
 }
 
+export class CreateUpdateHistoryOrder implements ICreateUpdateHistoryOrder {
+    action: string | undefined;
+    note: string | undefined;
+    orderId: number;
+    transactionId: number | undefined;
+
+    constructor(data?: ICreateUpdateHistoryOrder) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.action = _data["action"];
+            this.note = _data["note"];
+            this.orderId = _data["orderId"];
+            this.transactionId = _data["transactionId"];
+        }
+    }
+
+    static fromJS(data: any): CreateUpdateHistoryOrder {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateUpdateHistoryOrder();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["action"] = this.action;
+        data["note"] = this.note;
+        data["orderId"] = this.orderId;
+        data["transactionId"] = this.transactionId;
+        return data;
+    }
+
+    clone(): CreateUpdateHistoryOrder {
+        const json = this.toJSON();
+        let result = new CreateUpdateHistoryOrder();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateUpdateHistoryOrder {
+    action: string | undefined;
+    note: string | undefined;
+    orderId: number;
+    transactionId: number | undefined;
+}
+
 export class CreateUpdateOrderDto implements ICreateUpdateOrderDto {
     personId: number;
     fullName: string | undefined;
@@ -5140,6 +5315,199 @@ export interface IGetRoleForEditOutput {
     grantedPermissionNames: string[] | undefined;
 }
 
+export class HistoryOrderDto implements IHistoryOrderDto {
+    id: number;
+    action: string | undefined;
+    note: string | undefined;
+    orderId: number;
+    orderCode: string | undefined;
+    transactionId: number | undefined;
+    personId: number;
+    name: string | undefined;
+    creationTime: moment.Moment;
+
+    constructor(data?: IHistoryOrderDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.action = _data["action"];
+            this.note = _data["note"];
+            this.orderId = _data["orderId"];
+            this.orderCode = _data["orderCode"];
+            this.transactionId = _data["transactionId"];
+            this.personId = _data["personId"];
+            this.name = _data["name"];
+            this.creationTime = _data["creationTime"] ? moment(_data["creationTime"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): HistoryOrderDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new HistoryOrderDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["action"] = this.action;
+        data["note"] = this.note;
+        data["orderId"] = this.orderId;
+        data["orderCode"] = this.orderCode;
+        data["transactionId"] = this.transactionId;
+        data["personId"] = this.personId;
+        data["name"] = this.name;
+        data["creationTime"] = this.creationTime ? this.creationTime.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): HistoryOrderDto {
+        const json = this.toJSON();
+        let result = new HistoryOrderDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IHistoryOrderDto {
+    id: number;
+    action: string | undefined;
+    note: string | undefined;
+    orderId: number;
+    orderCode: string | undefined;
+    transactionId: number | undefined;
+    personId: number;
+    name: string | undefined;
+    creationTime: moment.Moment;
+}
+
+export class HistoryOrderDtoPagedResultDto implements IHistoryOrderDtoPagedResultDto {
+    items: HistoryOrderDto[] | undefined;
+    totalCount: number;
+
+    constructor(data?: IHistoryOrderDtoPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(HistoryOrderDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): HistoryOrderDtoPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new HistoryOrderDtoPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+
+    clone(): HistoryOrderDtoPagedResultDto {
+        const json = this.toJSON();
+        let result = new HistoryOrderDtoPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IHistoryOrderDtoPagedResultDto {
+    items: HistoryOrderDto[] | undefined;
+    totalCount: number;
+}
+
+export class HistoyOrderRequestModel implements IHistoyOrderRequestModel {
+    maxResultCount: number;
+    skipCount: number;
+    sorting: string | undefined;
+    search: string | undefined;
+    storeCode: string | undefined;
+    orderId: number | undefined;
+
+    constructor(data?: IHistoyOrderRequestModel) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.maxResultCount = _data["maxResultCount"];
+            this.skipCount = _data["skipCount"];
+            this.sorting = _data["sorting"];
+            this.search = _data["search"];
+            this.storeCode = _data["storeCode"];
+            this.orderId = _data["orderId"];
+        }
+    }
+
+    static fromJS(data: any): HistoyOrderRequestModel {
+        data = typeof data === 'object' ? data : {};
+        let result = new HistoyOrderRequestModel();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["maxResultCount"] = this.maxResultCount;
+        data["skipCount"] = this.skipCount;
+        data["sorting"] = this.sorting;
+        data["search"] = this.search;
+        data["storeCode"] = this.storeCode;
+        data["orderId"] = this.orderId;
+        return data;
+    }
+
+    clone(): HistoyOrderRequestModel {
+        const json = this.toJSON();
+        let result = new HistoyOrderRequestModel();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IHistoyOrderRequestModel {
+    maxResultCount: number;
+    skipCount: number;
+    sorting: string | undefined;
+    search: string | undefined;
+    storeCode: string | undefined;
+    orderId: number | undefined;
+}
+
 export class Int64EntityDto implements IInt64EntityDto {
     id: number;
 
@@ -5487,6 +5855,7 @@ export class OrderDto implements IOrderDto {
     note: string | undefined;
     deliveryMethod: string | undefined;
     orderStatus: string | undefined;
+    isExpanded: boolean;
 
     constructor(data?: IOrderDto) {
         if (data) {
@@ -5515,6 +5884,7 @@ export class OrderDto implements IOrderDto {
             this.note = _data["note"];
             this.deliveryMethod = _data["deliveryMethod"];
             this.orderStatus = _data["orderStatus"];
+            this.isExpanded = _data["isExpanded"];
         }
     }
 
@@ -5543,6 +5913,7 @@ export class OrderDto implements IOrderDto {
         data["note"] = this.note;
         data["deliveryMethod"] = this.deliveryMethod;
         data["orderStatus"] = this.orderStatus;
+        data["isExpanded"] = this.isExpanded;
         return data;
     }
 
@@ -5571,6 +5942,7 @@ export interface IOrderDto {
     note: string | undefined;
     deliveryMethod: string | undefined;
     orderStatus: string | undefined;
+    isExpanded: boolean;
 }
 
 export class OrderDtoPagedResultDto implements IOrderDtoPagedResultDto {

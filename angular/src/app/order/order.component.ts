@@ -9,10 +9,14 @@ import {
   OrderDtoPagedResultDto,
   BaseRequest,
   OrderDto,
-  OrderServiceProxy
+  OrderServiceProxy,
+  OrderDetailDto,
+  OrderDetailRequestModel,
+  OrderDetailServiceProxy,
+  OrderDetailDtoPagedResultDto
 } from '@shared/service-proxies/service-proxies';
 import {OrderActionHelper} from '@helper/order-action.helper';
-import { ViewOrderComponent } from './view-order/view-order.component';
+import { TransactionComponent } from './transaction/transaction.component';
 
 @Component({
   templateUrl: './order.component.html',
@@ -20,11 +24,13 @@ import { ViewOrderComponent } from './view-order/view-order.component';
 })
 export class OrderComponent extends PagedListingComponentBase<OrderDto> {
   orders: OrderDto[] = [];
+  orderDetails:OrderDetailDto[];
   keyword = '';
   constructor(
     injector: Injector,
     private orderService: OrderServiceProxy,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private orderDetailService: OrderDetailServiceProxy
   ) {
     super(injector);
   }
@@ -48,6 +54,38 @@ export class OrderComponent extends PagedListingComponentBase<OrderDto> {
       });
   }
 
+  getPaginOrderDetail(orderId:number){
+    let request = new OrderDetailRequestModel();
+    request.orderId = orderId;
+    request.skipCount = 0;
+    request.maxResultCount=9999;
+    this.orderDetailService
+      .getPaging(request)
+      .subscribe((result: OrderDetailDtoPagedResultDto) => {
+        this.orderDetails = result.items;
+      });
+  }
+
+  toggleRow(order:OrderDto){
+    order.isExpanded = !order.isExpanded;
+    if(order.isExpanded){
+      this.getPaginOrderDetail(order.id);
+    }
+  }
+
+  showDetail(orderDetail:OrderDetailDto){
+    let viewTransactionDialog: BsModalRef;
+    viewTransactionDialog = this._modalService.show(
+       TransactionComponent,
+         {
+           class: 'modal-xl',
+           initialState: {
+            orderDetailId: orderDetail.id,
+           },
+         }
+       );
+  }
+
   canOrder(action: string,orderStatus: string){
     let helper = new OrderActionHelper
     return helper.canOrder(action,orderStatus);
@@ -65,19 +103,6 @@ export class OrderComponent extends PagedListingComponentBase<OrderDto> {
       abp.notify.success(this.l('CancelledSuccess'));
       this.refresh()
     });
-  }
-
-  showDetail(entity: OrderDto){
-    let viewOrderDetailDialog: BsModalRef;
-    viewOrderDetailDialog = this._modalService.show(
-      ViewOrderComponent,
-        {
-          class: 'modal-xl',
-          initialState: {
-            orderId: entity.id,
-          },
-        }
-      );
   }
 
   protected delete(entity: OrderDto): void {
