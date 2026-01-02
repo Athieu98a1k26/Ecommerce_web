@@ -139,6 +139,26 @@
           </ng-container>
         </div>
       </tab>
+      <tab [heading]="'ConfigUserStore' | localize" class="pt-3 px-2">
+        <div class="form-group row mb-0">
+          <ng-container *ngFor="let store of stores; let i = index">
+            <div class="col-md-6">
+              <div class="custom-control custom-checkbox">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  [id]="'store_' + i"
+                  [checked]="isStoreChecked(store.code)"
+                  (change)="onStoreChange(store, $event)"
+                />
+                <label class="custom-control-label" [for]="'store_' + i">
+                  {{ store.name }}
+                </label>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </tab>
     </tabset>
   </div>
   <abp-modal-footer

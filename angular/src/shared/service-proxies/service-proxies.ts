@@ -378,6 +378,85 @@ export class ConfigurationServiceProxy {
 }
 
 @Injectable()
+export class FileServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param id (optional) 
+     * @param path (optional) 
+     * @param name (optional) 
+     * @param extension (optional) 
+     * @return Success
+     */
+    downloadFile(id: number | undefined, path: string | undefined, name: string | undefined, extension: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/File/DownloadFile?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        if (path === null)
+            throw new Error("The parameter 'path' cannot be null.");
+        else if (path !== undefined)
+            url_ += "Path=" + encodeURIComponent("" + path) + "&";
+        if (name === null)
+            throw new Error("The parameter 'name' cannot be null.");
+        else if (name !== undefined)
+            url_ += "Name=" + encodeURIComponent("" + name) + "&";
+        if (extension === null)
+            throw new Error("The parameter 'extension' cannot be null.");
+        else if (extension !== undefined)
+            url_ += "Extension=" + encodeURIComponent("" + extension) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDownloadFile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDownloadFile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDownloadFile(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
 export class FileMangerServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
@@ -386,6 +465,126 @@ export class FileMangerServiceProxy {
     constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    /**
+     * @param ids (optional) 
+     * @return Success
+     */
+    getByListId(ids: number[] | undefined): Observable<FileManagerDto[]> {
+        let url_ = this.baseUrl + "/api/services/app/FileManger/GetByListId?";
+        if (ids === null)
+            throw new Error("The parameter 'ids' cannot be null.");
+        else if (ids !== undefined)
+            ids && ids.forEach(item => { url_ += "ids=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetByListId(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetByListId(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileManagerDto[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileManagerDto[]>;
+        }));
+    }
+
+    protected processGetByListId(response: HttpResponseBase): Observable<FileManagerDto[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200.push(FileManagerDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param id (optional) 
+     * @return Success
+     */
+    getFile(id: number | undefined): Observable<string> {
+        let url_ = this.baseUrl + "/api/services/app/FileManger/GetFile?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetFile(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetFile(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<string>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<string>;
+        }));
+    }
+
+    protected processGetFile(response: HttpResponseBase): Observable<string> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
     }
 
     /**
@@ -5079,6 +5278,7 @@ export class CreateUserDto implements ICreateUserDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string;
+    storeCode: string | undefined;
 
     constructor(data?: ICreateUserDto) {
         if (data) {
@@ -5102,6 +5302,7 @@ export class CreateUserDto implements ICreateUserDto {
                     this.roleNames.push(item);
             }
             this.password = _data["password"];
+            this.storeCode = _data["storeCode"];
         }
     }
 
@@ -5125,6 +5326,7 @@ export class CreateUserDto implements ICreateUserDto {
                 data["roleNames"].push(item);
         }
         data["password"] = this.password;
+        data["storeCode"] = this.storeCode;
         return data;
     }
 
@@ -5144,6 +5346,62 @@ export interface ICreateUserDto {
     isActive: boolean;
     roleNames: string[] | undefined;
     password: string;
+    storeCode: string | undefined;
+}
+
+export class FileManagerDto implements IFileManagerDto {
+    id: number;
+    path: string | undefined;
+    name: string | undefined;
+    extension: string | undefined;
+
+    constructor(data?: IFileManagerDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.path = _data["path"];
+            this.name = _data["name"];
+            this.extension = _data["extension"];
+        }
+    }
+
+    static fromJS(data: any): FileManagerDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new FileManagerDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["path"] = this.path;
+        data["name"] = this.name;
+        data["extension"] = this.extension;
+        return data;
+    }
+
+    clone(): FileManagerDto {
+        const json = this.toJSON();
+        let result = new FileManagerDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IFileManagerDto {
+    id: number;
+    path: string | undefined;
+    name: string | undefined;
+    extension: string | undefined;
 }
 
 export class FlatPermissionDto implements IFlatPermissionDto {
@@ -7442,6 +7700,8 @@ export class TransactionDto implements ITransactionDto {
     amounToBePaid: number;
     tranSactionStatus: string | undefined;
     reason: string | undefined;
+    listFile: FileManagerDto[] | undefined;
+    listFileId: number[] | undefined;
 
     constructor(data?: ITransactionDto) {
         if (data) {
@@ -7461,6 +7721,16 @@ export class TransactionDto implements ITransactionDto {
             this.amounToBePaid = _data["amounToBePaid"];
             this.tranSactionStatus = _data["tranSactionStatus"];
             this.reason = _data["reason"];
+            if (Array.isArray(_data["listFile"])) {
+                this.listFile = [] as any;
+                for (let item of _data["listFile"])
+                    this.listFile.push(FileManagerDto.fromJS(item));
+            }
+            if (Array.isArray(_data["listFileId"])) {
+                this.listFileId = [] as any;
+                for (let item of _data["listFileId"])
+                    this.listFileId.push(item);
+            }
         }
     }
 
@@ -7480,6 +7750,16 @@ export class TransactionDto implements ITransactionDto {
         data["amounToBePaid"] = this.amounToBePaid;
         data["tranSactionStatus"] = this.tranSactionStatus;
         data["reason"] = this.reason;
+        if (Array.isArray(this.listFile)) {
+            data["listFile"] = [];
+            for (let item of this.listFile)
+                data["listFile"].push(item.toJSON());
+        }
+        if (Array.isArray(this.listFileId)) {
+            data["listFileId"] = [];
+            for (let item of this.listFileId)
+                data["listFileId"].push(item);
+        }
         return data;
     }
 
@@ -7499,6 +7779,8 @@ export interface ITransactionDto {
     amounToBePaid: number;
     tranSactionStatus: string | undefined;
     reason: string | undefined;
+    listFile: FileManagerDto[] | undefined;
+    listFileId: number[] | undefined;
 }
 
 export class TransactionDtoPagedResultDto implements ITransactionDtoPagedResultDto {
@@ -7630,6 +7912,7 @@ export class UserDto implements IUserDto {
     lastLoginTime: moment.Moment | undefined;
     creationTime: moment.Moment;
     roleNames: string[] | undefined;
+    storeCode: string | undefined;
 
     constructor(data?: IUserDto) {
         if (data) {
@@ -7656,6 +7939,7 @@ export class UserDto implements IUserDto {
                 for (let item of _data["roleNames"])
                     this.roleNames.push(item);
             }
+            this.storeCode = _data["storeCode"];
         }
     }
 
@@ -7682,6 +7966,7 @@ export class UserDto implements IUserDto {
             for (let item of this.roleNames)
                 data["roleNames"].push(item);
         }
+        data["storeCode"] = this.storeCode;
         return data;
     }
 
@@ -7704,6 +7989,7 @@ export interface IUserDto {
     lastLoginTime: moment.Moment | undefined;
     creationTime: moment.Moment;
     roleNames: string[] | undefined;
+    storeCode: string | undefined;
 }
 
 export class UserDtoPagedResultDto implements IUserDtoPagedResultDto {

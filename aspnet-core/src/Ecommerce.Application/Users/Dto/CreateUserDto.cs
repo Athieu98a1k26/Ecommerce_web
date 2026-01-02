@@ -36,6 +36,10 @@ namespace Ecommerce.Users.Dto
         [DisableAuditing]
         public string Password { get; set; }
 
+
+        [StringLength(100)]
+        public string? StoreCode {  get; set; }
+
         public void Normalize()
         {
             if (RoleNames == null)

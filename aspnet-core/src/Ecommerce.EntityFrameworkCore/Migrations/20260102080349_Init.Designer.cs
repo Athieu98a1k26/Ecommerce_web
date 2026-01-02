@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20260102012753_add1")]
-    partial class add1
+    [Migration("20260102080349_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1552,6 +1552,10 @@ namespace Ecommerce.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<string>("StoreCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -1911,6 +1915,10 @@ namespace Ecommerce.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Reason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatuApprove")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -2302,6 +2310,10 @@ namespace Ecommerce.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Reason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatuApprove")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

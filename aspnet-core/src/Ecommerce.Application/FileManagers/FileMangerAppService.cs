@@ -25,9 +25,10 @@ namespace Ecommerce.FileManagers
         Task DeleteFilesAsync(List<long> ids);
 
         Task<List<FileManagerDto>> GetByListId(List<long> ids);
+        Task<byte[]> GetFileAsync(long id);
     }
 
-    [AbpAuthorize]
+    
     public class FileMangerAppService: EcommerceAppServiceBase,IFileMangerAppService
     {
         private readonly IRepository<FileManager,long> _fileManagerRepository;
@@ -37,6 +38,7 @@ namespace Ecommerce.FileManagers
             _fileManagerRepository = fileManagerRepository;
         }
 
+        [AbpAuthorize]
         public async Task<List<FileManagerDto>> GetByListId(List<long> ids)
         {
             List<FileManager> listFile = await _fileManagerRepository.GetAll().Where(s=>ids.Contains(s.Id)).ToListAsync();
@@ -44,6 +46,36 @@ namespace Ecommerce.FileManagers
             return ObjectMapper.Map<List<FileManagerDto>>(listFile);
         }
 
+        public async Task<byte[]> GetFileAsync(long id)
+        {
+            // 1. Lấy thông tin file từ DB
+            FileManager file = await _fileManagerRepository.GetAsync(id);
+            if (file == null)
+            {
+                throw new UserFriendlyException(L("FileNotFound"));
+            }
+
+            // 2. Ghép đường dẫn file
+            // Ví dụ: Path = "uploads/2025/01"
+            // Name = "invoice"
+            // Extension = ".pdf"
+            string fullPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                file.Path.TrimStart('/', '\\')
+            );
+
+            // 3. Check file tồn tại
+            if (!File.Exists(fullPath))
+            {
+                throw new UserFriendlyException(L("FileNotFound"));
+            }
+
+            // 4. Đọc file thành byte[]
+            return await File.ReadAllBytesAsync(fullPath);
+        }
+
+        [AbpAuthorize]
         public async Task<List<long>> UploadFilesAsync(
             List<IFormFile> files,
             string subsystem
@@ -80,7 +112,7 @@ namespace Ecommerce.FileManagers
                 }
 
                 // 2️⃣ Tạo entity
-                var fileEntity = new FileManager
+                FileManager fileEntity = new FileManager
                 {
                     Name = fileNameWithoutExt,
                     Extension = extension,
@@ -89,14 +121,16 @@ namespace Ecommerce.FileManagers
                 };
 
                 // 3️⃣ Lưu DB
-                await _fileManagerRepository.InsertAsync(fileEntity);
+                long id = await _fileManagerRepository.InsertAndGetIdAsync(fileEntity);
 
-                resultIds.Add(fileEntity.Id);
+                resultIds.Add(id);
             }
 
             return resultIds;
         }
 
+
+        [AbpAuthorize]
         public async Task DeleteFilesAsync(List<long> ids)
         {
             if (ids == null || !ids.Any())

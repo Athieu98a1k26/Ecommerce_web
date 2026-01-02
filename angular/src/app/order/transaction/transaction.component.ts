@@ -5,12 +5,14 @@ import { appModuleAnimation } from '@shared/animations/routerTransition';
 import {
   PagedListingComponentBase,
 } from '@shared/paged-listing-component-base';
-import { TransactionDto, TransactionDtoPagedResultDto, TransactionRequestModel, TransactionServiceProxy } from '@shared/service-proxies/service-proxies';
+import { FileManagerDto, TransactionDto, TransactionDtoPagedResultDto, TransactionRequestModel, TransactionServiceProxy } from '@shared/service-proxies/service-proxies';
+import { FileDownloadService } from '@shared/utils/file-download.service';
 
 @Component({
   selector:'transaction',
   templateUrl: './transaction.component.html',
-  animations: [appModuleAnimation()]
+  styleUrls: ['./transaction.component.scss'],
+  animations: [appModuleAnimation()],
 })
 export class TransactionComponent extends PagedListingComponentBase<TransactionDto> {
   transactions: TransactionDto[] = [];
@@ -18,6 +20,7 @@ export class TransactionComponent extends PagedListingComponentBase<TransactionD
   constructor(
     injector: Injector,
     private transactionService: TransactionServiceProxy,
+    private fileDownloadService: FileDownloadService,
   ) {
     super(injector);
   }
@@ -43,5 +46,9 @@ export class TransactionComponent extends PagedListingComponentBase<TransactionD
 
   protected delete(entity: TransactionDto): void {
     throw new Error('Method not implemented.');
+  }
+
+  downLoadFile(file: FileManagerDto){
+    this.fileDownloadService.downloadFile(file);
   }
 }

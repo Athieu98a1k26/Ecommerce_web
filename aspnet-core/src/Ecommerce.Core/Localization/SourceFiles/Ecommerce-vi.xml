@@ -187,5 +187,11 @@
 		<text name="Content">Nội dung</text>
 		<text name="Time">Thời gian</text>
 		<text name="HistoryTransaction">Lịch sử giao dịch</text>
+		<text name="AttachedFile">File đính kèm</text>
+		<text name="FileNotFound">Không tìm thấy file</text>
+		<text name="OrderStatus">Trạng thái đơn hàng</text>
+		<text name="Price">Giá đơn hàng</text>
+		<text name="Note">Ghi chú</text>
+		<text name="ConfigUserStore">Cấu hình nhân viên cửa hàng</text>
 	</texts>
 </localizationDictionary>

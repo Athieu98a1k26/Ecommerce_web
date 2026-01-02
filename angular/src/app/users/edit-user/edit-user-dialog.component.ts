@@ -11,7 +11,11 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
   UserServiceProxy,
   UserDto,
-  RoleDto
+  RoleDto,
+  BaseRequest,
+  StoreDtoPagedResultDto,
+  StoreDto,
+  StoreServiceProxy
 } from '@shared/service-proxies/service-proxies';
 
 @Component({
@@ -22,6 +26,7 @@ export class EditUserDialogComponent extends AppComponentBase
   saving = false;
   user = new UserDto();
   roles: RoleDto[] = [];
+  stores: StoreDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   id: number;
 
@@ -30,7 +35,8 @@ export class EditUserDialogComponent extends AppComponentBase
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef
+    public bsModalRef: BsModalRef,
+    private storesService: StoreServiceProxy,
   ) {
     super(injector);
   }
@@ -44,6 +50,8 @@ export class EditUserDialogComponent extends AppComponentBase
         this.setInitialRolesStatus();
       });
     });
+
+    this.getPagingStore();
   }
 
   setInitialRolesStatus(): void {
@@ -52,6 +60,23 @@ export class EditUserDialogComponent extends AppComponentBase
         item.normalizedName
       );
     });
+  }
+
+  getPagingStore(){
+    let request =new BaseRequest();
+    request.skipCount = 0;
+    request.maxResultCount = 999;
+    this.storesService.getPaging(request).subscribe((datas:StoreDtoPagedResultDto)=>{
+      this.stores = datas.items;
+    })
+  }
+
+  onStoreChange(store:StoreDto,$event){
+    this.user.storeCode = store.code;
+  }
+
+  isStoreChecked(code:string){
+    return this.user.storeCode == code;
   }
 
   isRoleChecked(normalizedName: string): boolean {

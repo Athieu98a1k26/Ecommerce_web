@@ -24,6 +24,9 @@ namespace Ecommerce.Entitys
         public string TranSactionStatus { get; set; } // Trạng thái
 
         [StringLength(50)]
+        public string StatuApprove { get; set; } // trạng thái phê duyệt của admin, nhân viên
+
+        [StringLength(50)]
         public string Reason { get; set; } // lý do
 
         [StringLength(255)]

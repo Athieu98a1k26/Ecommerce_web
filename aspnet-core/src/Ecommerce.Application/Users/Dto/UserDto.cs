@@ -36,5 +36,8 @@ namespace Ecommerce.Users.Dto
         public DateTime CreationTime { get; set; }
 
         public string[] RoleNames { get; set; }
+
+        [StringLength(100)]
+        public string? StoreCode { get; set; }
     }
 }

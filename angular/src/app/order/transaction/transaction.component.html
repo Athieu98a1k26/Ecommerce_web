@@ -17,11 +17,12 @@
               <table class="table table-striped table-bordered" [busy]="isTableLoading">
                 <thead class="bg-light">
                   <tr>
-                    <th>{{ "FromDate" | localize }}</th>
-                    <th>{{ "ToDate" | localize }}</th>
-                    <th>{{ "AmounToBePaid" | localize }}</th>
-                    <th>{{ "Status" | localize }}</th>
-                    <th style="width: 20%;">{{ "Actions" | localize }}</th>
+                    <th class="text-center">{{ "FromDate" | localize }}</th>
+                    <th class="text-center">{{ "ToDate" | localize }}</th>
+                    <th class="text-center">{{ "AmounToBePaid" | localize }}</th>
+                    <th class="text-center">{{ "AttachedFile" | localize }}</th>
+                    <th class="text-center">{{ "Status" | localize }}</th>
+                    <th class="text-center" style="width: 20%;">{{ "Actions" | localize }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -40,6 +41,28 @@
                     <td>{{ transaction.fromDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ transaction.toDate | date:'dd/MM/yyyy' }}</td>
                     <td>{{ transaction.amounToBePaid | currency:'VND':'symbol':'1.0-0':'vi-VN' }}</td>
+                    <td>
+                      <ng-container *ngIf="transaction.listFile && transaction.listFile.length > 0; else noFiles">
+                        <ul class="mb-0 list-unstyled">
+                          <li 
+                            *ngFor="let file of transaction.listFile" 
+                            class="d-flex align-items-center mb-1 py-1 px-2 bg-light rounded shadow-sm file-item"
+                            (click)="downLoadFile(file)"
+                          >
+                            <i class="fas fa-paperclip mr-2 text-primary"></i>
+                            <span 
+                              class="file-name text-truncate font-weight-semibold"
+                              title="{{ file.name }}"
+                            >
+                              {{ file.name }}
+                            </span>
+                          </li>
+                        </ul>
+                      </ng-container>
+                      <ng-template #noFiles>
+                        <span class="text-muted">{{ "NoFiles" | localize }}</span>
+                      </ng-template>
+                    </td>
                     <td>{{ transaction.tranSactionStatus | localize }}</td>
                     <td>
                       

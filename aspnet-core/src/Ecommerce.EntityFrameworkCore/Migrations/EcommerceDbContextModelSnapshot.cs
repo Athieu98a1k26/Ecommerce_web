@@ -1549,6 +1549,10 @@ namespace Ecommerce.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<string>("StoreCode")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(64)
@@ -1908,6 +1912,10 @@ namespace Ecommerce.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Reason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatuApprove")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -2299,6 +2307,10 @@ namespace Ecommerce.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Reason")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("StatuApprove")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 

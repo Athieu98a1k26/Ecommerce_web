@@ -11,7 +11,11 @@ import { AppComponentBase } from '@shared/app-component-base';
 import {
   UserServiceProxy,
   CreateUserDto,
-  RoleDto
+  RoleDto,
+  StoreDto,
+  StoreServiceProxy,
+  BaseRequest,
+  StoreDtoPagedResultDto
 } from '@shared/service-proxies/service-proxies';
 import { AbpValidationError } from '@shared/components/validation/abp-validation.api';
 
@@ -23,6 +27,7 @@ export class CreateUserDialogComponent extends AppComponentBase
   saving = false;
   user = new CreateUserDto();
   roles: RoleDto[] = [];
+  stores: StoreDto[] = [];
   checkedRolesMap: { [key: string]: boolean } = {};
   defaultRoleCheckedStatus = false;
   passwordValidationErrors: Partial<AbpValidationError>[] = [
@@ -44,7 +49,8 @@ export class CreateUserDialogComponent extends AppComponentBase
   constructor(
     injector: Injector,
     public _userService: UserServiceProxy,
-    public bsModalRef: BsModalRef
+    public bsModalRef: BsModalRef,
+    private storesService: StoreServiceProxy,
   ) {
     super(injector);
   }
@@ -56,6 +62,25 @@ export class CreateUserDialogComponent extends AppComponentBase
       this.roles = result.items;
       this.setInitialRolesStatus();
     });
+
+    this.getPagingStore();
+  }
+
+  getPagingStore(){
+    let request =new BaseRequest();
+    request.skipCount = 0;
+    request.maxResultCount = 999;
+    this.storesService.getPaging(request).subscribe((datas:StoreDtoPagedResultDto)=>{
+      this.stores = datas.items;
+    })
+  }
+
+  onStoreChange(store:StoreDto,$event){
+    this.user.storeCode = store.code;
+  }
+
+  isStoreChecked(code:string){
+    return false;
   }
 
   setInitialRolesStatus(): void {

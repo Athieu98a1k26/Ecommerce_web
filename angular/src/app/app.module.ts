@@ -47,6 +47,7 @@ import { CreateStoreDialogComponent } from './stores/create-store/create-store-d
 import { ProductStoresComponent } from './product-stores/product-store.component';
 import { OrderComponent } from './order/order.component';
 import { TransactionComponent } from './order/transaction/transaction.component';
+import { FileDownloadService } from '@shared/utils/file-download.service';
 
 @NgModule({
     declarations: [
@@ -107,6 +108,8 @@ import { TransactionComponent } from './order/transaction/transaction.component'
         SharedModule,
         NgxPaginationModule,
     ],
-    providers: []
+    providers: [
+        FileDownloadService
+    ]
 })
 export class AppModule {}

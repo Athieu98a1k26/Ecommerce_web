@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Abp.Authorization.Users;
 using Abp.Extensions;
 
@@ -8,6 +9,9 @@ namespace Ecommerce.Authorization.Users
     public class User : AbpUser<User>
     {
         public const string DefaultPassword = "123qwe";
+
+        [StringLength(100)]
+        public string? StoreCode { get; set; }
 
         public static string CreateRandomPassword()
         {
